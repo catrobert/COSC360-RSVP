@@ -2,8 +2,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    justify-content: left;
+    justify-content: flex-start;
     padding: 16px;
+    margin: 16px;
 }
 
 .event-card {
@@ -12,6 +13,8 @@
     overflow: hidden;
     background-color: white;
     font-family: sans-serif;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .event-card img {
