@@ -1,5 +1,6 @@
 .sidebar {
     background-color: gray;
+    max-width: 400px;
 }
 
 .overall-star-rating, .overall-number-rating, .reviews-title {
