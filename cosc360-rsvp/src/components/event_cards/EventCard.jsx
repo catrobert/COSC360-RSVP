@@ -1,16 +1,5 @@
 import React from 'react';
-
-const EventContainer = () => {
-    return (
-        <div className="event-container">
-            <EventCard name="Concert" location="park" date="FEB 28 - 07:00 PM" />
-            <EventCard name="art gallery show" location="art gallery" date="MAR 05 - 06:00 PM" />
-            <EventCard />
-        </div>
-    )
-}
-
-export default EventContainer;
+import './EventCard.css';
 
 const EventCard = ({ name, location, date }) => {
     return (
@@ -24,3 +13,4 @@ const EventCard = ({ name, location, date }) => {
         </div>
     )
 }
+export default EventCard;
