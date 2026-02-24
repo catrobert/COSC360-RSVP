@@ -1,7 +1,7 @@
 import ReviewItem from './ReviewItem.jsx';
 import './Review.css';
 
-export function ReviewList({ reviews }) {
+export default function ReviewList({ reviews }) {
     return (
         <div>
             <ul className="reviews-list"> 
@@ -11,6 +11,5 @@ export function ReviewList({ reviews }) {
             </ul>
             <button className="add-review-button">Add Review</button>
         </div>
-        
     );
 }

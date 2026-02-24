@@ -1,6 +1,6 @@
 import './Review.css';
 
-export function Header({ averageRating }) {
+export default function ReviewHeader({ averageRating }) {
     return (
         <header className="reviews-header">
             <h3 className="reviews-title">Reviews</h3>
