@@ -1,6 +1,6 @@
 import './App.css'
 import RegisterForm from './components/RegisterForm.jsx'
-import ReviewCard from './components/ReviewCard.jsx'
+import ReviewCard from './components/review_bar/ReviewContainer.jsx'
 import EventContainer from './components/EventCard.jsx'
 
 function App() {
