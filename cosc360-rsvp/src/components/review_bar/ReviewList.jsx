@@ -1,5 +1,5 @@
 import ReviewItem from './ReviewItem.jsx';
-import './Review.css';
+import '../../css/EventCard.css';
 
 export default function ReviewList({ reviews }) {
     return (

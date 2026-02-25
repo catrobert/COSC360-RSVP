@@ -1,4 +1,4 @@
-import './Review.css';
+import '../../css/EventCard.css';
 import ReviewHeader from './ReviewHeader.jsx';
 import ReviewList from './ReviewList.jsx';
 

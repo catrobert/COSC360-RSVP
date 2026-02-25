@@ -1,4 +1,4 @@
-import './Review.css';
+import '../../css/EventCard.css';
 
 export default function ReviewItem({ review, rating }) {
     return (
