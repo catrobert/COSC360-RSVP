@@ -20,12 +20,14 @@ function Sidebar({ user, profilePicture }) {
     return (
         <div className="sidebar">
             <div className="menu-container">
-                <div className='profile-picture'>
-                    {profilePicture}
-                </div>
-                <div className="sidebar-header">
-                    <h4>{user}</h4>
-                    <p>View Profile</p>
+                <div className='profile-section'>
+                    <div className='profile-picture'>
+                        {profilePicture}
+                    </div>
+                    <div className="sidebar-header">
+                        <h4>{user}</h4>
+                        <p>View Profile</p>
+                    </div>
                 </div>
             </div>
             <div className="menu-container">
