@@ -1,0 +1,81 @@
+#root {
+  max-width: 1280px;
+  padding: 2rem;
+}
+
+#register{
+  color:black;
+}
+
+.form-Input{
+  color:black;
+  border:2px;
+  margin-top: 20px;
+  margin-bottom:20px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  cursor: pointer;
+  font-size: 18px;
+  color: navy;
+}
+
+#create-accountBtn{
+  color:white;
+  background-color: blue;
+}
+
+.form-container{
+  border: 2px solid blue;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  border-radius: 8%;
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  margin: 10px 10px;
+}
+
+
+/* ------------- Sidebar styles ------------- */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 240px;
+  background-color: #f8f9ff;
+  border-right: 1px solid #e0e4f0;
+  padding: 20px 12px;
+  box-sizing: border-box;
+}
+
+.sidebar-header {
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: navy;
+}
+
+.profile-picture {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.logout {
+  margin-top: auto;
+  background-color: whitesmoke;
+  border-radius: 15px;
+  width: 100%;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* ------------- End sidebar styles ------------- */

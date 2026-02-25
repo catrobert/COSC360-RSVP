@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Review.css';
+import '..css/Review.css';
 
 const reviews = [
     { id: 1, text: "Great event!", rating: 5 },
