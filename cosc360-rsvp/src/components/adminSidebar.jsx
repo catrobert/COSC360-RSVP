@@ -43,7 +43,7 @@ function AdminSidebar({ user, profilePicture }) {
                         label={item.label} />
                 ))}
                 <div><br></br>
-                    <h4>⎯ Admin Controls ⎯</h4>
+                    <h4> Admin Controls </h4>
                 </div>
                 {adminItems.map ((item, index) => (
                     <MenuItem
