@@ -1,0 +1,6 @@
+
+.search-container {
+    border: 2px solid gray;
+    display: flex;
+    flex-direction: row;
+}
