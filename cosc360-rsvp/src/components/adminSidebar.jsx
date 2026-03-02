@@ -1,4 +1,4 @@
-import { Calendar, LogOutIcon, Save, FileBadge } from 'lucide-react';
+import { Calendar, LogOutIcon, Save, FileBadge, AlignEndHorizontal, Users } from 'lucide-react';
 import "../css/sidebar.css";
 
 const menuItems = [
@@ -7,6 +7,10 @@ const menuItems = [
     { icon: FileBadge, label: "My Events" },
 ];
 
+const adminItems = [
+    { icon: AlignEndHorizontal, label: "Analytics"},
+    { icon: Users, label: "Users & Events" }
+];
 
 const MenuItem = ({ icon: Icon, label }) => {
     return (
@@ -17,7 +21,7 @@ const MenuItem = ({ icon: Icon, label }) => {
     )
 };
 
-function Sidebar({ user, profilePicture }) {
+function AdminSidebar({ user, profilePicture }) {
     return (
         <div className="sidebar">
             <div className="menu-container">
@@ -38,6 +42,15 @@ function Sidebar({ user, profilePicture }) {
                         icon={item.icon}
                         label={item.label} />
                 ))}
+                <div><br></br>
+                    <h4> Admin Controls </h4>
+                </div>
+                {adminItems.map ((item, index) => (
+                    <MenuItem
+                        key={index}
+                        icon={item.icon}
+                        label= {item.label} />
+                ))}
             </div>
             <div className="logout">
                 <MenuItem
@@ -49,4 +62,4 @@ function Sidebar({ user, profilePicture }) {
     )
 };
 
-export default Sidebar;
+export default AdminSidebar;
