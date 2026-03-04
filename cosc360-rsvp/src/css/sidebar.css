@@ -1,21 +1,23 @@
-
 .sidebar {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 240px;
+  min-width: 240px;
+  max-width: 240px;
   background-color: #f8f9ff;
   border-right: 1px solid #e0e4f0;
   padding: 20px 12px;
   box-sizing: border-box;
   border-radius: 20px;
+  flex-shrink: 0;
 }
 
 .profile-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
 }
 
 
@@ -27,19 +29,19 @@
 }
 
 .sidebar-header p {
-    margin: 0;
-    font-size: 14px;
+  margin: 0;
+  font-size: 14px;
 }
 
 .sidebar-header h4 {
-    margin: 14px 0 4px 0;
-    font-size: 12px;
-    color: #888;
+  margin: 14px 0 4px 0;
+  font-size: 12px;
+  color: #888;
 }
 
 
 .profile-picture {
-  width: 54px; 
+  width: 54px;
   height: 54px;
   border-radius: 50%;
   margin-bottom: 10px;
@@ -52,6 +54,9 @@
   color: #2a2b58;
   padding: 10px 12px;
   border-radius: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .menu-item:hover {
