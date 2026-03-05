@@ -1,6 +1,6 @@
 import EventContainer from "../components/event_cards/EventContainer";
 import Sidebar from "../components/sidebar";
-import AdminSidebar from "../components/adminSidebar";
+import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 
 const username = "Lexi Loudiadis"

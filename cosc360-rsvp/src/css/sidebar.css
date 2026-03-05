@@ -2,7 +2,7 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   width: 240px;
   background-color: #f8f9ff;
   border-right: 1px solid #e0e4f0;
@@ -73,4 +73,5 @@
 .sidebar .menu-container h4 {
   display: flex;
   justify-content: center;
+  color:blue;
 }
