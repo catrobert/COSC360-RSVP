@@ -3,11 +3,11 @@ import '../css/topNav.css'
 import { Plus, Search } from 'lucide-react';
 import CreateEventForm from './CreateEventForm';
 
-function Searchbar() {
+function Searchbar( { value, onClick, onChange }) {
      return (
         <div className='search-container'>
-            <input type='text' id='top-searchbar' placeholder='Search for an event ...' />
-            <Search size={18} color='gray' className='search-icon'/>
+            <input type='text' id='top-searchbar' placeholder='Search for an event ...' value={value} onChange={onChange} />
+            <Search size={18} color='gray' className='search-icon' onClick={onClick}/>
         </div>
     );
 }
@@ -27,11 +27,18 @@ function AddEventButton ({ onClick }) {
 
 function TopNav () {
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    async function handleSearch() {
+        const response = await fetch(`http://localhost:3000/events?q=${searchtext}`);
+        const data = await response.json();
+        console.log(data)
+    }
 
     return (
         <>
             <div className='top-nav'>
-                <Searchbar />
+                <Searchbar onClick={handleSearch} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
                 <AddEventButton onClick={() => setShowCreateForm(true)} />
             </div>
             {showCreateForm && (
