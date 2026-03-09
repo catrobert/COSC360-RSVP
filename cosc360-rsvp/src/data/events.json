@@ -1,0 +1,30 @@
+{
+    "events": [
+        {
+            "id": 1,
+            "name": "Birthday Party",
+            "date": "2024-07-15",
+            "location": "123 Main St",
+            "startTime": "18:00",
+            "endTime": "22:00",
+            "attendance": 20,
+            "host": "Alice",
+            "price": 20.00,
+            "description": "Join us for a fun birthday celebration with food, drinks, and music!",
+            "reviews": [
+                {
+                    "id": 1,
+                    "username": "Bob",
+                    "rating": 5,
+                    "comment": "Had a great time! The food was delicious and the music was fantastic."
+                },
+                {
+                    "id": 2,
+                    "username": "Charlie",
+                    "rating": 4,
+                    "comment": "The party was fun, but it got a bit crowded towards the end."
+                }
+            ]
+        }
+    ]
+}
