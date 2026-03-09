@@ -35,7 +35,7 @@
     display: block;
 }
 
-/* Wishlist bookmark button — bottom right of card body */
+/* Wishlist bookmark button*/
 .wishlist-btn {
     position: absolute;
     bottom: 10px;

@@ -1,53 +1,61 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 import '../css/CreateEventForm.css';
 
 function CreateEventForm({ onClose }) {
-    const [formData, setFormData] = useState({
-        name: '',
-        location: '',
-        date: '',
-        startTime: '',
-        endTime: '',
-        description: ''
-    });
+    const formRef = useRef(null);
 
-    const [errors, setErrors] = useState({});
-
-    // Clear error when user types
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        setErrors(prev => ({ ...prev, [name]: '' }));
-    };
-
-    // Validate on submit, preventDefault if invalid
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const newErrors = {};
-        for (const [key, value] of Object.entries(formData)) {
-            if (value.trim() === '') {
-                newErrors[key] = 'This field is required';
+        const form = formRef.current;
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach((field) => {
+            // get rid of prv err
+            field.classList.remove('ce-input-error');
+            const existingError = field.parentNode.querySelector('.ce-error');
+            if (existingError) existingError.remove();
+
+            // if field empty add error
+            if (field.value === '') {
+                isValid = false;
+                field.classList.add('ce-input-error');
+
+                const errorDiv = document.createElement('div');
+                errorDiv.classList.add('ce-error');
+                errorDiv.textContent = 'This field is required';
+                field.parentNode.insertBefore(errorDiv, field.nextSibling);
             }
+        });
+
+        if (isValid) {
+            //no db yet so cant send
+            const formData = new FormData(form);
+            console.log('Event created:', Object.fromEntries(formData));
+            alert('Event created successfully!');
+            onClose();
         }
+    };
 
-        setErrors(newErrors);
-
-        if (Object.keys(newErrors).length > 0) {
-            return;
-        }
-
-        // Would send to server when we have a DB
-        console.log('Event created:', formData);
-        alert('Event created successfully!');
-        onClose();
+    const handleInput = (e) => {
+        const field = e.target;
+        field.classList.remove('ce-input-error');
+        const existingError = field.parentNode.querySelector('.ce-error');
+        if (existingError) existingError.remove();
     };
 
     return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="create-event-modal" onClick={(e) => e.stopPropagation()}>
                 <h2>Create Event</h2>
-                <form onSubmit={handleSubmit} noValidate>
+
+                <form
+                    id="create-event-form"
+                    ref={formRef}
+                    method="post"
+                    onSubmit={handleSubmit}
+                    noValidate>
 
                     <div className="ce-form-group">
                         <label htmlFor="ce-name">Event Name</label>
@@ -56,11 +64,9 @@ function CreateEventForm({ onClose }) {
                             id="ce-name"
                             name="name"
                             placeholder="Your event name..."
-                            className={errors.name ? 'ce-input-error' : ''}
-                            value={formData.name}
-                            onChange={handleChange}
+                            required
+                            onInput={handleInput}
                         />
-                        {errors.name && <span className="ce-error">{errors.name}</span>}
                     </div>
 
                     <div className="ce-form-group">
@@ -70,11 +76,9 @@ function CreateEventForm({ onClose }) {
                             id="ce-location"
                             name="location"
                             placeholder="Your event location..."
-                            className={errors.location ? 'ce-input-error' : ''}
-                            value={formData.location}
-                            onChange={handleChange}
+                            required
+                            onInput={handleInput}
                         />
-                        {errors.location && <span className="ce-error">{errors.location}</span>}
                     </div>
 
                     <div className="ce-form-group">
@@ -83,11 +87,9 @@ function CreateEventForm({ onClose }) {
                             type="date"
                             id="ce-date"
                             name="date"
-                            className={errors.date ? 'ce-input-error' : ''}
-                            value={formData.date}
-                            onChange={handleChange}
+                            required
+                            onInput={handleInput}
                         />
-                        {errors.date && <span className="ce-error">{errors.date}</span>}
                     </div>
 
                     <div className="ce-form-row">
@@ -97,11 +99,9 @@ function CreateEventForm({ onClose }) {
                                 type="time"
                                 id="ce-startTime"
                                 name="startTime"
-                                className={errors.startTime ? 'ce-input-error' : ''}
-                                value={formData.startTime}
-                                onChange={handleChange}
+                                required
+                                onInput={handleInput}
                             />
-                            {errors.startTime && <span className="ce-error">{errors.startTime}</span>}
                         </div>
                         <div className="ce-form-group">
                             <label htmlFor="ce-endTime">End Time</label>
@@ -109,11 +109,9 @@ function CreateEventForm({ onClose }) {
                                 type="time"
                                 id="ce-endTime"
                                 name="endTime"
-                                className={errors.endTime ? 'ce-input-error' : ''}
-                                value={formData.endTime}
-                                onChange={handleChange}
+                                required
+                                onInput={handleInput}
                             />
-                            {errors.endTime && <span className="ce-error">{errors.endTime}</span>}
                         </div>
                     </div>
 
@@ -124,11 +122,9 @@ function CreateEventForm({ onClose }) {
                             name="description"
                             placeholder="Event description..."
                             rows="4"
-                            className={errors.description ? 'ce-input-error' : ''}
-                            value={formData.description}
-                            onChange={handleChange}
+                            required
+                            onInput={handleInput}
                         />
-                        {errors.description && <span className="ce-error">{errors.description}</span>}
                     </div>
 
                     <div className="ce-form-actions">
