@@ -25,9 +25,8 @@ function Homepage() {
 
                 const response = await fetch(url);
                 const data = await response.json();
-                
-                setEvents(data.events);
-                console.log("fetched events: ", data);
+
+                setEvents(data.events ?? data);
 
             } catch (e) {
                 console.log("Error fetching events: " + e);

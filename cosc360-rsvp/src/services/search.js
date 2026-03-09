@@ -4,7 +4,7 @@ export default async function search_events(query, filepath) {
     try {
         const fileData = await fs.readFile(filepath, "utf-8");
         const data = JSON.parse(fileData);
-        const events = data.events || data; // Handle both { events: [...] } and [...]
+        const events = data.events || data;  // Handle both { events: [...] } and [...]
 
         if (!query) {
             return events; // Return all events if no query is provided

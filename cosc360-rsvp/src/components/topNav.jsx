@@ -32,10 +32,7 @@ function TopNav () {
     const navigate = useNavigate();
 
     async function handleSearch() {
-        navigate(`/?q=${searchQuery}`) // with this, clicking search changes the url to include search query, which we will pass to home page where events are displayed
-        const response = await fetch(`http://localhost:3000/events?q=${searchQuery}`);
-        const data = await response.json();
-        console.log(data)
+        navigate(`/home?q=${searchQuery}`) // with this, clicking search changes the url to include search query, which we will pass to home page where events are displayed
     }
 
     return (
