@@ -1,7 +1,7 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
   width: 240px;
   min-width: 240px;
   max-width: 240px;
@@ -78,4 +78,5 @@
 .sidebar .menu-container h4 {
   display: flex;
   justify-content: center;
+  color:blue;
 }
