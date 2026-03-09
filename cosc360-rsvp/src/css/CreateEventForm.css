@@ -1,0 +1,133 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.create-event-modal {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    font-family: sans-serif;
+}
+
+.create-event-modal h2 {
+    margin: 0 0 24px 0;
+    font-size: 1.6rem;
+    color: #1a1a2e;
+}
+
+.ce-form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ce-form-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1a1a2e;
+    margin-bottom: 6px;
+}
+
+.ce-form-group input,
+.ce-form-group textarea {
+    background-color: #f0f0f0;
+    border: 2px solid transparent;
+    border-radius: 25px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.ce-form-group input[type="date"],
+.ce-form-group input[type="time"] {
+    color: #555;
+    cursor: pointer;
+}
+
+.ce-form-group input:focus,
+.ce-form-group textarea:focus {
+    border-color: navy;
+    background-color: #fff;
+}
+
+.ce-form-group textarea {
+    border-radius: 12px;
+    resize: vertical;
+    font-family: sans-serif;
+    border: 2px solid #e0e4f0;
+    background-color: #fff;
+}
+
+/* row for start/end time */
+.ce-form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.ce-form-row .ce-form-group {
+    flex: 1;
+}
+
+.ce-error {
+    color: #d32f2f;
+    font-size: 0.78rem;
+    margin-top: 4px;
+    padding-left: 8px;
+}
+
+.ce-input-error {
+    border-color: #d32f2f !important;
+}
+
+.ce-form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.ce-cancel-btn {
+    background-color: #e8e8e8;
+    color: #333;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 32px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.ce-cancel-btn:hover {
+    background-color: #d0d0d0;
+}
+
+.ce-submit-btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 32px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.ce-submit-btn:hover {
+    background-color: navy;
+}

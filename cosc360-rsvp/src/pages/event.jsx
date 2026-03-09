@@ -1,6 +1,6 @@
 import ReviewContainer from "../components/event/review_bar/ReviewContainer";
 import EventContainer from "../components/event/EventContainer";
-import EventHeader from "../components/event/EventHeader";
+import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
 import '../css/Event.css';
 
@@ -29,7 +29,8 @@ function EventPage() {
         <div id="page-container">
             <Sidebar id="main-sidebar" />
             <div id="event-page">
-                <EventHeader event={event} />
+                <TopNav />
+                <h1 id="event-title">{event.title}</h1>
                 <div id="event-content">
                     <EventContainer event={event} />
                     <ReviewContainer reviews={reviews} />
