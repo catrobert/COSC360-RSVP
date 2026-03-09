@@ -72,3 +72,10 @@
   border-top: 1px solid #e0e4f0;
   margin-bottom: 10px;
 }
+
+/* ------- admin -------- */
+
+.sidebar .menu-container h4 {
+  display: flex;
+  justify-content: center;
+}
