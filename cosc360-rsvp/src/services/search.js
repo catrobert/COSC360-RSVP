@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 
-async function search_events(query, filepath) {
+export default async function search_events(query, filepath) {
     try {
         const fileData = await fs.readFile(filepath, "utf-8");
         const data = JSON.parse(fileData);
