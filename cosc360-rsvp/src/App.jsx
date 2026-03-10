@@ -4,7 +4,7 @@ import RegisterForm from './components/RegisterForm.jsx'
 import Homepage from "./pages/home.jsx";
 import AdminUserManage from './pages/AdminUserManage.jsx'
 import EventPage from "./pages/event.jsx";
-import Login from "./pages/login/Login.jsx";
+import Login from "./pages/Login.jsx";
 
 /* Create a page for each main view and then link it here! It will be accessible at localhost/pageName */
 

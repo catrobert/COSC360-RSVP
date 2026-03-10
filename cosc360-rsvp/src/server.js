@@ -1,5 +1,5 @@
 import express from "express";
-import loginRouter from "./pages/login/processLogin.js";
+import loginRouter from "./components/login/processLogin.js";
 import cors from "cors";
 
 const app = express();

@@ -1,6 +1,9 @@
 import { useState } from "react";
+import "../../css/LoginCard.css";
+import { Italic } from "lucide-react";
 
-function Login(){
+
+function LoginCard(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -25,29 +28,30 @@ function Login(){
   }  
 
   return (
-    <div>
-        <h2>Login</h2>
+    <div className="login-container">
 
-        <form onSubmit={handleSubmit}>
-            <input
+        <form id= "login" onSubmit={handleSubmit}>
+            <h2 className = "title">Welcome Back!</h2>
+            <input className="textField"
              type="text"
              placeholder="Username"
              value={username}
              onChange={(e)=>setUsername(e.target.value)}/>
 
-            <input
+            <input className="textField"
               type="password"
               placeholder="Password"
               value={password}
               onChange={(e)=>setPassword(e.target.value)}/>
 
-            <button type="submit">Login</button>   
-        </form>
+            <button id = "login-btn" type="submit">Login</button> 
+            <a id="forgotPassword">Forgot Password?</a> 
 
-        <p>{message}</p>
+            <p>{message}</p> 
+        </form>
 
     </div>
   )
 }
 
-export default Login;
+export default LoginCard;
