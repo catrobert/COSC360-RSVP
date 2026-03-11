@@ -1,10 +1,8 @@
 import express from "express";
-
-
-import loginRouter from "./modules/services/processLogin.js";
 import cors from "cors";
-import fs from "fs/promises";
-import search_events from "./modules/services/search.js"
+import eventRoutes from "./modules/routes/eventRoutes.js";
+import loginRouter from "./modules/routes/loginRouter.js"
+
 
 const app = express();
 const PORT = 3000;
@@ -25,13 +23,9 @@ app.get("/api/events", async (req, res) => {
         event_data = JSON.parse(file);
       }
 
-      res.json(event_data);
+app.use("/login", loginRouter)
+app.use("/events", eventRoutes);
 
-    } catch (error) {
-      console.log("Error getting events: ", error);
-      res.status(500).json({ error: "Could not load events" });
-    }
-})
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

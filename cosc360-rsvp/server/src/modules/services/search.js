@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 
-export default async function search_events(query, filepath) {
+export async function search_events(query, filepath) {
     try {
         const fileData = await fs.readFile(filepath, "utf-8");
         const data = JSON.parse(fileData);
@@ -12,7 +12,7 @@ export default async function search_events(query, filepath) {
 
         let results = [];
         for (const event of events) {
-            if (event.name.toLowerCase().includes(query) || event.description.toLowerCase().includes(query)) {
+            if (event.name.toLowerCase().includes(query.toLowerCase()) || event.description.toLowerCase().includes(query.toLowerCase())) {
                 results.push(event);
             }
         }
@@ -23,4 +23,3 @@ export default async function search_events(query, filepath) {
     }
 }
 
-export { search_events };
