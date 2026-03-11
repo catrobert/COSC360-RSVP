@@ -1,6 +1,6 @@
-import AdminSidebar from "../components/AdminSidebar";
-import AdminManagement from "../components/AdminManagement"
-import topNav from "../components/topNav";
+import AdminSidebar from "../../client/components/AdminSidebar";
+import AdminManagement from "../../client/components/AdminManagement"
+import topNav from "../../client/components/topNav";
 import '../css/adminManagement.css';
 
 function AdminUserManage(){

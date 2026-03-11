@@ -1,4 +1,4 @@
-import Login from "../components/login/LoginCard.jsx";
+import Login from "../../client/components/login/LoginCard.jsx";
 import "../css/LoginCard.css"
 
 function LoginPage(){
