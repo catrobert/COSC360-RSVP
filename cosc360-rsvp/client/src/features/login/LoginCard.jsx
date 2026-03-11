@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "../../css/LoginCard.css";
-import { Italic } from "lucide-react";
+import "./LoginCard.css";
+import { loginApi } from "./api/Login.js";
 
 
 function LoginCard(){
@@ -11,19 +11,12 @@ function LoginCard(){
   async function handleSubmit(e){
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers:{
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password,
-        })
-    });
-
-    const data = await response.json();
-    setMessage(data.message);
+    try{
+      const data = await loginApi(username, password); 
+      setMessage(data.message);
+    }catch (error){
+      setMessage(error.message);
+    }
 
   }  
 

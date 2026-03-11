@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/topNav.css'
 import { Plus, Search } from 'lucide-react';
-import CreateEventForm from './CreateEventForm';
+import CreateEventForm from '../features/event/CreateEventForm';
 
 function Searchbar( { value, onClick, onChange }) {
      return (

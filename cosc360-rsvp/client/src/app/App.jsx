@@ -1,12 +1,11 @@
 import { Routes, Route } from "react-router-dom";
-import './css/App.css'
-import RegisterForm from '../client/components/RegisterForm.jsx'
-import Homepage from "../../../src/pages/home.jsx";
+import './App.css'
+import RegisterForm from '../features/register/RegisterForm.jsx'
+import Homepage from "../pages/home.jsx";
 import AdminUserManage from '../features/adminManagement/AdminUserManage.jsx'
 import EventPage from "../features/event/event.jsx";
-
-import MyEvents from "../../../src/pages/myEvents.jsx";
-import SavedEvents from "../../../src/pages/savedEvents.jsx";
+import MyEvents from "../pages/myEvents.jsx";
+import SavedEvents from "../pages/savedEvents.jsx";
 import Login from "../features/login/Login.jsx";
 
 

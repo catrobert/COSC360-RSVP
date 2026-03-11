@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import EventContainer from "../../client/components/event_cards/EventContainer";
-import Sidebar from "../../client/components/sidebar";
-import AdminSidebar from "../../client/components/AdminSidebar";
-import TopNav from "../../client/components/topNav";
+import EventContainer from "../features/event/event_cards/EventContainer";
+import Sidebar from "../components/sidebar";
+import AdminSidebar from "../components/AdminSidebar";
+import TopNav from "../components/topNav";
 
 const username = "Lexi Loudiadis"
 const isAdmin = false;
@@ -17,7 +17,7 @@ function Homepage() {
     useEffect( () => {
         async function fetchEvents() {
             try {
-                let url = "http://localhost:3000/events";
+                let url = "/api/events";
             
                 if (query) {
                     url += `?q=${query}`;
@@ -25,6 +25,8 @@ function Homepage() {
 
                 const response = await fetch(url);
                 const data = await response.json();
+
+                console.log(data);
 
                 setEvents(data.events ?? data);
 

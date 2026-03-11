@@ -1,4 +1,4 @@
-import '../../css/Event.css'
+import './Event.css'
 import EventDetails from './EventDetails';
 
 

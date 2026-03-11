@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Bookmark, Star, MapPin, Calendar } from 'lucide-react';
-import '../../css/EventCard.css';
+import './EventCard.css';
 
 const EventCard = ({ name, location, date, rating = 4.0 }) => {
     const [wishlisted, setWishlisted] = useState(false);

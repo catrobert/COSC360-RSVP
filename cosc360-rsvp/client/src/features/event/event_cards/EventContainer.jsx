@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../css/EventCard.css';
+import './EventCard.css';
 import EventCard from './EventCard.jsx';
 
 function averageRating(reviews) {
