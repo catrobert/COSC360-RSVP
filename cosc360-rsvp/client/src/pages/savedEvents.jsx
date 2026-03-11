@@ -1,4 +1,4 @@
-import EventContainer from "../features/event/EventContainer";
+import EventContainer from "../features/event/event_cards/EventContainer";
 import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
@@ -16,7 +16,7 @@ function SavedEvents() {
             <div style= {{ display: "flex", flexDirection: "column", flex: "1" }}>
                 <TopNav />
                 <h1 style={{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Saved Events</h1>
-                <EventContainer />
+                <EventContainer events={[]}/>
             </div>
         </div>
     );

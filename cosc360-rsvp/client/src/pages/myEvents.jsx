@@ -16,13 +16,13 @@ function MyEvents() {
             <div style= {{ display: "flex", flexDirection: "column", flex: "1" }}>
                 <TopNav />
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
-                <EventContainer />
+                <EventContainer events={[]} />
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Attending Events</h1>
-                <EventContainer />
+                <EventContainer events={[]}/>
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
-                <EventContainer />
+                <EventContainer events={[]}/>
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previous Attended Events</h1>
-                <EventContainer />
+                <EventContainer events={[]}/>
             </div>
         </div>
     );
