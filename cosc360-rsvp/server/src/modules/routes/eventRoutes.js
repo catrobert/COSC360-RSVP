@@ -8,3 +8,5 @@ router.get("/:id", getEventById);
 router.post("/", createEvent);
 router.delete("/:id", deleteEvent);
 router.put("/:id", editEvent);
+
+export default router;
