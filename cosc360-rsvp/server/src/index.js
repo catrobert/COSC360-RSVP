@@ -1,8 +1,10 @@
 import express from "express";
-import loginRouter from "../client/src/features/login/processLogin.js";
+
+
+import loginRouter from "./modules/services/processLogin.js";
 import cors from "cors";
 import fs from "fs/promises";
-import search_events from "../src/services/search.js"
+import search_events from "./modules/services/search.js"
 
 const app = express();
 const PORT = 3000;
