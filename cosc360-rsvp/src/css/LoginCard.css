@@ -91,3 +91,13 @@ body, html {
     cursor:pointer;
     color:#60A5FA;
 }
+    
+#createAccount{
+    font-size: 0.5rem;
+    align-self:center;
+}
+
+#createAccount:hover{
+    cursor:pointer;
+    color:#60A5FA;
+}

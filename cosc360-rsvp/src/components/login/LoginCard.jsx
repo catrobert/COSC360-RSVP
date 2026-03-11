@@ -46,6 +46,7 @@ function LoginCard(){
 
             <button id = "login-btn" type="submit">Login</button> 
             <a id="forgotPassword">Forgot Password?</a> 
+            <a id="createAccount">Create Account</a>
 
             <p>{message}</p> 
         </form>
