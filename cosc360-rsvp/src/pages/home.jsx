@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import EventContainer from "../components/event_cards/EventContainer";
-import Sidebar from "../components/sidebar";
-import AdminSidebar from "../components/AdminSidebar";
-import TopNav from "../components/topNav";
+import EventContainer from "../../client/components/event_cards/EventContainer";
+import Sidebar from "../../client/components/sidebar";
+import AdminSidebar from "../../client/components/AdminSidebar";
+import TopNav from "../../client/components/topNav";
 
 const username = "Lexi Loudiadis"
 const isAdmin = false;

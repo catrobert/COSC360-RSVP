@@ -1,7 +1,7 @@
-import ReviewContainer from "../components/event/review_bar/ReviewContainer";
-import EventContainer from "../components/event/EventContainer";
-import TopNav from "../components/topNav";
-import Sidebar from "../components/sidebar";
+import ReviewContainer from "../../client/components/event/review_bar/ReviewContainer";
+import EventContainer from "../../client/components/event/EventContainer";
+import TopNav from "../../client/components/topNav";
+import Sidebar from "../../client/components/sidebar";
 import '../css/Event.css';
 
 const event = {
