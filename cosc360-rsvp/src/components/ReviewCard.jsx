@@ -2,11 +2,11 @@ import React from 'react';
 import '..css/Review.css';
 
 const reviews = [
-    { id: 1, text: "Great event!", rating: 5 },
-    { id: 2, text: "Had a wonderful time.", rating: 4 },
-    { id: 3, text: "Would attend again.", rating: 4 },
-    { id: 4, text: "Not what I expected.", rating: 2 },
-    { id: 5, text: "Amazing experience!", rating: 5 }
+    { id: 1, comment: "Great event!", rating: 5 },
+    { id: 2, comment: "Had a wonderful time.", rating: 4 },
+    { id: 3, comment: "Would attend again.", rating: 4 },
+    { id: 4, comment: "Not what I expected.", rating: 2 },
+    { id: 5, comment: "Amazing experience!", rating: 5 }
 ];
 
 function getAverageRating() {
@@ -51,7 +51,7 @@ function ReviewList({ reviews }) {
 
 function ReviewItem({ review, rating }) {
     return (
-        <li className="review-item">{review.text} <span className="rating">{rating}</span></li>
+        <li className="review-item">{review.comment} <span className="rating">{rating}</span></li>
     );
 }
 
