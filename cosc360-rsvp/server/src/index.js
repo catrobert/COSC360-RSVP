@@ -8,14 +8,13 @@ import search_events from "./modules/services/search.js"
 
 const app = express();
 const PORT = 3000;
+
 app.use(cors( { origin: "http://localhost:5173" } ));
-
-app.use(cors());
 app.use(express.json());
-app.use(loginRouter);
+app.use("/api",loginRouter);
 
 
-app.get("/events", async (req, res) => {
+app.get("/api/events", async (req, res) => {
     let event_data = [];
     const query = req.query.q;
     try {
