@@ -1,12 +1,16 @@
 import express from "express";
+import loginRouter from "./components/login/processLogin.js";
+import cors from "cors";
 import fs from "fs/promises";
 import search_events from "./services/search.js"
-import cors from "cors";
-
 
 const app = express();
 const PORT = 3000;
 app.use(cors( { origin: "http://localhost:5173" } ));
+
+app.use(cors());
+app.use(express.json());
+app.use(loginRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
