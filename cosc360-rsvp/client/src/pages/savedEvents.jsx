@@ -1,7 +1,7 @@
-import EventContainer from "../../client/components/event_cards/EventContainer";
-import Sidebar from "../../client/components/sidebar";
-import AdminSidebar from "../../client/components/AdminSidebar";
-import TopNav from "../../client/components/topNav";
+import EventContainer from "../features/event/EventContainer";
+import Sidebar from "../components/sidebar";
+import AdminSidebar from "../components/AdminSidebar";
+import TopNav from "../components/topNav";
 import '../css/index.css'
 
 const username = "Lexi Loudiadis"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../css/LoginCard.css";
+import "./LoginCard.css";
 import { loginApi } from "./api/Login.js";
 
 
@@ -12,7 +12,7 @@ function LoginCard(){
     e.preventDefault();
 
     try{
-      const response = await loginApi(username, password); 
+      const data = await loginApi(username, password); 
       setMessage(data.message);
     }catch (error){
       setMessage(error.message);

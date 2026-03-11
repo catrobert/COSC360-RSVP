@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import '../css/CreateEventForm.css';
+import './CreateEventForm.css';
 
 function CreateEventForm({ onClose }) {
     const formRef = useRef(null);
