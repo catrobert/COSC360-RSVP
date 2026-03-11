@@ -1,0 +1,82 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 240px;
+  min-width: 240px;
+  max-width: 240px;
+  background-color: #f8f9ff;
+  border-right: 1px solid #e0e4f0;
+  padding: 20px 12px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+
+.sidebar-header {
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1a1a2e;
+  cursor: pointer;
+}
+
+.sidebar-header p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.sidebar-header h4 {
+  margin: 14px 0 4px 0;
+  font-size: 12px;
+  color: #888;
+}
+
+
+.profile-picture {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  background-color: #e0e4f0;
+}
+
+.menu-item {
+  cursor: pointer;
+  font-size: 15px;
+  color: #2a2b58;
+  padding: 10px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menu-item:hover {
+  background-color: #0051A2;
+  color: white;
+}
+
+.logout {
+  margin-top: auto;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  border-top: 1px solid #e0e4f0;
+  margin-bottom: 10px;
+}
+
+/* ------- admin -------- */
+
+.sidebar .menu-container h4 {
+  display: flex;
+  justify-content: center;
+  color:blue;
+}
