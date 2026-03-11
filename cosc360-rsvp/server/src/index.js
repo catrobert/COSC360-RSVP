@@ -19,9 +19,9 @@ app.get("/api/events", async (req, res) => {
     const query = req.query.q;
     try {
       if (query) {
-        event_data = await search_events(query, "./src/data/events.json")
+        event_data = await search_events(query, "./server/src/data/events.json")
       } else {
-        const file = await fs.readFile("./src/data/events.json", "utf-8");
+        const file = await fs.readFile("./server/src/data/events.json", "utf-8");
         event_data = JSON.parse(file);
       }
 
