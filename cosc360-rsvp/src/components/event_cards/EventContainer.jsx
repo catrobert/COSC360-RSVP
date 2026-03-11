@@ -2,12 +2,27 @@ import React from 'react';
 import '../../css/EventCard.css';
 import EventCard from './EventCard.jsx';
 
-const EventContainer = () => {
+function averageRating(reviews) {
+    if (reviews.length === 0 || !reviews) {
+        return "N/A";
+    }
+    let sum = 0;
+    for (let i = 0; i < reviews.length; i++) {
+        sum += reviews[i].rating;
+    }
+    return (sum / reviews.length);
+}
+
+const EventContainer = ( {events} ) => {
     return (
         <div className="event-container">
-            <EventCard name="Concert" location="Central Park" date="FEB 28 - 07:00 PM" rating={4.5} />
-            <EventCard name="Art Gallery Show" location="Downtown Art Gallery" date="MAR 05 - 06:00 PM" rating={3.8} />
-            <EventCard name="Food Festival" location="Waterfront Plaza" date="MAR 12 - 12:00 PM" rating={4.2} />
+            {events.map((event) => (
+                <EventCard key={event.id} 
+                    name={event.name} 
+                    location={event.location} 
+                    date={ `${event.date} - ${event.startTime}` } 
+                    rating={averageRating(event.reviews)} />
+            ))}
         </div>
     )
 }
