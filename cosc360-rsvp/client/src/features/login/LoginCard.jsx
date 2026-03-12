@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./LoginCard.css";
 import { loginApi } from "./api/Login.js";
+import { Link } from "react-router-dom";
 
 
 function LoginCard(){
@@ -39,7 +40,7 @@ function LoginCard(){
 
             <button id = "login-btn" type="submit">Login</button> 
             <a id="forgotPassword">Forgot Password?</a> 
-            <a id="createAccount">Create Account</a>
+            <Link to="/register">Create Account</Link>
 
             <p>{message}</p> 
         </form>
