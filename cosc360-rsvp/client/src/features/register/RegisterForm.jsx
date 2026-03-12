@@ -11,6 +11,7 @@ function RegisterForm(){
     const [password, setPassword] = useState("");
 
     return(
+        <div className="auth-background">
         <div className="form-container">
             <h2 id = "registerTitle">Create An Account</h2>
             
@@ -68,6 +69,7 @@ function RegisterForm(){
             </form>
 
             
+        </div>
         </div>
     );
 }

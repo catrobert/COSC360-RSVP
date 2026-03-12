@@ -22,6 +22,7 @@ function LoginCard(){
   }  
 
   return (
+    <div className = "auth-background">
     <div className="login-container">
 
         <form id= "login" onSubmit={handleSubmit}>
@@ -45,6 +46,7 @@ function LoginCard(){
             <p>{message}</p> 
         </form>
 
+    </div>
     </div>
   )
 }
