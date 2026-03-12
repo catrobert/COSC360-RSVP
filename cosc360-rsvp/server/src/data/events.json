@@ -220,6 +220,19 @@
             "price": 20,
             "description": "test event",
             "reviews": []
+        },
+        {
+            "id": 10,
+            "name": "test2",
+            "date": "2002-02-02",
+            "location": "Kelowna, BC",
+            "startTime": "14:23",
+            "endTime": "17:00",
+            "attendance": 0,
+            "host": "TBD",
+            "price": 20.45,
+            "description": "event",
+            "reviews": []
         }
     ]
 }
