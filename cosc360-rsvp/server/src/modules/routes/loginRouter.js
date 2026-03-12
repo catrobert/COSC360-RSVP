@@ -3,6 +3,6 @@ import { processLogin } from "../controllers/loginController.js";
 
 const router = express.Router();
 
-router.post("/", processLogin);
+router.post("/login", processLogin);
 
 export default router;
