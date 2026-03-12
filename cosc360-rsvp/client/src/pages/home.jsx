@@ -4,6 +4,7 @@ import EventContainer from "../features/event/event_cards/EventContainer";
 import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
+import "../css/Home.css";
 
 const username = "Lexi Loudiadis"
 const isAdmin = false;
@@ -26,7 +27,10 @@ function Homepage() {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                console.log(data);
+                if (!response.ok) {
+                    console.log("Error fetching events:", data.error);
+                    return;
+                }
 
                 setEvents(data.events ?? data);
 
@@ -40,9 +44,9 @@ function Homepage() {
     }, [query]) 
 
     return (
-        <div style= {{ display: "flex", flexDirection: "row", width: "100%" }}>        
+        <div className="homepage-layout">        
             {isAdmin ? ( <AdminSidebar user= { username } /> ) : ( <Sidebar user = { username } /> )}
-            <div style= {{ display: "flex", flexDirection: "column", flex: "1" }}>
+            <div className="main-content">
                 <TopNav />
                 <EventContainer events={events} />
             </div>

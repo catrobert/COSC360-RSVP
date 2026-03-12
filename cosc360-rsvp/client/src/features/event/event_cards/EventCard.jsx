@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Bookmark, Star, MapPin, Calendar } from 'lucide-react';
+import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
 
-const EventCard = ({ name, location, date, rating = 4.0 }) => {
+const EventCard = ({ name, location, date, rating = 4.0, price = 0 }) => {
     const [wishlisted, setWishlisted] = useState(false);
 
     return (
@@ -15,7 +15,7 @@ const EventCard = ({ name, location, date, rating = 4.0 }) => {
                     <h2>{name || "Default Name"}</h2>
                     <div className="event-rating">
                         <Star size={14} fill="#f5c518" color="#f5c518" />
-                        <span>{rating.toFixed(1)}</span>
+                        <span>{typeof rating === 'number' ? rating.toFixed(1) : rating}</span>
                     </div>
                 </div>
                 <div className="event-info">
@@ -25,6 +25,10 @@ const EventCard = ({ name, location, date, rating = 4.0 }) => {
                 <div className="event-info">
                     <Calendar size={14} color="#888" />
                     <p>{date || "Default Date"}</p>
+                </div>
+                <div className="event-info">
+                    <DollarSign size={14} color="#888" />
+                    <p>${typeof price === 'number' ? price.toFixed(2) : '0.00'}</p>
                 </div>
                 <button
                     className={`wishlist-btn ${wishlisted ? 'wishlisted' : ''}`}
