@@ -1,5 +1,6 @@
 import {useState} from "react";
 import "./RegisterForm.css";
+import { Link } from "react-router-dom";
 
 
 function RegisterForm(){
@@ -62,7 +63,7 @@ function RegisterForm(){
 
                 <div>
                     <p>Already Have an Account?</p>
-                    <a href>Login</a>
+                    <Link to="/login">Login</Link>
                 </div>    
             </form>
 
