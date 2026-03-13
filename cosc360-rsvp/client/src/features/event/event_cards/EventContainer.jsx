@@ -21,7 +21,8 @@ const EventContainer = ( {events} ) => {
                     name={event.name} 
                     location={event.location} 
                     date={ `${event.date} - ${event.startTime}` } 
-                    rating={averageRating(event.reviews)} />
+                    rating={averageRating(event.reviews)}
+                    price={event.price} />
             ))}
         </div>
     )

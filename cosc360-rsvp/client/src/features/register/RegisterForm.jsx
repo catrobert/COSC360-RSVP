@@ -1,5 +1,6 @@
 import {useState} from "react";
-import "../../app/App.css";
+import "./RegisterForm.css";
+import { Link } from "react-router-dom";
 
 
 function RegisterForm(){
@@ -10,6 +11,7 @@ function RegisterForm(){
     const [password, setPassword] = useState("");
 
     return(
+        <div className="auth-background">
         <div className="form-container">
             <h2 id = "registerTitle">Create An Account</h2>
             
@@ -62,11 +64,12 @@ function RegisterForm(){
 
                 <div>
                     <p>Already Have an Account?</p>
-                    <a href>Login</a>
+                    <Link to="/login">Login</Link>
                 </div>    
             </form>
 
             
+        </div>
         </div>
     );
 }

@@ -1,25 +1,53 @@
 #register {
-  color: black;
+  color: grey;
+  font-weight: bold;
+  background-color:white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
-.form-Input {
+#registerTitle{
+  color:#60A5FA;
+}
+
+.form-Input{
   color: black;
   border: 2px;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top:10px;
+  width:100%;
+  box-sizing: border-box;
+}
+
+.form-Input input {
+  width:90%;
+  box-sizing: border-box;
 }
 
 #create-accountBtn {
   color: white;
-  background-color: blue;
+  background-color: #60A5FA;
+  margin-top:20px;
+
 }
 
 .form-container {
-  border: 2px solid blue;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 20px;
-  padding-bottom: 30px;
+  border: 2px solid #60A5FA;
+  background-color: white;
+  padding:20px;
   border-radius: 8%;
-  max-width: 200px;
+  width: 400px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+p {
+  font-size: 17px;
+  margin-top: 20px;
+
+}
+
+a {
+  font-size: 18px;
 }

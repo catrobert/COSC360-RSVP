@@ -10,11 +10,11 @@ const PORT = 3000;
 
 await connectDB();
 
-app.use(cors( { origin: "http://localhost:5173" } ));
+app.use(cors( { origin: ["http://localhost:5173", "http://localhost:5174"] } ));
 app.use(express.json());
 
-app.use("/login", loginRouter)
-app.use("/events", eventRoutes);
+app.use("/api/login", loginRouter);
+app.use("/api/events", eventRoutes);
 
 
 app.listen(PORT, () => {

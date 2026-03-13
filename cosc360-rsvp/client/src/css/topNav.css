@@ -73,5 +73,11 @@
     height: fit-content;
     gap: 12px;
     width: 100%;
-    padding: 16px 0;
+    padding: 20px 16px 20px 32px;
+    box-sizing: border-box;
+    background-color: white;
+    border-bottom: 1px solid #e0e4f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }

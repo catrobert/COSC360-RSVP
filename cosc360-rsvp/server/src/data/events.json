@@ -9,7 +9,7 @@
             "endTime": "22:00",
             "attendance": 20,
             "host": "Alice",
-            "price": 20.00,
+            "price": 20,
             "description": "Join us for a fun birthday celebration with food, drinks, and music!",
             "reviews": [
                 {
@@ -35,7 +35,7 @@
             "endTime": "17:00",
             "attendance": 200,
             "host": "Tech Corp",
-            "price": 150.00,
+            "price": 150,
             "description": "A conference for tech enthusiasts featuring keynote speakers, workshops, and networking opportunities.",
             "reviews": [
                 {
@@ -61,7 +61,7 @@
             "endTime": "23:00",
             "attendance": 500,
             "host": "Music Inc",
-            "price": 75.00,
+            "price": 75,
             "description": "A day-long music festival featuring local and national bands, food trucks, and fun activities.",
             "reviews": [
                 {
@@ -87,7 +87,7 @@
             "endTime": "18:00",
             "attendance": 100,
             "host": "Art Lovers",
-            "price": 10.00,
+            "price": 10,
             "description": "An exhibition showcasing the works of local artists, including paintings, sculptures, and photography.",
             "reviews": [
                 {
@@ -113,7 +113,7 @@
             "endTime": "20:00",
             "attendance": 300,
             "host": "Foodies United",
-            "price": 25.00,
+            "price": 25,
             "description": "A festival celebrating local cuisine with food trucks, cooking demonstrations, and tastings.",
             "reviews": [
                 {
@@ -139,7 +139,7 @@
             "endTime": "12:00",
             "attendance": 150,
             "host": "Run for a Cause",
-            "price": 30.00,
+            "price": 30,
             "description": "A charity run to raise funds for local nonprofits, featuring a 5K and 10K race, as well as a fun run for kids.",
             "reviews": [
                 {
@@ -165,7 +165,7 @@
             "endTime": "22:00",
             "attendance": 250,
             "host": "Film Buffs",
-            "price": 20.00,
+            "price": 20,
             "description": "A festival showcasing independent films from around the world, with screenings, Q&A sessions, and awards.",
             "reviews": [
                 {
@@ -191,7 +191,7 @@
             "endTime": "18:00",
             "attendance": 80,
             "host": "Book Lovers",
-            "price": 5.00,
+            "price": 5,
             "description": "A fair for book enthusiasts featuring author signings, book sales, and literary discussions.",
             "reviews": [
                 {
@@ -207,6 +207,32 @@
                     "comment": "The fair was great, but I wish there were more activities for kids."
                 }
             ]
+        },
+        {
+            "id": 9,
+            "name": "test",
+            "date": "2024-01-25",
+            "location": "Kelowna, BC",
+            "startTime": "12:00",
+            "endTime": "14:00",
+            "attendance": 0,
+            "host": "TBD",
+            "price": 20,
+            "description": "test event",
+            "reviews": []
+        },
+        {
+            "id": 10,
+            "name": "test2",
+            "date": "2002-02-02",
+            "location": "Kelowna, BC",
+            "startTime": "14:23",
+            "endTime": "17:00",
+            "attendance": 0,
+            "host": "TBD",
+            "price": 20.45,
+            "description": "event",
+            "reviews": []
         }
     ]
 }
