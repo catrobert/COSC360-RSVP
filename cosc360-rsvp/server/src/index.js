@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { connectDB } from "./data/connection.js";
+import { connectDB } from "./db/connection.js";
 import eventRoutes from "./modules/routes/eventRoutes.js";
 import loginRouter from "./modules/routes/loginRouter.js"
 
