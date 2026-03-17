@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const reviewSchema = new Schema (
     {
-        username: { type: String, required: true },
+        username: { type: Schema.Types.ObjectId, ref: "User", required: true },
         rating: { type: Number, required: true },
         comment: { type: String }
     }
@@ -16,10 +16,12 @@ const eventSchema = new Schema (
         startTime: { type: String, required: true },
         endTime: { type: String, required: true },
         attendance: { type: Number, default: 0 },
-        host: { type: String, required: true },
+        createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true }, 
         price: { type: Number, required: true },
         description: { type: String, required: true },
         reviews: [reviewSchema],
 
     }
 );
+
+export const EventModel = mongoose.model("Event", eventSchema);
