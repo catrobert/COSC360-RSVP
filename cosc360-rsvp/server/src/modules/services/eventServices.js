@@ -2,23 +2,11 @@ import fs from "fs/promises";
 import * as eventRepository from "../repository/eventRepository.js";
 
 export async function getEvents(query) { //, filepath) {
-    // try {
-    //     const fileData = await fs.readFile(filepath, "utf-8");
-    //     const data = JSON.parse(fileData);
-    //     const events = data.events || data;  // Handle both { events: [...] } and [...]
-
-        if (!query) {
-            return await eventRepository.findAll();
-            // return events; // Return all events if no query is provided
-        } else {
-            return await eventRepository.findBySearchTerm(query);
-        }
-
-
-        
-    // } catch (error) {
-    //     res.status(500).json({error: "Error fetching events"});
-    // }
+    if (!query) {
+        return await eventRepository.findAll();
+    } else {
+        return await eventRepository.findBySearchTerm(query);
+    }
 }
 
 export async function createEvent(data) {
