@@ -7,20 +7,12 @@
             "startTime": "18:00",
             "endTime": "22:00",
             "attendance": 20,
-            "createdBy": "Alice",
+            "createdBy": "000000000000000000000001",
             "price": 20,
             "description": "Join us for a fun birthday celebration with food, drinks, and music!",
             "reviews": [
-                {
-                    "username": "Bob",
-                    "rating": 5,
-                    "comment": "Had a great time! The food was delicious and the music was fantastic."
-                },
-                {
-                    "username": "Charlie",
-                    "rating": 4,
-                    "comment": "The party was fun, but it got a bit crowded towards the end."
-                }
+                { "userId": "000000000000000000000002", "rating": 5, "comment": "Had a great time! The food was delicious and the music was fantastic." },
+                { "userId": "000000000000000000000003", "rating": 4, "comment": "The party was fun, but it got a bit crowded towards the end." }
             ]
         },
         {
@@ -30,20 +22,12 @@
             "startTime": "09:00",
             "endTime": "17:00",
             "attendance": 200,
-            "createdBy": "Tech Corp",
+            "createdBy": "000000000000000000000001",
             "price": 150,
             "description": "A conference for tech enthusiasts featuring keynote speakers, workshops, and networking opportunities.",
             "reviews": [
-                {
-                    "username": "Dave",
-                    "rating": 5,
-                    "comment": "The speakers were amazing and I learned a lot!"
-                },
-                {
-                    "username": "Eve",
-                    "rating": 3,
-                    "comment": "The conference was good, but the sessions were a bit too long."
-                }
+                { "userId": "000000000000000000000002", "rating": 5, "comment": "The speakers were amazing and I learned a lot!" },
+                { "userId": "000000000000000000000003", "rating": 3, "comment": "The conference was good, but the sessions were a bit too long." }
             ]
         },
         {
@@ -53,20 +37,12 @@
             "startTime": "12:00",
             "endTime": "23:00",
             "attendance": 500,
-            "createdBy": "Music Inc",
+            "createdBy": "000000000000000000000001",
             "price": 75,
             "description": "A day-long music festival featuring local and national bands, food trucks, and fun activities.",
             "reviews": [
-                {
-                    "username": "Frank",
-                    "rating": 4,
-                    "comment": "Great lineup of bands and the atmosphere was fantastic!"
-                },
-                {
-                    "username": "Grace",
-                    "rating": 2,
-                    "comment": "The sound quality was poor and it was hard to see the stage."
-                }
+                { "userId": "000000000000000000000002", "rating": 4, "comment": "Great lineup of bands and the atmosphere was fantastic!" },
+                { "userId": "000000000000000000000003", "rating": 2, "comment": "The sound quality was poor and it was hard to see the stage." }
             ]
         },
         {
@@ -76,20 +52,12 @@
             "startTime": "10:00",
             "endTime": "18:00",
             "attendance": 100,
-            "createdBy": "Art Lovers",
+            "createdBy": "000000000000000000000001",
             "price": 10,
             "description": "An exhibition showcasing the works of local artists, including paintings, sculptures, and photography.",
             "reviews": [
-                {
-                    "username": "Heidi",
-                    "rating": 5,
-                    "comment": "The art was stunning and the gallery was well-organized."
-                },
-                {
-                    "username": "Ivan",
-                    "rating": 4,
-                    "comment": "I enjoyed the exhibition, but I wish there were more interactive displays."
-                }
+                { "userId": "000000000000000000000002", "rating": 5, "comment": "The art was stunning and the gallery was well-organized." },
+                { "userId": "000000000000000000000003", "rating": 4, "comment": "I enjoyed the exhibition, but I wish there were more interactive displays." }
             ]
         },
         {
@@ -99,20 +67,12 @@
             "startTime": "11:00",
             "endTime": "20:00",
             "attendance": 300,
-            "createdBy": "Foodies United",
+            "createdBy": "000000000000000000000001",
             "price": 25,
             "description": "A festival celebrating local cuisine with food trucks, cooking demonstrations, and tastings.",
             "reviews": [
-                {
-                    "username": "Judy",
-                    "rating": 5,
-                    "comment": "The food was amazing and there was such a great variety!"
-                },
-                {
-                    "username": "Karl",
-                    "rating": 3,
-                    "comment": "The festival was fun, but the lines for food were very long."
-                }
+                { "userId": "000000000000000000000002", "rating": 5, "comment": "The food was amazing and there was such a great variety!" },
+                { "userId": "000000000000000000000003", "rating": 3, "comment": "The festival was fun, but the lines for food were very long." }
             ]
         },
         {
@@ -122,20 +82,12 @@
             "startTime": "08:00",
             "endTime": "12:00",
             "attendance": 150,
-            "createdBy": "Run for a Cause",
+            "createdBy": "000000000000000000000001",
             "price": 30,
             "description": "A charity run to raise funds for local nonprofits, featuring a 5K and 10K race, as well as a fun run for kids.",
             "reviews": [
-                {
-                    "username": "Leo",
-                    "rating": 5,
-                    "comment": "A great event for a good cause! The organization was excellent."
-                },
-                {
-                    "username": "Mia",
-                    "rating": 4,
-                    "comment": "The run was fun, but the course was a bit confusing at times."
-                }
+                { "userId": "000000000000000000000002", "rating": 5, "comment": "A great event for a good cause! The organization was excellent." },
+                { "userId": "000000000000000000000003", "rating": 4, "comment": "The run was fun, but the course was a bit confusing at times." }
             ]
         },
         {
@@ -145,20 +97,12 @@
             "startTime": "14:00",
             "endTime": "22:00",
             "attendance": 250,
-            "createdBy": "Film Buffs",
+            "createdBy": "000000000000000000000001",
             "price": 20,
             "description": "A festival showcasing independent films from around the world, with screenings, Q&A sessions, and awards.",
             "reviews": [
-                {
-                    "username": "Nina",
-                    "rating": 5,
-                    "comment": "The films were thought-provoking and the Q&A sessions were insightful."
-                },
-                {
-                    "username": "Oscar",
-                    "rating": 3,
-                    "comment": "I enjoyed some of the films, but others were not my cup of tea."
-                }
+                { "userId": "000000000000000000000002", "rating": 5, "comment": "The films were thought-provoking and the Q&A sessions were insightful." },
+                { "userId": "000000000000000000000003", "rating": 3, "comment": "I enjoyed some of the films, but others were not my cup of tea." }
             ]
         },
         {
@@ -168,44 +112,24 @@
             "startTime": "10:00",
             "endTime": "18:00",
             "attendance": 80,
-            "createdBy": "Book Lovers",
+            "createdBy": "000000000000000000000001",
             "price": 5,
             "description": "A fair for book enthusiasts featuring author signings, book sales, and literary discussions.",
             "reviews": [
-                {
-                    "username": "Paul",
-                    "rating": 5,
-                    "comment": "A wonderful event for book lovers! I got to meet some of my favorite authors."
-                },
-                {
-                    "username": "Quinn",
-                    "rating": 4,
-                    "comment": "The fair was great, but I wish there were more activities for kids."
-                }
+                { "userId": "000000000000000000000002", "rating": 5, "comment": "A wonderful event for book lovers! I got to meet some of my favorite authors." },
+                { "userId": "000000000000000000000003", "rating": 4, "comment": "The fair was great, but I wish there were more activities for kids." }
             ]
         },
         {
-            "name": "test",
-            "date": "2024-01-25",
-            "location": "Kelowna, BC",
-            "startTime": "12:00",
-            "endTime": "14:00",
+            "name": "Lexi's Test",
+            "date": "2026-03-19",
+            "location": "UBCO",
+            "startTime": "19:00",
+            "endTime": "20:15",
             "attendance": 0,
-            "createdBy": "TBD",
-            "price": 20,
-            "description": "test event",
-            "reviews": []
-        },
-        {
-            "name": "test2",
-            "date": "2002-02-02",
-            "location": "Kelowna, BC",
-            "startTime": "14:23",
-            "endTime": "17:00",
-            "attendance": 0,
-            "createdBy": "TBD",
-            "price": 20.45,
-            "description": "event",
+            "createdBy": "000000000000000000000001",
+            "price": 5,
+            "description": "Lexi is testing endpoints rn",
             "reviews": []
         }
     ]

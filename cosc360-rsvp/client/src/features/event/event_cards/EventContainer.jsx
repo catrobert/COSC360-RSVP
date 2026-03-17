@@ -13,19 +13,37 @@ function averageRating(reviews) {
     return (sum / reviews.length);
 }
 
-const EventContainer = ( {events} ) => {
-    return (
-        <div className="event-container">
-            {events.map((event) => (
-                <EventCard key={event.id} 
-                    name={event.name} 
-                    location={event.location} 
-                    date={ `${event.date} - ${event.startTime}` } 
-                    rating={averageRating(event.reviews)}
-                    price={event.price} />
-            ))}
-        </div>
-    )
-}
+const EventContainer = ({ events }) => {
+  return (
+    <div className="event-container">
+      {events.map((event) => {
+        const date = new Date(event.date).toLocaleDateString("en-US", {
+          year:  "numeric",
+          month: "short",
+          day:   "numeric"
+        }).toUpperCase();
+
+        const time = new Date(`1970-01-01T${event.startTime}:00`).toLocaleTimeString("en-US", {
+            hour:   "numeric",
+            minute: "2-digit",
+            hour12: true
+        });
+
+
+
+        return (
+          <EventCard
+            key={event._id}
+            name={event.name}
+            location={event.location}
+            date={`${date} - ${time}`}
+            rating={averageRating(event.reviews)}
+            price={event.price}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
 export default EventContainer;
