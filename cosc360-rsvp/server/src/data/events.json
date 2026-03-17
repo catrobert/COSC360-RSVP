@@ -207,6 +207,19 @@
             "price": 20.45,
             "description": "event",
             "reviews": []
+        },
+        {
+            "id": null,
+            "name": "Lexi's Test",
+            "date": "2026-03-19",
+            "location": "UBCO",
+            "startTime": "19:00",
+            "endTime": "20:15",
+            "attendance": 0,
+            "host": "TBD",
+            "price": 5,
+            "description": "Lexi is testing endpoints rn",
+            "reviews": []
         }
     ]
 }
