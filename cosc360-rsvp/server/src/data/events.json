@@ -1,25 +1,22 @@
 {
     "events": [
         {
-            "id": 1,
             "name": "Birthday Party",
             "date": "2024-07-15",
             "location": "123 Main St",
             "startTime": "18:00",
             "endTime": "22:00",
             "attendance": 20,
-            "host": "Alice",
+            "createdBy": "Alice",
             "price": 20,
             "description": "Join us for a fun birthday celebration with food, drinks, and music!",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Bob",
                     "rating": 5,
                     "comment": "Had a great time! The food was delicious and the music was fantastic."
                 },
                 {
-                    "id": 2,
                     "username": "Charlie",
                     "rating": 4,
                     "comment": "The party was fun, but it got a bit crowded towards the end."
@@ -27,25 +24,22 @@
             ]
         },
         {
-            "id": 2,
             "name": "Tech Conference",
             "date": "2024-08-20",
             "location": "Convention Center",
             "startTime": "09:00",
             "endTime": "17:00",
             "attendance": 200,
-            "host": "Tech Corp",
+            "createdBy": "Tech Corp",
             "price": 150,
             "description": "A conference for tech enthusiasts featuring keynote speakers, workshops, and networking opportunities.",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Dave",
                     "rating": 5,
                     "comment": "The speakers were amazing and I learned a lot!"
                 },
                 {
-                    "id": 2,
                     "username": "Eve",
                     "rating": 3,
                     "comment": "The conference was good, but the sessions were a bit too long."
@@ -53,25 +47,22 @@
             ]
         },
         {
-            "id": 3,
             "name": "Music Festival",
             "date": "2024-09-10",
             "location": "City Park",
             "startTime": "12:00",
             "endTime": "23:00",
             "attendance": 500,
-            "host": "Music Inc",
+            "createdBy": "Music Inc",
             "price": 75,
             "description": "A day-long music festival featuring local and national bands, food trucks, and fun activities.",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Frank",
                     "rating": 4,
                     "comment": "Great lineup of bands and the atmosphere was fantastic!"
                 },
                 {
-                    "id": 2,
                     "username": "Grace",
                     "rating": 2,
                     "comment": "The sound quality was poor and it was hard to see the stage."
@@ -79,25 +70,22 @@
             ]
         },
         {
-            "id": 4,
             "name": "Art Exhibition",
             "date": "2024-10-05",
             "location": "Art Gallery",
             "startTime": "10:00",
             "endTime": "18:00",
             "attendance": 100,
-            "host": "Art Lovers",
+            "createdBy": "Art Lovers",
             "price": 10,
             "description": "An exhibition showcasing the works of local artists, including paintings, sculptures, and photography.",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Heidi",
                     "rating": 5,
                     "comment": "The art was stunning and the gallery was well-organized."
                 },
                 {
-                    "id": 2,
                     "username": "Ivan",
                     "rating": 4,
                     "comment": "I enjoyed the exhibition, but I wish there were more interactive displays."
@@ -105,25 +93,22 @@
             ]
         },
         {
-            "id": 5,
             "name": "Food Festival",
             "date": "2024-11-15",
             "location": "Downtown",
             "startTime": "11:00",
             "endTime": "20:00",
             "attendance": 300,
-            "host": "Foodies United",
+            "createdBy": "Foodies United",
             "price": 25,
             "description": "A festival celebrating local cuisine with food trucks, cooking demonstrations, and tastings.",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Judy",
                     "rating": 5,
                     "comment": "The food was amazing and there was such a great variety!"
                 },
                 {
-                    "id": 2,
                     "username": "Karl",
                     "rating": 3,
                     "comment": "The festival was fun, but the lines for food were very long."
@@ -131,25 +116,22 @@
             ]
         },
         {
-            "id": 6,
             "name": "Charity Run",
             "date": "2024-12-01",
             "location": "City Stadium",
             "startTime": "08:00",
             "endTime": "12:00",
             "attendance": 150,
-            "host": "Run for a Cause",
+            "createdBy": "Run for a Cause",
             "price": 30,
             "description": "A charity run to raise funds for local nonprofits, featuring a 5K and 10K race, as well as a fun run for kids.",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Leo",
                     "rating": 5,
                     "comment": "A great event for a good cause! The organization was excellent."
                 },
                 {
-                    "id": 2,
                     "username": "Mia",
                     "rating": 4,
                     "comment": "The run was fun, but the course was a bit confusing at times."
@@ -157,25 +139,22 @@
             ]
         },
         {
-            "id": 7,
             "name": "Film Festival",
             "date": "2025-01-20",
             "location": "Cinema Complex",
             "startTime": "14:00",
             "endTime": "22:00",
             "attendance": 250,
-            "host": "Film Buffs",
+            "createdBy": "Film Buffs",
             "price": 20,
             "description": "A festival showcasing independent films from around the world, with screenings, Q&A sessions, and awards.",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Nina",
                     "rating": 5,
                     "comment": "The films were thought-provoking and the Q&A sessions were insightful."
                 },
                 {
-                    "id": 2,
                     "username": "Oscar",
                     "rating": 3,
                     "comment": "I enjoyed some of the films, but others were not my cup of tea."
@@ -183,25 +162,22 @@
             ]
         },
         {
-            "id": 8,
             "name": "Book Fair",
             "date": "2025-02-15",
             "location": "Library",
             "startTime": "10:00",
             "endTime": "18:00",
             "attendance": 80,
-            "host": "Book Lovers",
+            "createdBy": "Book Lovers",
             "price": 5,
             "description": "A fair for book enthusiasts featuring author signings, book sales, and literary discussions.",
             "reviews": [
                 {
-                    "id": 1,
                     "username": "Paul",
                     "rating": 5,
                     "comment": "A wonderful event for book lovers! I got to meet some of my favorite authors."
                 },
                 {
-                    "id": 2,
                     "username": "Quinn",
                     "rating": 4,
                     "comment": "The fair was great, but I wish there were more activities for kids."
@@ -209,27 +185,25 @@
             ]
         },
         {
-            "id": 9,
             "name": "test",
             "date": "2024-01-25",
             "location": "Kelowna, BC",
             "startTime": "12:00",
             "endTime": "14:00",
             "attendance": 0,
-            "host": "TBD",
+            "createdBy": "TBD",
             "price": 20,
             "description": "test event",
             "reviews": []
         },
         {
-            "id": 10,
             "name": "test2",
             "date": "2002-02-02",
             "location": "Kelowna, BC",
             "startTime": "14:23",
             "endTime": "17:00",
             "attendance": 0,
-            "host": "TBD",
+            "createdBy": "TBD",
             "price": 20.45,
             "description": "event",
             "reviews": []
