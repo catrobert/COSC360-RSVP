@@ -1,4 +1,4 @@
-import ReviewContainer from "../features/event/singleEvent/review_bar/ReviewContainer";
+import ReviewCard from "../features/event/singleEvent/ReviewCard";
 import SingleEventContainer from "../features/event/singleEvent/SingleEventContainer";
 import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
@@ -44,7 +44,7 @@ function EventPage() {
                 <h1 id="event-title">{event.name}</h1>
                 <div id="event-content">
                     <SingleEventContainer event={event} />
-                    <ReviewContainer reviews={event.reviews} />
+                    <ReviewCard reviews={event.reviews} />
                 </div>
             </div>
         </div>

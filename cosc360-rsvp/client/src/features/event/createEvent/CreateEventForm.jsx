@@ -1,4 +1,4 @@
-import './CreateEventForm.css';
+import '../../../css/CreateEventForm.css';
 
 function CreateEventForm({ onClose }) {
 

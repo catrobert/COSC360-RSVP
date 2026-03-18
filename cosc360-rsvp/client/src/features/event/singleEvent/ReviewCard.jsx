@@ -1,8 +1,7 @@
-import React from 'react';
-import '..css/Review.css';
+import '../../../css/Event.css';
 
 
-function getAverageRating() {
+function getAverageRating(reviews) {
     if (reviews.length === 0) {
         return null;
     }
@@ -11,22 +10,23 @@ function getAverageRating() {
     return total / reviews.length;
 }
 
-function ReviewsCard() {
+function ReviewsCard({reviews}) {
     return (
         <aside className="sidebar">
-            <Header />
+            <Header reviews={reviews} />
             <ReviewList reviews={reviews} />
         </aside>
     );
 }
 
-function Header() {
+function Header({reviews}) {
+    const avg = getAverageRating(reviews);
     return (
         <header className="reviews-header">
             <h3 className="reviews-title">Reviews</h3>
-            <h1 className="overall-number-rating">{getAverageRating() !== null ? getAverageRating().toFixed(1) : "No Reviews Yet"}</h1>
+            <h1 className="overall-number-rating">{avg ? avg.toFixed(1) : "No Reviews Yet"}</h1>
             <div className="stars">
-                {getAverageRating() !== null ? "⭐".repeat(Math.round(getAverageRating())) : "0"}
+                {avg ? "⭐".repeat(Math.round(avg)) : ""}
             </div>
         </header>
     );
@@ -46,9 +46,9 @@ function ReviewList({ reviews }) {
     );
 }
 
-function ReviewItem({ review, rating }) {
+function ReviewItem({ review }) {
     return (
-        <li className="review-item">{review.comment} <span className="rating">{rating}</span></li>
+        <li className="review-item">{review.comment} <span className="rating">{review.rating}</span></li>
     );
 }
 
