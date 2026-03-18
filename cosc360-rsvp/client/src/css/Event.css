@@ -8,9 +8,13 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 button {
-    background-color: steelblue;
+    background-color: navy;
     border: 1px solid black;
     color: white;
+}
+
+button:hover{
+    background-color:#0051A2;;
 }
 
 #page-container {
@@ -128,13 +132,6 @@ button {
     gap: 1rem;
 }
 
-.review-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-}
-
 .review-text {
     margin: 0;
     padding: 0;
@@ -147,9 +144,25 @@ button {
     color: #213547;
 }
 
+.no-reviews {
+    display: flex;
+    white-space: nowrap;
+    font-size: 16px;
+    color: #213547;
+    margin: 20px 0 0 12px;
+}
+
 .reviews-title {
     font-size: 20px;
     color: #213547;
+    font-weight: bold;
+}
+
+.review-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
 }
 
 #event-title {

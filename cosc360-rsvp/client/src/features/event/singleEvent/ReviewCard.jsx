@@ -12,7 +12,7 @@ function getAverageRating(reviews) {
 
 function ReviewsCard({reviews}) {
     return (
-        <aside className="sidebar">
+        <aside className="reviews-container">
             <Header reviews={reviews} />
             <ReviewList reviews={reviews} />
         </aside>
@@ -24,7 +24,7 @@ function Header({reviews}) {
     return (
         <header className="reviews-header">
             <h3 className="reviews-title">Reviews</h3>
-            <h1 className="overall-number-rating">{avg ? avg.toFixed(1) : "No Reviews Yet"}</h1>
+            { avg ? <h1 className="overall-number-rating">{avg.toFixed(1)}</h1> : <p className="no-reviews">No Reviews Yet</p>}
             <div className="stars">
                 {avg ? "⭐".repeat(Math.round(avg)) : ""}
             </div>
@@ -35,7 +35,7 @@ function Header({reviews}) {
 function ReviewList({ reviews }) {
     return (
         <div>
-            <ul className="reviews-list"> 
+            <ul className="reviews-list-container"> 
                 {reviews.map((review, index) => (
                     <ReviewItem key={index} review={review} rating={"⭐".repeat(review.rating)} />
                 ))}
@@ -46,10 +46,18 @@ function ReviewList({ reviews }) {
     );
 }
 
-function ReviewItem({ review }) {
+
+function ReviewItem({review }) {
     return (
-        <li className="review-item">{review.comment} <span className="rating">{review.rating}</span></li>
+        <>
+            <div className="review-title">
+                <div>{review.userId}</div> {/* TODO: switch this use userId to join username in user table and display that */}
+                <div>{review.rating}</div>
+            </div>
+            <p className="review-text">{review.comment}</p>
+        </>
     );
 }
+ 
 
 export default ReviewsCard;

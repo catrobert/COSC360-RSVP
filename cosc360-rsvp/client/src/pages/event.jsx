@@ -2,7 +2,7 @@ import ReviewCard from "../features/event/singleEvent/ReviewCard";
 import SingleEventContainer from "../features/event/singleEvent/SingleEventContainer";
 import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
-import '../features/event/singleEvent/Event.css';
+import '../css/Event.css';
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
