@@ -29,7 +29,7 @@ function EventPage() {
             const result = await response.json();
 
             if (response.status === 400) {
-                alert(`${result.error} Navigate to "My Events" to view.`);
+                alert(`${result.error} \nNavigate to "My Events" to view.`);
                 return;
             }
 
