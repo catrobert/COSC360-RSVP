@@ -2,6 +2,8 @@ import '../../../css/CreateEventForm.css';
 
 function CreateEventForm({ onClose }) {
 
+    {/* TODO: add image functionality to form creation*/}
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 

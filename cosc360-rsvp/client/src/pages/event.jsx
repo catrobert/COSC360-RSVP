@@ -7,9 +7,38 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 
+
 function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    
+    async function handleRsvpClick() {
+        const data = {
+            eventId: id,
+            userId: "000000000000000000000001", // placeholder till we have login and can track userId
+            status: "yes",
+        };
+
+        try {
+            const response = await fetch("/api/rsvp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                console.log("Error RSVP-ing:", result.error);
+            }
+
+            alert('RSVP successful! Navigate to "My Events" to view.');
+            
+        } catch (error) {
+            console.log("Error RSVP-ing to event: ", error);
+        }
+    }
+
 
     useEffect( () => {
         async function fetchEvent() {
@@ -43,7 +72,7 @@ function EventPage() {
                 <TopNav />
                 <h1 id="event-title">{event.name}</h1>
                 <div id="event-content">
-                    <SingleEventContainer event={event} />
+                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick}/>
                     <ReviewCard reviews={event.reviews} />
                 </div>
             </div>
