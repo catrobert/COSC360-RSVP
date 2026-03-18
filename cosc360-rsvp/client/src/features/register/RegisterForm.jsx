@@ -1,6 +1,7 @@
 import {useState} from "react";
 import "./RegisterForm.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerApi } from "./api/Register.js";
 
 
 function RegisterForm(){
@@ -9,6 +10,30 @@ function RegisterForm(){
     const [lastName, setLastName] = useState("");
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [passConfirmation, setPassConfirmation] = useState("");
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError("");
+
+    //validation
+
+    if(password !== passConfirmation){
+        setError("Passwords don't match");
+        return;
+    }
+
+    try{
+        await registerApi(firstName, lastName, userName, password);
+        navigate("/login"); //if successful, navigate to login
+
+    }catch(err){
+        setError(err.message);
+    }
+}
 
     return(
         <div className="auth-background">
@@ -73,5 +98,6 @@ function RegisterForm(){
         </div>
     );
 }
+
 
 export default RegisterForm;
