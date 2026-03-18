@@ -3,6 +3,10 @@ import '..css/Review.css';
 
 
 function getAverageRating() {
+    if (reviews.length === 0) {
+        return null;
+    }
+
     const total = reviews.reduce((sum, review) => sum + review.rating, 0);
     return total / reviews.length;
 }
@@ -20,9 +24,9 @@ function Header() {
     return (
         <header className="reviews-header">
             <h3 className="reviews-title">Reviews</h3>
-            <h1 className="overall-number-rating">{getAverageRating().toFixed(1)}</h1>
+            <h1 className="overall-number-rating">{getAverageRating() !== null ? getAverageRating().toFixed(1) : "No Reviews Yet"}</h1>
             <div className="stars">
-                {"⭐".repeat(Math.round(getAverageRating()))}
+                {getAverageRating() !== null ? "⭐".repeat(Math.round(getAverageRating())) : "0"}
             </div>
         </header>
     );
