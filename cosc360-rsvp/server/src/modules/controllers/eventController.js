@@ -20,7 +20,6 @@ export const getEvents = async (req, res) => {
 export const getEventById = async (req, res) => {
     try {
         const event = await eventService.getEventById(req.params.id);
-        console.log("getEventById hit, id:", req.params.id); // ← add this
 
         if (!event) {
             return res.status(404).json({ error: "Event not found" });

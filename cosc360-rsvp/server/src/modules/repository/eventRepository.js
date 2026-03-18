@@ -22,5 +22,4 @@ export async function findBySearchTerm(query) {
 
 export async function findEvent(id) {
     return await EventModel.findById(id);
-    console.log("getEventById hit, id:", req.params.id);
 }
