@@ -1,4 +1,4 @@
-import EventContainer from "../features/event/event_cards/EventContainer";
+import EventContainer from "../features/event/homepageEvents/EventContainer";
 import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";

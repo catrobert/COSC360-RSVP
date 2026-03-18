@@ -2,10 +2,10 @@ import './Event.css'
 import EventDetails from './EventDetails';
 
 
-function EventContainer({ event }) {
+function SingleEventContainer({ event }) {
     return (
         <div id="event-container">
-            <img id="event-image" src={event.image} alt={event.title} />
+            <img id="event-image" src={event.image} alt={event.name} />
             <div id="event-info">
                 <div id="event-details"><EventDetails event={event} /></div>
                 <p id="event-description">{event.description}</p>
@@ -20,4 +20,4 @@ function EventContainer({ event }) {
     );
 }
 
-export default EventContainer;
+export default SingleEventContainer;

@@ -1,13 +1,6 @@
 import React from 'react';
 import '..css/Review.css';
 
-const reviews = [
-    { id: 1, comment: "Great event!", rating: 5 },
-    { id: 2, comment: "Had a wonderful time.", rating: 4 },
-    { id: 3, comment: "Would attend again.", rating: 4 },
-    { id: 4, comment: "Not what I expected.", rating: 2 },
-    { id: 5, comment: "Amazing experience!", rating: 5 }
-];
 
 function getAverageRating() {
     const total = reviews.reduce((sum, review) => sum + review.rating, 0);
