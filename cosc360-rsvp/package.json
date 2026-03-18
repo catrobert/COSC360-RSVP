@@ -12,6 +12,7 @@
     "seed": "node --env-file=server/src/.env server/src/seed.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "lucide-react": "^0.575.0",

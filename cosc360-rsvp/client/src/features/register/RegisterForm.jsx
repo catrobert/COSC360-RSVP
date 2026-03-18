@@ -8,7 +8,7 @@ function RegisterForm(){
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [userName, setUserName] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [passConfirmation, setPassConfirmation] = useState("");
     const [error, setError] = useState("");
@@ -27,7 +27,7 @@ function RegisterForm(){
     }
 
     try{
-        await registerApi(firstName, lastName, userName, password);
+        await registerApi(firstName, lastName, username, password);
         navigate("/login"); //if successful, navigate to login
 
     }catch(err){
@@ -40,12 +40,14 @@ function RegisterForm(){
         <div className="form-container">
             <h2 id = "registerTitle">Create An Account</h2>
             
-            <form id = "register"> 
+            <form id = "register" onSubmit={handleSubmit}> 
                 <div className = "form-Input">
                     <input 
                     type = "text" 
                     id = "firstName" 
                     placeholder = "First Name" 
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     required />
                 </div>
 
@@ -54,14 +56,18 @@ function RegisterForm(){
                     type = "text"
                     id = "lastName"
                     placeholder = "Last Name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     required />
                 </div>
 
                 <div className = "form-Input">
                     <input
                     type = "text"
-                    id = "userName"
+                    id = "username"
                     placeholder = "Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     required />
                 </div>
 
@@ -70,6 +76,8 @@ function RegisterForm(){
                     type = "password"
                     id = "password"
                     placeholder = "Enter a password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     required />
                 </div>
 
@@ -79,6 +87,8 @@ function RegisterForm(){
                     type = "password"
                     id = "passConfirmation"
                     placeholder = "Re-Enter Password"
+                    value={passConfirmation}
+                    onChange={(e) => setPassConfirmation(e.target.value)}
                     required />
                 </div>   
 
