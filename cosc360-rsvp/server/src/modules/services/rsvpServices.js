@@ -1,7 +1,7 @@
 import * as rsvpRepository from "../repository/rsvpRepository.js";
 
 export async function createRSVP(rsvpData) {
-    const existingRSVP = await rsvpRepository.findRSVP(rsvpData);
+    const existingRSVP = await rsvpRepository.findRSVP(rsvpData.eventId, rsvpData.userId);
 
     if (existingRSVP) {
         throw new Error("You have already RSVP'd to this event!");

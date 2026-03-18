@@ -6,9 +6,9 @@ export const createRSVP = async (req, res) => {
         res.status(201).json({ message: "RSVP created successfully!", event: newRsvp });
     } catch (error) {
         if (error.message === "You have already RSVP'd to this event!") {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
-        
+
         res.status(500).json({ error: "Could not create RSVP" });
     }
 }

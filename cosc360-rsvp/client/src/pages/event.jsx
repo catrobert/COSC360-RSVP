@@ -28,8 +28,14 @@ function EventPage() {
 
             const result = await response.json();
 
+            if (response.status === 400) {
+                alert(`${result.error} Navigate to "My Events" to view.`);
+                return;
+            }
+
             if (!response.ok) {
-                console.log("Error RSVP-ing:", result.error);
+                alert(`Something went wrong: ${result.error}`);
+                return;
             }
 
             alert('RSVP successful! Navigate to "My Events" to view.');
