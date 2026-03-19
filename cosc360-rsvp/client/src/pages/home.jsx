@@ -1,6 +1,6 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import EventContainer from "../features/event/event_cards/EventContainer";
+import EventContainer from "../features/event/homepageEvents/EventContainer";
 import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
@@ -9,11 +9,18 @@ import "../css/Home.css";
 const username = "Lexi Loudiadis"
 const isAdmin = false;
 
+
 function Homepage() {
     const [events, setEvents] = useState([]);
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     const query = searchParams.get("q"); // get the search params sent over from search bar in top nav component
+
+    function handleEventClick (eventId) {
+        navigate(`/event/${eventId.toString()}`);
+    }
+
 
     useEffect( () => {
         async function fetchEvents() {
@@ -28,7 +35,7 @@ function Homepage() {
                 const data = await response.json();
 
                 if (!response.ok) {
-                    console.log("Error fetching events:", data.error);
+                    console.log("Error fetching events: ", data.error);
                     return;
                 }
 
@@ -48,7 +55,7 @@ function Homepage() {
             {isAdmin ? ( <AdminSidebar user= { username } /> ) : ( <Sidebar user = { username } /> )}
             <div className="main-content">
                 <TopNav />
-                <EventContainer events={events} />
+                <EventContainer events={events} onEventClick={handleEventClick} />
             </div>
         </div>
     );

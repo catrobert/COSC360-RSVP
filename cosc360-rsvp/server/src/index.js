@@ -3,6 +3,7 @@ import cors from "cors";
 import { connectDB } from "./db/connection.js";
 import eventRoutes from "./modules/routes/eventRoutes.js";
 import loginRouter from "./modules/routes/loginRouter.js"
+import rsvpRoutes from "./modules/routes/rsvpRoutes.js"
 
 
 const app = express();
@@ -15,7 +16,7 @@ app.use(express.json());
 
 app.use("/api/login", loginRouter);
 app.use("/api/events", eventRoutes);
-
+app.use("/api/rsvp", rsvpRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

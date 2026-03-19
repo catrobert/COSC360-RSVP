@@ -13,7 +13,7 @@ function averageRating(reviews) {
     return (sum / reviews.length);
 }
 
-const EventContainer = ({ events }) => {
+const EventContainer = ({ events, onEventClick }) => {
   return (
     <div className="event-container">
       {events.map((event) => {
@@ -39,6 +39,7 @@ const EventContainer = ({ events }) => {
             date={`${date} - ${time}`}
             rating={averageRating(event.reviews)}
             price={event.price}
+            onClick={ () => onEventClick(event._id.toString())}
           />
         );
       })}

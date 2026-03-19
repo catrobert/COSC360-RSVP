@@ -1,12 +1,15 @@
-import fs from "fs/promises";
 import * as eventRepository from "../repository/eventRepository.js";
 
-export async function getEvents(query) { //, filepath) {
+export async function getEvents(query) { 
     if (!query) {
         return await eventRepository.findAll();
     } else {
         return await eventRepository.findBySearchTerm(query);
     }
+}
+
+export async function getEventById(id) {
+    return await eventRepository.findEvent(id);
 }
 
 export async function createEvent(data) {
