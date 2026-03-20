@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { UserSchema } from "../model/user.model.js";
+import { saveUser } from "../services/userServices.js";
 
 export const processRegister = async (req, res) => {
     const { firstName, lastName, username, password } = req.body;
@@ -16,18 +17,9 @@ export const processRegister = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        //save the user to DB
+        //save the user to DB via userServices.js
+         await saveUser({ firstName, lastName, username, hashedPassword});
 
-        const newUser = new UserSchema({
-            firstName,
-            lastName,
-            username,
-            password: hashedPassword,
-            createdDate: new Date(),
-            role: "user"
-        });
-
-        await newUser.save();
 
         res.status(201).json({ success: true, message: "User registered successfully"});
 
