@@ -1,13 +1,32 @@
-// login doesn't have a service yet since we have no db that would require logic for login
-export const processLogin = (req,res) => {
+import bcrypt from "bcryptjs";
+import { UserSchema } from "../model/user.model.js"
+
+
+export const processLogin = async (req,res) => {
     const { username, password } = req.body;
 
-    if (username === "admin" && password === "1234") {
-        res.json({ success: true, message: "Login successful" });
-    } else {
-        res.status(401).json({ success: false, message: "Invalid credentials" });
+    try {
+        //find user with input username
+        const user = await UserSchema.findOne({ username });
+
+        if(!user) {
+            return res.status(401).json({ error: "Invalid Credentials"});
+        }
+
+        //compare password with stored hash password
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if(!match){
+            return res.status(401).json({ error: "Invalid Credentials"})
+        }
+
+        //if successful
+
+        res.json({ success: true, message: "Login Successful"});
+
+    }catch (err) {
+        res.status(500).json({ error: "Something went wrong"});
     }
 
 }
-
-
