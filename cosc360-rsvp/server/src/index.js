@@ -2,8 +2,11 @@ import express from "express";
 import cors from "cors";
 import { connectDB } from "./db/connection.js";
 import eventRoutes from "./modules/routes/eventRoutes.js";
+
 import loginRouter from "./modules/routes/loginRouter.js";
 import registerRouter from "./modules/routes/registerRouter.js";
+import rsvpRoutes from "./modules/routes/rsvpRoutes.js"
+
 
 
 const app = express();
@@ -16,7 +19,9 @@ app.use(express.json());
 
 app.use("/api/login", loginRouter);
 app.use("/api/events", eventRoutes);
+
 app.use("/api/register", registerRouter);
+app.use("/api/rsvp", rsvpRoutes);
 
 
 app.listen(PORT, () => {

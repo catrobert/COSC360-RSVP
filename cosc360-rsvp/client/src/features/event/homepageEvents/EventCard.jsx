@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
 
-const EventCard = ({ name, location, date, rating = 4.0, price = 0 }) => {
+const EventCard = ({ name, location, date, rating, price, onClick}) => {
     const [wishlisted, setWishlisted] = useState(false);
 
     return (
-        <div className="event-card">
+        <div className="event-card" onClick={onClick}>
             <div className="event-card-image">
                 <img src="https://picsum.photos/300/160" alt="Event Image" />
             </div>
