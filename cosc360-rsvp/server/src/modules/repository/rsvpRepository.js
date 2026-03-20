@@ -5,6 +5,16 @@ export async function createRSVP(rsvpData) {
     return rsvp.toJSON();
 }
 
+export async function updateRSVP(eventId, userId, status) {
+    const rsvp = await RSVPModel.findOneAndUpdate({eventId, userId}, { status }, { new: true, runValidators: true });
+
+    if (!rsvp) {
+        throw new Error("RSVP not found");
+    }
+
+    return rsvp.toJSON();
+}
+
 export async function findRSVP(eventId, userId) {
     return await RSVPModel.findOne(
         {
@@ -12,4 +22,13 @@ export async function findRSVP(eventId, userId) {
             userId: userId
         }
     )
+}
+
+export async function findEventsByStatus(userId, status) {
+    return await RSVPModel.find(
+        {
+            userId: userId,
+            status: status
+        }
+    ).populate("eventId");
 }
