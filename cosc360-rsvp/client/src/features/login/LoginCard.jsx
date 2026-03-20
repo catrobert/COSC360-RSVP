@@ -40,7 +40,7 @@ function LoginCard(){
               onChange={(e)=>setPassword(e.target.value)}/>
 
             <button id = "login-btn" type="submit">Login</button> 
-            <a id="forgotPassword">Forgot Password?</a> 
+            <Link to="/reset-password" id="forgotPassword">Forgot Password?</Link> 
             <Link to="/register">Create Account</Link>
 
             <p>{message}</p> 
