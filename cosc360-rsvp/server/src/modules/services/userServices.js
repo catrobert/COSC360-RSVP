@@ -12,3 +12,11 @@ export const saveUser = async ({ firstName, lastName, username, hashedPassword})
 
     return await newUser.save();
 }
+
+export const resetPassword = async (username, newHashedPassword) => {
+    return await UserSchema.findOneAndUpdate(
+        { username },
+        { password: newHashedPassword},
+        { new: true }
+    );
+}
