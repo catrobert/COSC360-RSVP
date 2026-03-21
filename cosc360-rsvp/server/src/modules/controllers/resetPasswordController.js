@@ -21,6 +21,7 @@ export const processResetPassword = async (req, res) => {
         await resetPassword(username, hashedPassword);
 
         res.status(200).json({ success: true, message: "Password reset successfully"});
+        
     
     }catch(err){
         res.status(500).json({ error: "Something went wrong"});

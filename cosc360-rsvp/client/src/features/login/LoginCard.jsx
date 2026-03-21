@@ -1,13 +1,15 @@
 import { useState } from "react";
 import "./LoginCard.css";
 import { loginApi } from "./api/Login.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 
 
 function LoginCard(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
   async function handleSubmit(e){
     e.preventDefault();
@@ -15,6 +17,7 @@ function LoginCard(){
     try{
       const data = await loginApi(username, password); 
       setMessage(data.message);
+      navigate("/home");
     }catch (error){
       setMessage(error.message);
     }
