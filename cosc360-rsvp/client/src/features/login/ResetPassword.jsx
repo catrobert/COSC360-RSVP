@@ -1,38 +1,45 @@
 import { useState } from "react";
 import {useNavigate} from "react-router-dom";
+import {resetPass} from "./api/Reset.js";
 
 function ResetPassword(){
     const [username, setUsername] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const[error,setError] = useState("");
+    const[message,setMessage] = useState("");
     const navigate = useNavigate();
 
-    const handleResetPassword = async() => {
-       const res = await fetch("/api/reset-password", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ username, newPassword, confirmPassword })
-       });
+    async function handleSubmit(e){
+        e.preventDefault();
 
-       const data = await res.json();
+        try{
+            const data = await resetPass(username, newPassword, confirmPassword);
+            setMessage(data.message);
 
-       if (data.success){
-        navigate("/login");
-       }else{
-        setError(data.error || "Something went wrong");
-       }
-    };
+            if (data.success){
+                navigate("/login");
+            }
+        }catch(error){
+            setMessage(error.message);
+        }
+
+    }
 
     return (
-        <div>
-            <h2>Reset Password</h2>
-            <input placeholder="Username" onChange={e => setUsername(e.target.value)}/>
-            <input type="password" placeholder="New Password" onChange={e => setNewPassword(e.target.value)}/>
-            <input type="password" placeholder="Confirm Password" onChange={e => setConfirmPassword(e.target.value)}/>
-            <button onClick={handleResetPassword}>Reset Password</button>
+        <div className = "auth-background">
+        <div className = "login-container">
+           <form id= "reset-password" onSubmit={handleSubmit}>
+            <h2 className = "title">Reset Password</h2>
+            <input className = "textField" placeholder="Username" onChange={e => setUsername(e.target.value)}/>
+            <input className = "textField" type="password" placeholder="New Password" onChange={e => setNewPassword(e.target.value)}/>
+            <input className = "textField" type="password" placeholder="Confirm Password" onChange={e => setConfirmPassword(e.target.value)}/>
+            <button id = "reset-btn">Reset Password</button>
+
+            <p>{message}</p>
+           </form> 
+        </div>
         </div>
     );
-}
 
+}
 export default ResetPassword;
