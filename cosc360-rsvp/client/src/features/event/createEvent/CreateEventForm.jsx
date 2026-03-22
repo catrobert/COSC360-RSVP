@@ -1,9 +1,6 @@
 import '../../../css/CreateEventForm.css';
 
 function CreateEventForm({ onClose }) {
-
-    {/* TODO: add image functionality to form creation*/}
-    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -20,7 +17,7 @@ function CreateEventForm({ onClose }) {
             if (field.value === '') {
                 isValid = false;
                 field.style.border = '2px solid red';
-                
+
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'ce-error';
                 errorDiv.textContent = 'This field is required';
@@ -32,17 +29,19 @@ function CreateEventForm({ onClose }) {
 
         if (isValid) {
             const formData = new FormData(form);
-            const data = Object.fromEntries(formData);
 
             const response = await fetch("/api/events", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
+                body: formData,
             });
 
             const result = await response.json();
-            alert(result.message);
-            onClose();
+            if (result.error) {
+                alert(result.error);
+            } else {
+                alert(result.message);
+                onClose();
+            }
         }
     };
 
@@ -55,7 +54,8 @@ function CreateEventForm({ onClose }) {
                     id="create-event-form"
                     method="post"
                     onSubmit={handleSubmit}
-                    noValidate>
+                    noValidate
+                    className="ce-form-grid">
 
                     <div className="ce-form-group">
                         <label>Event Name</label>
@@ -85,38 +85,8 @@ function CreateEventForm({ onClose }) {
                             type="date"
                             id="ce-date"
                             name="date"
-                            required
-                        />
-                    </div>
-
-                    <div className="ce-form-row">
-                        <div className="ce-form-group">
-                            <label>Start Time</label>
-                            <input
-                                type="time"
-                                id="ce-startTime"
-                                name="startTime"
-                                required
-                            />
-                        </div>
-                        <div className="ce-form-group">
-                            <label>End Time</label>
-                            <input
-                                type="time"
-                                id="ce-endTime"
-                                name="endTime"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    <div className="ce-form-group">
-                        <label>Description</label>
-                        <textarea
-                            id="ce-description"
-                            name="description"
-                            placeholder="Event description..."
-                            rows="4"
+                            min="2020-01-01"
+                            max="2099-12-31"
                             required
                         />
                     </div>
@@ -134,7 +104,48 @@ function CreateEventForm({ onClose }) {
                         />
                     </div>
 
-                    <div className="ce-form-actions">
+                    <div className="ce-form-group">
+                        <label>Start Time</label>
+                        <input
+                            type="time"
+                            id="ce-startTime"
+                            name="startTime"
+                            required
+                        />
+                    </div>
+
+                    <div className="ce-form-group">
+                        <label>End Time</label>
+                        <input
+                            type="time"
+                            id="ce-endTime"
+                            name="endTime"
+                            required
+                        />
+                    </div>
+
+                    <div className="ce-form-group ce-form-full">
+                        <label>Event Image</label>
+                        <input
+                            type="file"
+                            id="ce-image"
+                            name="image"
+                            accept="image/*"
+                        />
+                    </div>
+
+                    <div className="ce-form-group ce-form-full">
+                        <label>Description</label>
+                        <textarea
+                            id="ce-description"
+                            name="description"
+                            placeholder="Event description..."
+                            rows="3"
+                            required
+                        />
+                    </div>
+
+                    <div className="ce-form-actions ce-form-full">
                         <button type="button" className="ce-cancel-btn" onClick={onClose}>Cancel</button>
                         <button type="submit" className="ce-submit-btn">Create Event</button>
                     </div>
