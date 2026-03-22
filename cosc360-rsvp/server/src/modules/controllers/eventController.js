@@ -35,12 +35,15 @@ export const getEventById = async (req, res) => {
 
 export const createEvent = async (req, res) => {
     try {
-        const newEvent = await eventService.createEvent(req.body); 
+        const data = { ...req.body };
+        if (req.file) {
+            data.image = "/uploads/" + req.file.filename;
+        }
+        const newEvent = await eventService.createEvent(data);
         console.log("Event created:", newEvent);
         res.status(201).json({ message: "Event created successfully!", event: newEvent });
-        
     } catch (error) {
         console.log("Error creating event: ", error);
         res.status(500).json({ error: "Could not create event" });
     }
-}
+};
