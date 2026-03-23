@@ -18,11 +18,6 @@ function ResetPassword(){
             return;
         }
 
-        if (confirmPassword !== newPassword) {
-            setMessage("Passwords don't match.");
-            return;
-        }
-
         try{
             const data = await resetPass(username, newPassword, confirmPassword);
             setMessage(data.message);
