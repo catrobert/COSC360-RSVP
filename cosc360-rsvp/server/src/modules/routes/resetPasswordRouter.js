@@ -3,6 +3,6 @@ import { processResetPassword } from "../controllers/resetPasswordController.js"
 
 const router = express.Router();
 
-router.post("/", processResetPassword);
+router.put("/", processResetPassword);
 
 export default router;
