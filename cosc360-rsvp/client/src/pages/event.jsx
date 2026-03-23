@@ -20,7 +20,22 @@ function EventPage() {
     }
 
     async function handleDeleteEventClick() {
+        try {
+            const response = await fetch (`/api/events/${id}`, {
+                method: "DELETE"
+            });
 
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(`Something went wrong: ${result.error}`);
+                return;
+            }
+
+            alert("Deleted event successfully.")
+        } catch (error) {
+            console.log("Error deleting event: ", error);
+        }
     }
     
     async function handleRsvpClick() {
@@ -92,7 +107,7 @@ function EventPage() {
                     {userCreated && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
                 </div>
                 <div id="event-content">
-                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} /> {/* createdByUser={userCreated} onDeleteEventClick={handleDeleteEventClick} /> */}
+                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
                     <ReviewCard reviews={event.reviews} />
                 </div>
             </div>

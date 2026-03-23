@@ -5,7 +5,6 @@ import EventDetails from './EventDetails';
 function SingleEventContainer({ event, onRsvpClick }) {
     return (
         <div id="event-container">
-            {/* {createdByUser && (<button id="delete-button" onClick={onDeleteEventClick}>Delete Event</button>)} */}
             <img id="event-image" src={event.image} alt={event.name} /> 
             <div id="event-info">
                 <div id="event-details"><EventDetails event={event} /></div>
