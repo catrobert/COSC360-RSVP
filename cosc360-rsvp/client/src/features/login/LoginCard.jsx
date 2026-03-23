@@ -15,7 +15,7 @@ function LoginCard(){
     e.preventDefault();
 
     try{
-      const data = await loginApi(username, password); 
+      const data = await loginApi(username, password);
       setMessage(data.message);
       navigate("/home");
     }catch (error){
