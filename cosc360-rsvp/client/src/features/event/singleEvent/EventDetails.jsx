@@ -1,6 +1,5 @@
 import '../../../css/Event.css';
-import { Calendar, MapPin, Clock, Users, UserPlus } from 'lucide-react';
-    
+import { Calendar, MapPin, Clock, Users } from 'lucide-react';
 
 function EventDetails({ event }) {
     const date = new Date(event.date).toLocaleDateString("en-US", {
@@ -26,8 +25,8 @@ function EventDetails({ event }) {
             <p className="event-detail"><Calendar className="detail-icon" /> {date}</p>
             <p className="event-detail"><MapPin className="detail-icon" /> {event.location}</p>
             <p className="event-detail"><Clock className="detail-icon" /> {start} - {end}</p>
-            <p className="event-detail"><Users className="detail-icon" /> {event.attendance}</p>
-            <p className="event-detail"><UserPlus className="detail-icon" /> {event.createdBy}</p>
+            <p className="event-detail"><Users className="detail-icon" /> {event.attendance ?? 0} people going</p>
+            <p className="event-detail">Host: {event.createdBy?.toString?.() ?? event.createdBy ?? "—"}</p>
         </div>
     );
 }

@@ -39,7 +39,8 @@ const EventContainer = ({ events, onEventClick }) => {
             date={`${date} - ${time}`}
             rating={averageRating(event.reviews)}
             price={event.price}
-            onClick={ () => onEventClick(event._id.toString())}
+            image={event.image}
+            onClick={() => onEventClick(event._id.toString())}
           />
         );
       })}

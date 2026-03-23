@@ -2,11 +2,12 @@ import ReviewCard from "../features/event/singleEvent/ReviewCard";
 import SingleEventContainer from "../features/event/singleEvent/SingleEventContainer";
 import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
-import '../css/Event.css';
+import "../css/Home.css";
+import "../css/Event.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-
+const username = "Lexi Loudiadis";
 
 function EventPage() {
     const { id } = useParams();
@@ -69,17 +70,31 @@ function EventPage() {
 
     }, [id]);
 
-    if (!event) return <p>Loading...</p>;
+    if (!event) {
+        return (
+            <div className="homepage-layout">
+                <Sidebar user={username} />
+                <div className="main-content">
+                    <TopNav />
+                    <div className="main-content-area">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div id="page-container">
-            <Sidebar id="main-sidebar" />
-            <div id="event-page">
+        <div className="homepage-layout">
+            <Sidebar user={username} />
+            <div className="main-content">
                 <TopNav />
-                <h1 id="event-title">{event.name}</h1>
-                <div id="event-content">
-                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick}/>
-                    <ReviewCard reviews={event.reviews} />
+                <div className="main-content-area">
+                    <h1 className="event-page-title">{event.name}</h1>
+                    <div className="event-page-content">
+                        <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
+                        <ReviewCard reviews={event.reviews} />
+                    </div>
                 </div>
             </div>
         </div>
