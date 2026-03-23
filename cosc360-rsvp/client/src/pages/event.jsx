@@ -6,11 +6,22 @@ import '../css/Event.css';
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+const loggedInUser = "000000000000000000000001"; // hardcoded for now
 
 
 function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    const userCreated = function (userId = "000000000000000000000001") { // hardcoded for now
+        if (loggedInUser === userId) {
+            return true;
+        }
+        return false;
+    }
+
+    async function handleDeleteEventClick() {
+
+    }
     
     async function handleRsvpClick() {
         const data = {
@@ -76,9 +87,12 @@ function EventPage() {
             <Sidebar id="main-sidebar" />
             <div id="event-page">
                 <TopNav />
-                <h1 id="event-title">{event.name}</h1>
+                <div id="event-header">
+                    <h1 id="event-title">{event.name}</h1>
+                    {userCreated && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
+                </div>
                 <div id="event-content">
-                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick}/>
+                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} /> {/* createdByUser={userCreated} onDeleteEventClick={handleDeleteEventClick} /> */}
                     <ReviewCard reviews={event.reviews} />
                 </div>
             </div>

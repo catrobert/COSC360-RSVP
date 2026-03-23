@@ -2,9 +2,10 @@ import '../../../css/Event.css';
 import EventDetails from './EventDetails';
 
 
-function SingleEventContainer({ event, onRsvpClick}) {
+function SingleEventContainer({ event, onRsvpClick }) {
     return (
         <div id="event-container">
+            {/* {createdByUser && (<button id="delete-button" onClick={onDeleteEventClick}>Delete Event</button>)} */}
             <img id="event-image" src={event.image} alt={event.name} /> 
             <div id="event-info">
                 <div id="event-details"><EventDetails event={event} /></div>
@@ -14,8 +15,6 @@ function SingleEventContainer({ event, onRsvpClick}) {
                 <button id="rsvp-button" onClick={onRsvpClick}>RSVP</button>
                 <span>{event.price}</span>
             </div>
-            
-
         </div>
     );
 }
