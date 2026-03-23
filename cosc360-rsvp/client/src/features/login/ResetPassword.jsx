@@ -13,6 +13,16 @@ function ResetPassword(){
     async function handleSubmit(e){
         e.preventDefault();
 
+        if (!confirmPassword) {
+            setMessage("Please confirm your password.");
+            return;
+        }
+
+        if (confirmPassword !== newPassword) {
+            setMessage("Passwords don't match.");
+            return;
+        }
+
         try{
             const data = await resetPass(username, newPassword, confirmPassword);
             setMessage(data.message);
