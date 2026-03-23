@@ -7,7 +7,10 @@ import eventRoutes from "./modules/routes/eventRoutes.js";
 
 import loginRouter from "./modules/routes/loginRouter.js";
 import registerRouter from "./modules/routes/registerRouter.js";
-import rsvpRoutes from "./modules/routes/rsvpRoutes.js";
+
+import rsvpRoutes from "./modules/routes/rsvpRoutes.js"
+import resetPasswordRouter from "./modules/routes/resetPasswordRouter.js";
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -24,6 +27,7 @@ app.use("/api/events", eventRoutes);
 
 app.use("/api/register", registerRouter);
 app.use("/api/rsvp", rsvpRoutes);
+app.use("/api/reset-password", resetPasswordRouter);
 
 
 app.listen(PORT, () => {
