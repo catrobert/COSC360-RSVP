@@ -8,6 +8,7 @@ import MyEvents from "../pages/myEvents.jsx";
 import SavedEvents from "../pages/savedEvents.jsx";
 import Login from "../features/login/Login.jsx";
 import ResetPassword from "../features/login/ResetPassword.jsx";
+import ProtectedRoute from "../components/ProtectedRoute.jsx";
 
 
 /* Create a page for each main view and then link it here! It will be accessible at localhost/pageName */

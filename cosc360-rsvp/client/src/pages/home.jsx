@@ -5,6 +5,7 @@ import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 import "../css/Home.css";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const username = "Lexi Loudiadis"
 const isAdmin = false;
@@ -14,6 +15,8 @@ function Homepage() {
     const [events, setEvents] = useState([]);
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
+    const { user } = useAuth();
+    console.log('Auth user:', user);
 
     const query = searchParams.get("q"); // get the search params sent over from search bar in top nav component
 

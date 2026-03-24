@@ -18,7 +18,7 @@ function LoginCard(){
 
     try{
       const data = await loginApi(username, password);
-      login(data);
+      login(data.user);
       setMessage(data.message);
       navigate("/home");
     }catch (error){
