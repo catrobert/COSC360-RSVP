@@ -17,17 +17,19 @@ function App() {
   return (
     <>
       <Routes>
+
+        {/* Public Routes - Unregistered User Pages to Go here too?*/}
         <Route path="/register" element={<RegisterForm />} />
-        <Route path="/home" element={<Homepage />} />
-        <Route path="/adminManage" element={<AdminUserManage/>} />
-        <Route path="/event/:id" element={<SingleEventPage />} />
-
-        <Route path="/myevents" element={<MyEvents />} />
-        <Route path="/savedevents" element={<SavedEvents />} />
-
         <Route path="/login" element={<Login />}/>
-
         <Route path="/reset-password" element={<ResetPassword/>} />
+
+
+        {/* Protected Routes - Require Auth to Access*/}
+        <Route path="/myevents" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
+        <Route path="/savedevents" element={<ProtectedRoute><SavedEvents /></ProtectedRoute>} />
+        <Route path="/home" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
+        <Route path="/adminManage" element={<ProtectedRoute><AdminUserManage/></ProtectedRoute>} />
+        <Route path="/event/:id" element={<ProtectedRoute><SingleEventPage /></ProtectedRoute>} />
 
       </Routes> 
       
