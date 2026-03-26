@@ -17,7 +17,13 @@ export const processLogin = async (req, res) => {
             return res.status(401).json({ error: "Invalid Credentials" });
         }
 
-        res.json({ success: true, message: "Login Successful", userId: user._id.toString() });
+        res.json({ success: true, message: "Login Successful",
+            user: {
+                id: user._id,
+                username: user.username,
+                role: user.role
+            }
+         });
     } catch (err) {
         res.status(500).json({ error: "Something went wrong" });
     }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./LoginCard.css";
 import { loginApi } from "./api/Login.js";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 
 
@@ -10,12 +11,14 @@ function LoginCard(){
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
+    const { login } = useAuth();
 
   async function handleSubmit(e){
     e.preventDefault();
 
     try{
       const data = await loginApi(username, password);
+      login(data.user);
       setMessage(data.message);
 
       if (data.userId) {
