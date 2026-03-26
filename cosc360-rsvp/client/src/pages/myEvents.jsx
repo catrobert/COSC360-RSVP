@@ -10,6 +10,8 @@ import "../css/Home.css";
 const username = "Lexi Loudiadis"
 const isAdmin = false;
 
+// todo: if previously attended event, swap out review stars for "Leave a Review" button
+
 function MyEvents() {
     const [upcomingHostedEvents, setUpcomingHostedEvents] = useState([]);
     const [upcomingAttendingEvents, setUpcomingAttendingEvents] = useState([]);
