@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './EventCard.css';
 import EventCard from './EventCard.jsx';
 
@@ -14,9 +14,57 @@ function averageRating(reviews) {
 }
 
 const EventContainer = ({ events, onEventClick }) => {
+  const [savedEventIds, setSavedEventIds] = useState(new Set());
+
+  useEffect(() => {
+    async function fetchSavedEvents() {
+      const userId = localStorage.getItem("userId") || "000000000000000000000001";
+
+      try {
+        const response = await fetch("/api/rsvp/events?status=saved", {
+          headers: {
+            "x-user-id": userId,
+          },
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = await response.json();
+        const savedIds = new Set(
+          (data.events || [])
+            .map((item) => item?.eventId?._id?.toString?.() || item?.eventId?.toString?.())
+            .filter(Boolean)
+        );
+
+        setSavedEventIds(savedIds);
+      } catch (error) {
+        console.log("Error fetching saved events:", error);
+      }
+    }
+
+    fetchSavedEvents();
+  }, []);
+
+  function handleWishlistChanged(eventId, isWishlisted) {
+    setSavedEventIds((prev) => {
+      const next = new Set(prev);
+
+      if (isWishlisted) {
+        next.add(eventId);
+      } else {
+        next.delete(eventId);
+      }
+
+      return next;
+    });
+  }
+
   return (
     <div className="event-container">
       {events.map((event) => {
+        const eventId = event._id?.toString();
         const date = new Date(event.date).toLocaleDateString("en-US", {
           year:  "numeric",
           month: "short",
@@ -34,13 +82,16 @@ const EventContainer = ({ events, onEventClick }) => {
         return (
           <EventCard
             key={event._id}
+            eventId={eventId}
+            initialWishlisted={savedEventIds.has(eventId)}
+            onWishlistChanged={handleWishlistChanged}
             name={event.name}
             location={event.location}
             date={`${date} - ${time}`}
             rating={averageRating(event.reviews)}
             price={event.price}
             image={event.image}
-            onClick={() => onEventClick(event._id.toString())}
+            onClick={() => onEventClick?.(eventId)}
           />
         );
       })}

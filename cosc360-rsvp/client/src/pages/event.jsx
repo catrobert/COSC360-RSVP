@@ -14,16 +14,20 @@ function EventPage() {
     const [event, setEvent] = useState(null);
     
     async function handleRsvpClick() {
+        const userId = localStorage.getItem("userId") || "000000000000000000000001";
+
         const data = {
             eventId: id,
-            userId: "000000000000000000000001", // placeholder till we have login and can track userId
             status: "yes",
         };
 
         try {
             const response = await fetch("/api/rsvp", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-user-id": userId,
+                },
                 body: JSON.stringify(data),
             });
 

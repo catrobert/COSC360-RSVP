@@ -1,9 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
 
-const EventCard = ({ name, location, date, rating, price, image, onClick}) => {
-    const [wishlisted, setWishlisted] = useState(false);
+const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick}) => {
+    const [wishlisted, setWishlisted] = useState(initialWishlisted);
+
+    useEffect(() => {
+        setWishlisted(initialWishlisted);
+    }, [initialWishlisted]);
+
+    async function handleWishlistClick(e) {
+        e.stopPropagation();
+
+        if (!eventId) return;
+
+        const userId = localStorage.getItem("userId") || "000000000000000000000001";
+
+        const nextWishlisted = !wishlisted;
+        const nextStatus = nextWishlisted ? "saved" : "no";
+
+        try {
+            let response = await fetch(`/api/rsvp/${eventId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-user-id": userId,
+                },
+                body: JSON.stringify({ status: nextStatus }),
+            });
+
+            if (response.status === 404 && nextWishlisted) {
+                response = await fetch("/api/rsvp", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-user-id": userId,
+                    },
+                    body: JSON.stringify({ eventId, status: "saved" }),
+                });
+            }
+
+            if (!response.ok) {
+                const result = await response.json().catch(() => ({}));
+                alert(result.error || "Could not update saved status.");
+                return;
+            }
+
+            setWishlisted(nextWishlisted);
+            onWishlistChanged?.(eventId, nextWishlisted);
+        } catch (error) {
+            console.log("Error updating saved status:", error);
+        }
+    }
 
     return (
         <div className="event-card" onClick={onClick}>
@@ -32,7 +80,7 @@ const EventCard = ({ name, location, date, rating, price, image, onClick}) => {
                 </div>
                 <button
                     className={`wishlist-btn ${wishlisted ? 'wishlisted' : ''}`}
-                    onClick={() => setWishlisted(!wishlisted)}
+                    onClick={handleWishlistClick}
                 >
                     <Bookmark size={22} fill={wishlisted ? 'gold' : 'none'} color={wishlisted ? 'gold' : '#888'} />
                 </button>
