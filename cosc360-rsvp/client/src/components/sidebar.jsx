@@ -1,6 +1,7 @@
 import { Calendar, LogOutIcon, Save, FileBadge } from 'lucide-react';
 import "../css/sidebar.css";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext.jsx";
 
 const menuItems = [
     { icon: Calendar, label: "Browse Events" },
@@ -20,6 +21,12 @@ const MenuItem = ({ icon: Icon, label, clickItem }) => {
 
 function Sidebar({ user, profilePicture }) {
     const navigate = useNavigate();
+    const { logout } = useAuth();
+
+    function handleLogout(){
+        logout();
+        navigate('/login');
+    }
 
     function handleSidebarClick(index){
         if (index === 0) {
@@ -57,7 +64,8 @@ function Sidebar({ user, profilePicture }) {
             <div className="logout">
                 <MenuItem
                     icon={LogOutIcon}
-                    label="Logout" /> {/*TODO: add logout functionality with clickItem call once implemented */}
+                    label="Logout"
+                    clickItem={handleLogout} /> 
             </div>
         </div>
     
