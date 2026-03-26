@@ -14,8 +14,10 @@ function EventPage() {
     const [event, setEvent] = useState(null);
     
     async function handleRsvpClick() {
+        // Use logged in user id when available and keep demo fallback for local testing.
         const userId = localStorage.getItem("userId") || "000000000000000000000001";
 
+        // Create a yes RSVP for this event id.
         const data = {
             eventId: id,
             status: "yes",

@@ -17,6 +17,7 @@ const EventContainer = ({ events, onEventClick }) => {
   const [savedEventIds, setSavedEventIds] = useState(new Set());
 
   useEffect(() => {
+    // Load saved RSVP rows once so bookmarks render correctly on first paint.
     async function fetchSavedEvents() {
       const userId = localStorage.getItem("userId") || "000000000000000000000001";
 
@@ -32,6 +33,7 @@ const EventContainer = ({ events, onEventClick }) => {
         }
 
         const data = await response.json();
+        // RSVP rows come back with populated eventId docs.
         const savedIds = new Set(
           (data.events || [])
             .map((item) => item?.eventId?._id?.toString?.() || item?.eventId?.toString?.())
@@ -47,6 +49,7 @@ const EventContainer = ({ events, onEventClick }) => {
     fetchSavedEvents();
   }, []);
 
+  // Keep a local set of saved ids in sync after each bookmark toggle.
   function handleWishlistChanged(eventId, isWishlisted) {
     setSavedEventIds((prev) => {
       const next = new Set(prev);

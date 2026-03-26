@@ -20,6 +20,7 @@ function SavedEvents() {
 
     useEffect(() => {
         async function fetchSavedEvents() {
+            // Use the active user id header required by RSVP middleware.
             const userId = localStorage.getItem("userId") || "000000000000000000000001";
 
             try {
@@ -37,6 +38,7 @@ function SavedEvents() {
                     return;
                 }
 
+                // RSVP rows include populated event objects under eventId.
                 const events = (data.events || [])
                     .map((rsvp) => rsvp?.eventId)
                     .filter(Boolean);

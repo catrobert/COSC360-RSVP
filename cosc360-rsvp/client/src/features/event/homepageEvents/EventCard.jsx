@@ -5,6 +5,7 @@ import './EventCard.css';
 const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick}) => {
     const [wishlisted, setWishlisted] = useState(initialWishlisted);
 
+    // Keep local button state in sync with data hydrated by the parent list.
     useEffect(() => {
         setWishlisted(initialWishlisted);
     }, [initialWishlisted]);
@@ -20,6 +21,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
         const nextStatus = nextWishlisted ? "saved" : "no";
 
         try {
+            // Try to update an existing RSVP first.
             let response = await fetch(`/api/rsvp/${eventId}`, {
                 method: "PUT",
                 headers: {
@@ -29,6 +31,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
                 body: JSON.stringify({ status: nextStatus }),
             });
 
+            // If no RSVP exists yet and user is saving, create it.
             if (response.status === 404 && nextWishlisted) {
                 response = await fetch("/api/rsvp", {
                     method: "POST",
@@ -46,6 +49,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
                 return;
             }
 
+            // Update local UI and notify parent so list state stays in sync.
             setWishlisted(nextWishlisted);
             onWishlistChanged?.(eventId, nextWishlisted);
         } catch (error) {
