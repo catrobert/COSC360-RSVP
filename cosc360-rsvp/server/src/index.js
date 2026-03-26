@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { connectDB } from "./db/connection.js";
+import { seedIfEmpty } from "./seed.js";
 import eventRoutes from "./modules/routes/eventRoutes.js";
 
 import loginRouter from "./modules/routes/loginRouter.js";
@@ -17,6 +18,7 @@ const app = express();
 const PORT = 3000;
 
 await connectDB();
+await seedIfEmpty();
 
 app.use(cors( { origin: ["http://localhost:5173", "http://localhost:5174"] } ));
 app.use(express.json());

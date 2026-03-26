@@ -6,12 +6,12 @@ import "../css/Home.css";
 import "../css/Event.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-const username = "Lexi Loudiadis";
+import { useAuth } from "../context/AuthContext.jsx";
 
 function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    const { user } = useAuth();
     
     async function handleRsvpClick() {
         const data = {
@@ -73,7 +73,7 @@ function EventPage() {
     if (!event) {
         return (
             <div className="homepage-layout">
-                <Sidebar user={username} />
+                <Sidebar />
                 <div className="main-content">
                     <TopNav />
                     <div className="main-content-area">
@@ -86,7 +86,7 @@ function EventPage() {
 
     return (
         <div className="homepage-layout">
-            <Sidebar user={username} />
+            <Sidebar />
             <div className="main-content">
                 <TopNav />
                 <div className="main-content-area">
