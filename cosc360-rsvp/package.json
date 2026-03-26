@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "seed": "node --env-file=server/src/.env server/src/seed.js"
+    "seed": "node --env-file=server/.env server/src/seed.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
