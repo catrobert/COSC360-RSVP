@@ -7,16 +7,11 @@ import TopNav from "../components/topNav";
 import "../css/Home.css";
 import { useAuth } from "../context/AuthContext.jsx";
 
-const username = "Lexi Loudiadis"
-const isAdmin = false;
-
-
 function Homepage() {
     const [events, setEvents] = useState([]);
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { user } = useAuth();
-    console.log('Auth user:', user);
 
     const query = searchParams.get("q"); // get the search params sent over from search bar in top nav component
 
@@ -55,7 +50,7 @@ function Homepage() {
 
     return (
         <div className="homepage-layout">        
-            {isAdmin ? ( <AdminSidebar user= { username } /> ) : ( <Sidebar user = { username } /> )}
+            {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
             <div className="main-content">
                 <TopNav />
                 <EventContainer events={events} onEventClick={handleEventClick} />

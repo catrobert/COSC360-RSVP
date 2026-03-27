@@ -19,9 +19,10 @@ const MenuItem = ({ icon: Icon, label, clickItem }) => {
     )
 };
 
-function Sidebar({ user, profilePicture }) {
+function Sidebar({ profilePicture }) {
     const navigate = useNavigate();
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
+    const fullName = user ? `${user.firstName} ${user.lastName}` : '';
 
     function handleLogout(){
         logout();
@@ -47,7 +48,7 @@ function Sidebar({ user, profilePicture }) {
                         {profilePicture}
                     </div>
                     <div className="sidebar-header">
-                        <h4>{user}</h4>
+                        <h4>{fullName}</h4>
                         <p>View Profile</p>
                     </div>
                 </div>
