@@ -5,10 +5,7 @@ import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 import "../css/Home.css";
-
-
-const username = "Lexi Loudiadis"
-const isAdmin = false;
+import { useAuth } from "../context/AuthContext.jsx";
 
 // todo: if previously attended event, swap out review stars for "Leave a Review" button
 
@@ -79,6 +76,11 @@ function MyEvents() {
         <div className="homepage-layout">        
             {isAdmin ? ( <AdminSidebar user= { username } /> ) : ( <Sidebar user = { username } /> )}
             <div className="main-content">
+//     const { user } = useAuth();
+//     return (
+//         <div style= {{ display: "flex", flexDirection: "row", width: "100%" }}>        
+//             {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
+//             <div style= {{ display: "flex", flexDirection: "column", flex: "1" }}>
                 <TopNav />
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} />}

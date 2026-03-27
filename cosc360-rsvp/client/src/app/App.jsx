@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import './App.css'
 import RegisterForm from '../features/register/RegisterForm.jsx'
 import Homepage from "../pages/home.jsx";
@@ -18,6 +18,9 @@ function App() {
   return (
     <>
       <Routes>
+
+        {/* Root redirect */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* Public Routes - Unregistered User Pages to Go here too?*/}
         <Route path="/register" element={<RegisterForm />} />

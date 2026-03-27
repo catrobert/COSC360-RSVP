@@ -1,6 +1,7 @@
 import { Calendar, LogOutIcon, Save, FileBadge, AlignEndHorizontal, Users } from 'lucide-react';
 import "../css/sidebar.css";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext.jsx";
 
 
 const menuItems = [
@@ -23,8 +24,10 @@ const MenuItem = ({ icon: Icon, label, clickItem }) => {
     )
 };
 
-function AdminSidebar({ user, profilePicture }) {
+function AdminSidebar({ profilePicture }) {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const fullName = user ? `${user.firstName} ${user.lastName}` : '';
 
     function handleSidebarClick(index){
         if (index === 0) {
@@ -53,7 +56,7 @@ function AdminSidebar({ user, profilePicture }) {
                         {profilePicture}
                     </div>
                     <div className="sidebar-header">
-                        <h4>{user}</h4>
+                        <h4>{fullName}</h4>
                         <p>View Profile</p>
                     </div>
                 </div>
