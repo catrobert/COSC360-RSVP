@@ -21,8 +21,8 @@ function LoginCard(){
       login(data.user);
       setMessage(data.message);
 
-      if (data.userId) {
-        localStorage.setItem("userId", data.userId);
+      if (data.user?.id) {
+        localStorage.setItem("userId", data.user.id);
       }
 
       navigate("/home");
