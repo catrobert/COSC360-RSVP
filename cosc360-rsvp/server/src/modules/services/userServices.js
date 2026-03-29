@@ -20,3 +20,15 @@ export const resetPassword = async (username, newHashedPassword) => {
         { new: true }
     );
 }
+
+export async function getUserById(id) {
+    return await UserSchema.findById(id).select("-password");
+}
+
+export async function updateUserById (id, updates) {
+    return await UserSchema.findByIdAndUpdate(
+        id,
+        { $set: updates},
+        { returnDocument: "after", runValidators: true}
+    ).select("-password");
+}
