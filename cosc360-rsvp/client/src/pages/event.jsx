@@ -14,16 +14,22 @@ function EventPage() {
     const { user } = useAuth();
     
     async function handleRsvpClick() {
+        // Use logged in user id when available and keep demo fallback for local testing.
+        const userId = localStorage.getItem("userId") || "000000000000000000000001";
+
+        // Create a yes RSVP for this event id.
         const data = {
             eventId: id,
-            userId: "000000000000000000000001", // placeholder till we have login and can track userId
             status: "yes",
         };
 
         try {
             const response = await fetch("/api/rsvp", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-user-id": userId,
+                },
                 body: JSON.stringify(data),
             });
 
