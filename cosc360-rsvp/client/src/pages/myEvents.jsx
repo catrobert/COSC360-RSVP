@@ -15,7 +15,6 @@ function MyEvents() {
     const [upcomingAttendingEvents, setUpcomingAttendingEvents] = useState([]);
     const [previousHostedEvents, setPreviousHostedEvents] = useState([]);
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
-    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
@@ -31,7 +30,6 @@ function MyEvents() {
     useEffect(() => {
         async function fetchMyEvents() {
             const userId = localStorage.getItem("userId") || "000000000000000000000001";
-            setLoading(true);
 
             const eventParams = new URLSearchParams();
             if (query.trim()) {
@@ -78,8 +76,6 @@ function MyEvents() {
                 setPreviousHostedEvents([]);
                 setUpcomingAttendingEvents([]);
                 setPreviousAttendedEvents([]);
-            } finally {
-                setLoading(false);
             }
         }
 
@@ -94,13 +90,13 @@ function MyEvents() {
             <div className="main-content">
                 <TopNav />
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} />}
+                {<EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Attending Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} />}
+                {<EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} />}
+                {<EventContainer events={previousHostedEvents} onEventClick={handleEventClick} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previous Attended Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} />}
+                {<EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} />}
             </div>
         </div>
     );
