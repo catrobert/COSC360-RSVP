@@ -115,16 +115,14 @@ function EventPage() {
         <div className="homepage-layout">
             <Sidebar />
             <div className="main-content">
-                <TopNav />
-                <div className="main-content-area">
-                  <div id="event-header">
-                    <h1 id="event-title">{event.name}</h1>
+            <TopNav />
+                <div id="event-header">
+                    <h1 id= "event-page-title">{event.name}</h1>
                     {userCreated() && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
-                  </div>
-                    <div className="event-content">
-                        <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
-                        <ReviewCard reviews={event.reviews} />
-                    </div>
+                </div>
+                <div className="event-page-content">
+                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
+                    <ReviewCard reviews={event.reviews} />
                 </div>
             </div>
         </div>
