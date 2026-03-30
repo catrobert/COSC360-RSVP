@@ -104,7 +104,7 @@ function EventPage() {
                 <TopNav />
                 <div id="event-header">
                     <h1 id="event-title">{event.name}</h1>
-                    {userCreated && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
+                    {userCreated() && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
                 </div>
                 <div id="event-content">
                     <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />

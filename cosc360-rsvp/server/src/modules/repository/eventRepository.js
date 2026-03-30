@@ -23,3 +23,7 @@ export async function findBySearchTerm(query) {
 export async function findEvent(id) {
     return await EventModel.findById(id);
 }
+
+export async function deleteEvent(id) {
+    return await EventModel.findByIdAndDelete(id);
+}
