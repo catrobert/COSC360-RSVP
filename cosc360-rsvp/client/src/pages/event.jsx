@@ -2,12 +2,13 @@ import ReviewCard from "../features/event/singleEvent/ReviewCard";
 import SingleEventContainer from "../features/event/singleEvent/SingleEventContainer";
 import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
-import '../css/Event.css';
+import "../css/Home.css";
+import "../css/Event.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const loggedInUser = "000000000000000000000001"; // hardcoded for now
-
 
 function EventPage() {
     const { id } = useParams();
@@ -37,6 +38,7 @@ function EventPage() {
             console.log("Error deleting event: ", error);
         }
     }
+    const { user } = useAuth();
     
     async function handleRsvpClick() {
         const data = {
@@ -95,20 +97,34 @@ function EventPage() {
 
     }, [id]);
 
-    if (!event) return <p>Loading...</p>;
+    if (!event) {
+        return (
+            <div className="homepage-layout">
+                <Sidebar />
+                <div className="main-content">
+                    <TopNav />
+                    <div className="main-content-area">
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
-        <div id="page-container">
-            <Sidebar id="main-sidebar" />
-            <div id="event-page">
+        <div className="homepage-layout">
+            <Sidebar />
+            <div className="main-content">
                 <TopNav />
-                <div id="event-header">
+                <div className="main-content-area">
+                  <div id="event-header">
                     <h1 id="event-title">{event.name}</h1>
                     {userCreated() && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
-                </div>
-                <div id="event-content">
-                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
-                    <ReviewCard reviews={event.reviews} />
+                  </div>
+                    <div className="event-content">
+                        <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
+                        <ReviewCard reviews={event.reviews} />
+                    </div>
                 </div>
             </div>
         </div>

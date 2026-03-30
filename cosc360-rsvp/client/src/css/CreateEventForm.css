@@ -14,21 +14,31 @@
 .create-event-modal {
     background-color: #fff;
     border-radius: 16px;
-    padding: 32px;
+    padding: 28px;
     width: 100%;
-    max-width: 480px;
+    max-width: 640px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     font-family: sans-serif;
 }
 
 .create-event-modal h2 {
-    margin: 0 0 24px 0;
+    margin: 0 0 20px 0;
     font-size: 1.6rem;
     color: #1a1a2e;
 }
 
+.ce-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+}
+
+.ce-form-full {
+    grid-column: 1 / -1;
+}
+
 .ce-form-group {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     display: flex;
     flex-direction: column;
 }
@@ -60,6 +70,11 @@
     cursor: pointer;
 }
 
+.ce-form-group input[type="file"] {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
 .ce-form-group input:focus,
 .ce-form-group textarea:focus {
     border-color: navy;
@@ -74,15 +89,6 @@
     background-color: #fff;
 }
 
-/* row for start/end time */
-.ce-form-row {
-    display: flex;
-    gap: 16px;
-}
-
-.ce-form-row .ce-form-group {
-    flex: 1;
-}
 
 .ce-error {
     color: #d32f2f;
@@ -99,7 +105,8 @@
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-top: 24px;
+    margin-top: 16px;
+    margin-bottom: 0;
 }
 
 .ce-cancel-btn {

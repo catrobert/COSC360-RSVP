@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
 
-const EventCard = ({ name, location, date, rating, price, onClick}) => {
+const EventCard = ({ name, location, date, rating, price, image, onClick}) => {
     const [wishlisted, setWishlisted] = useState(false);
 
     return (
         <div className="event-card" onClick={onClick}>
             <div className="event-card-image">
-                <img src="https://picsum.photos/300/160" alt="Event Image" />
+                <img src={image || "https://picsum.photos/300/160"} alt="Event Image" />
             </div>
             <div className="event-body">
                 <div className="event-body-top">
@@ -28,7 +28,7 @@ const EventCard = ({ name, location, date, rating, price, onClick}) => {
                 </div>
                 <div className="event-info">
                     <DollarSign size={14} color="#888" />
-                    <p>${typeof price === 'number' ? price.toFixed(2) : '0.00'}</p>
+                    <p>${(Number(price) || 0).toFixed(2)} / ticket</p>
                 </div>
                 <button
                     className={`wishlist-btn ${wishlisted ? 'wishlisted' : ''}`}

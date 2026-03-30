@@ -1,20 +1,26 @@
 import { useState } from "react";
 import "./LoginCard.css";
 import { loginApi } from "./api/Login.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext.jsx";
+
 
 
 function LoginCard(){
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
   async function handleSubmit(e){
     e.preventDefault();
 
     try{
-      const data = await loginApi(username, password); 
+      const data = await loginApi(username, password);
+      login(data.user);
       setMessage(data.message);
+      navigate("/home");
     }catch (error){
       setMessage(error.message);
     }
@@ -40,7 +46,7 @@ function LoginCard(){
               onChange={(e)=>setPassword(e.target.value)}/>
 
             <button id = "login-btn" type="submit">Login</button> 
-            <a id="forgotPassword">Forgot Password?</a> 
+            <Link to="/reset-password" id="forgotPassword">Forgot Password?</Link> 
             <Link to="/register">Create Account</Link>
 
             <p>{message}</p> 

@@ -13,11 +13,11 @@ export async function findBySearchTerm(query) {
     return await EventModel.find(
         {
             $or: [
-                { name: { $regex: query, $options: "i"}},   // match if event name contains query (case insensitive)
-                { description: { $regex: query, $options: "i"}} // match if description contains query (case insensitive)
+                { name: { $regex: query, $options: "i" } },
+                { description: { $regex: query, $options: "i" } }
             ]
         }
-    )
+    );
 }
 
 export async function findEvent(id) {

@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 server/src/.env
+
+# Uploaded event images (keep folder with .gitkeep)
+cosc360-rsvp/server/uploads/*
+!cosc360-rsvp/server/uploads/.gitkeep

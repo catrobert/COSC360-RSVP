@@ -17,20 +17,21 @@ export async function deleteEvent(id) {
 }
 
 export async function createEvent(data) {
-    const eventData =
-    {
+    const eventData = {
         name: data.name,
         date: new Date(data.date),
         location: data.location,
         startTime: data.startTime,
         endTime: data.endTime,
         attendance: 0,
-        createdBy: "000000000000000000000001", // placeholder, when we have login we will replace this with req.user._id,
-        price: parseFloat(data.price), //so its a number not a string
+        createdBy: "000000000000000000000001",
+        price: parseFloat(data.price),
         description: data.description,
-        reviews: []
+        reviews: [],
     };
-        
+    if (data.image) {
+        eventData.image = data.image;
+    }
     return await eventRepository.createEvent(eventData);
 }
 

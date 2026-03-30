@@ -19,6 +19,7 @@ const eventSchema = new Schema (
         createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true }, 
         price: { type: Number, required: true },
         description: { type: String, required: true },
+        image: { type: String },
         reviews: [reviewSchema],
 
     }
