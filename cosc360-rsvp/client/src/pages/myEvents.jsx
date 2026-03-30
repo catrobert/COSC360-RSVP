@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import EventContainer from "../features/event/homepageEvents/EventContainer";
 import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
@@ -16,6 +17,8 @@ function MyEvents() {
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get("q") || "";
 
     function isUpcoming(eventDate) {
         return new Date(eventDate) >= new Date();
@@ -28,12 +31,23 @@ function MyEvents() {
     useEffect(() => {
         async function fetchMyEvents() {
             const userId = localStorage.getItem("userId") || "000000000000000000000001";
+            setLoading(true);
+
+            const eventParams = new URLSearchParams();
+            if (query.trim()) {
+                eventParams.set("q", query.trim());
+            }
+
+            const rsvpParams = new URLSearchParams({ status: "yes" });
+            if (query.trim()) {
+                rsvpParams.set("q", query.trim());
+            }
 
             try {
                 // Pull all events for hosted sections and RSVP yes rows for attending sections.
                 const [allEventsResponse, attendingResponse] = await Promise.all([
-                    fetch("/api/events"),
-                    fetch("/api/rsvp/events?status=yes", {
+                    fetch(`/api/events${eventParams.toString() ? `?${eventParams.toString()}` : ""}`),
+                    fetch(`/api/rsvp/events?${rsvpParams.toString()}`, {
                         headers: {
                             "x-user-id": userId,
                         },
@@ -70,7 +84,7 @@ function MyEvents() {
         }
 
         fetchMyEvents();
-    }, []);
+    }, [query]);
 
     const { user } = useAuth();
 
