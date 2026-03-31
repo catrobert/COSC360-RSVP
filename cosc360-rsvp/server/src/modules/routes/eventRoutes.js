@@ -8,6 +8,7 @@ const router = express.Router();
 router.get("/", eventController.getEvents);
 router.post("/", authMiddleware, uploadImage.single("image"), eventController.createEvent);
 router.get("/:id", eventController.getEventById);
+router.get("/review/:id", eventController.createReview);
 
 // *** to be implemented later ***
 // router.delete("/:id", deleteEvent);

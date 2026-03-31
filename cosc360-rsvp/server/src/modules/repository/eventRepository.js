@@ -23,3 +23,10 @@ export async function findBySearchTerm(query) {
 export async function findEvent(id) {
     return await EventModel.findById(id).populate('createdBy', 'username').populate('reviews.userId', 'username');
 }
+
+export async function createReview(data, eventId) {
+    const event = await EventModel.findById(eventId);
+    event.reviews.push(data);
+    await event.save();
+    return event.toJSON();
+}

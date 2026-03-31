@@ -31,4 +31,13 @@ export async function createEvent(data, userId) {
     return await eventRepository.createEvent(eventData);
 }
 
+export async function createReview(data, eventId, userId) {
+    const reviewData = {
+        userId: userId,
+        rating: data.rating,
+        comment: data.comment
+    }
+
+    return await eventRepository.createReview(reviewData, eventId);
+}
 
