@@ -9,6 +9,7 @@ import SavedEvents from "../pages/savedEvents.jsx";
 import Login from "../features/login/Login.jsx";
 import ResetPassword from "../features/login/ResetPassword.jsx";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
+import Profile from "../pages/profile.jsx";
 
 
 /* Create a page for each main view and then link it here! It will be accessible at localhost/pageName */
@@ -34,6 +35,7 @@ function App() {
         <Route path="/home" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
         <Route path="/adminManage" element={<ProtectedRoute><AdminUserManage/></ProtectedRoute>} />
         <Route path="/event/:id" element={<ProtectedRoute><SingleEventPage /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
 
       </Routes> 
       

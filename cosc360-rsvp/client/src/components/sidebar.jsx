@@ -49,7 +49,7 @@ function Sidebar({ profilePicture }) {
                     </div>
                     <div className="sidebar-header">
                         <h4>{fullName}</h4>
-                        <p>View Profile</p>
+                        <p className="view-profile" onClick={() => navigate('/profile')}>View Profile</p>
                     </div>
                 </div>
             </div>

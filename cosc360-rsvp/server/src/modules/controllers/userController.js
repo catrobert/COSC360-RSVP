@@ -1,4 +1,4 @@
-import { getUserById, updateUserById } from "../services/userService.js";
+import { getUserById, updateUserById } from "../services/userServices.js";
 
 export const getProfile = async (req, res) => {
     try {
