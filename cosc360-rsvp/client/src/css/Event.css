@@ -138,6 +138,7 @@ button:hover{
     font-size: 24px;
     color: #213547;
     font-weight: bold;
+    padding-top: 0.5rem;
 }
 
 .review-title {
