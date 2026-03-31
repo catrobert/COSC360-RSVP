@@ -1,5 +1,5 @@
-import { UserModel } from "../models/userModel.js";
+import { UserSchema } from "../model/user.model.js";
 
 export async function findUser(id) {
-    return await UserModel.findOne({ _id : id }); 
+    return await UserSchema.findOne({ _id : id }); 
 }

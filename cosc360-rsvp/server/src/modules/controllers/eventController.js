@@ -39,7 +39,7 @@ export const createEvent = async (req, res) => {
         if (req.file) {
             data.image = "/uploads/" + req.file.filename;
         }
-        const newEvent = await eventService.createEvent(data);
+        const newEvent = await eventService.createEvent(data, req.userId);
         console.log("Event created:", newEvent);
         res.status(201).json({ message: "Event created successfully!", event: newEvent });
     } catch (error) {

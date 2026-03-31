@@ -36,7 +36,7 @@ function CreateEventForm({ onClose }) {
             const response = await fetch("/api/events", {
                 method: "POST",
                 headers: {
-                    "x-user-id": user.id,
+                    "x-user-id": user._id || user.id,
                 },
                 body: formData,
             });

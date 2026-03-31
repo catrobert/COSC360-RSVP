@@ -12,7 +12,7 @@ export async function getEventById(id) {
     return await eventRepository.findEvent(id);
 }
 
-export async function createEvent(data) {
+export async function createEvent(data, userId) {
     const eventData = {
         name: data.name,
         date: new Date(data.date),
@@ -20,7 +20,7 @@ export async function createEvent(data) {
         startTime: data.startTime,
         endTime: data.endTime,
         attendance: 0,
-        createdBy: "000000000000000000000001",
+        createdBy: userId,
         price: parseFloat(data.price),
         description: data.description,
         reviews: [],
