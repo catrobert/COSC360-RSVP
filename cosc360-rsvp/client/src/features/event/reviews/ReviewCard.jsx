@@ -13,8 +13,11 @@ function getAverageRating(reviews) {
 function ReviewsCard({reviews, onReviewClick}) {
     return (
         <aside className="reviews-container">
-            <Header reviews={reviews} />
-            <ReviewList reviews={reviews} onReviewClick={onReviewClick} />
+            <div className='reviews-background'>
+                <Header reviews={reviews} />
+                <ReviewList reviews={reviews} onReviewClick={onReviewClick} />
+
+            </div>
         </aside>
     );
 }
@@ -37,7 +40,7 @@ function ReviewList({ reviews, onReviewClick }) {
         <div>
             <ul className="reviews-list-container"> 
                 {reviews.map((review, index) => (
-                    <ReviewItem key={index} index={index} review={review} rating={"⭐".repeat(review.rating)} />
+                    <ReviewItem key={index} index={index} review={review} />
                 ))}
             </ul>
             <button className="add-review-button" onClick={onReviewClick}>Add Review</button>
@@ -52,7 +55,7 @@ function ReviewItem({review, index }) {
         <>
             <div className="review-title">
                 <div>{review.userId?.username ?? `Reviewer ${index + 1}`}</div> {/* TODO: switch this use userId to join username in user table and display that */}
-                <div>{review.rating}</div>
+                <div>{"⭐".repeat(review.rating)}</div>
             </div>
             <p className="review-text">{review.comment}</p>
         </>
