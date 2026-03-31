@@ -6,6 +6,7 @@ import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 import "../css/Home.css";
 import { useAuth } from "../context/AuthContext.jsx";
+import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
 
 // todo: if previously attended event, swap out review stars for "Leave a Review" button
 
@@ -20,7 +21,7 @@ function MyEvents() {
     const { user } = useAuth();
 
     const handleReviewClick = function(event) {
-        setReviewingEvent(event);
+        setReviewingEvent(event);  
     }
 
     function isUpcoming(eventDate, endTime) {

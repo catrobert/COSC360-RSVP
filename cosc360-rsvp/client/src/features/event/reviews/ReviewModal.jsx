@@ -25,6 +25,14 @@ function ReviewModal({ eventId, onClose }) {
                 errorDiv.className = 'review-error';
                 errorDiv.textContent = 'This field is required';
                 field.parentNode.appendChild(errorDiv);
+            } else if (field.value < 1 || field.value > 5) {
+                isValid = false;
+                field.style.border = '2px solid red';
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'review-error';
+                errorDiv.textContent = 'Please input a number between 1 and 5';
+                field.parentNode.appendChild(errorDiv);
             } else {
                 field.style.border = '';
             }
@@ -70,15 +78,15 @@ function ReviewModal({ eventId, onClose }) {
                     className="review-form-grid">
                     
                     <div className="review-form-group">
-                        <label>Rating</label>
+                        <label>Rating (1-5)</label>
                         <input type="number" id="rating" min="1" max="5" required />
                     </div>
 
                     <div className="review-form-group">
                         <label>Comment</label>
-                        <input type="text" 
+                        <textarea type="text" 
                         id="comment" 
-                        placeholder="Share details of your experience at this event" rows="3"/>
+                        placeholder="Share details of your experience at this event" rows="3" required/>
                     </div>
 
                     <div className="review-form-actions review-form-full">
