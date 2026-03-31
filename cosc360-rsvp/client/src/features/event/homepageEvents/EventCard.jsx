@@ -89,7 +89,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
                     <Bookmark size={22} fill={wishlisted ? 'gold' : 'none'} color={wishlisted ? 'gold' : '#888'} />
                 </button>
 
-                {showReviewButton && <button className="review-btn" onClick={(e) => { e.stopPropagation(); onReviewClick(eventId); }}>Leave a Review</button>}
+                {showReviewButton && <button className="review-btn" onClick={(e) => { e.stopPropagation(); onReviewClick(); }}>Leave a Review</button>}
             </div>
         </div>
     )

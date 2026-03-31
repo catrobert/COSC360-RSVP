@@ -50,13 +50,15 @@ export const createEvent = async (req, res) => {
 
 export const createReview = async (req, res) => {
     try {
-        const eventId = req.userId;
+        const eventId = req.params.id;
+        const userId = req.userId;
         const data = {...req.body};
 
         const newReview = await eventService.createReview(data, eventId, userId);
 
         res.status(201).json({ message: "Successfully created event!", review: newReview });
     } catch (error) {
-        res.status(505).json({ error: "Could not post review"});
+         console.log("Error creating review:", error);
+        res.status(500).json({ error: "Could not post review"});
     }
 }

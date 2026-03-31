@@ -1,7 +1,7 @@
 import "../../../css/reviewModal.css";
 import { useAuth } from "../../../context/AuthContext.jsx";
 
-function ReviewModal({ eventId, onClose }) {
+function ReviewModal({ event, onClose }) {
     const { user } = useAuth();
     
     const handleSubmit = async (e) => {
@@ -28,7 +28,7 @@ function ReviewModal({ eventId, onClose }) {
             } else if (field.value < 1 || field.value > 5) {
                 isValid = false;
                 field.style.border = '2px solid red';
-                
+
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'review-error';
                 errorDiv.textContent = 'Please input a number between 1 and 5';
@@ -40,14 +40,16 @@ function ReviewModal({ eventId, onClose }) {
 
         if (isValid) {
             try {
-                const formData = new FormData(form);
-
-                const response = await fetch(`api/events/review/${eventId}`, {
+             const response = await fetch(`/api/events/review/${event._id}`, {   
                     method: "POST",
                     headers: {
+                        "Content-Type": "application/json",
                         "x-user-id": user._id || user.id,
                     },
-                    body: formData,
+                    body: JSON.stringify({
+                        rating: Number(form.rating.value),
+                        comment: form.comment.value
+                    }),
                 });
 
                 const result = await response.json();
@@ -85,13 +87,13 @@ function ReviewModal({ eventId, onClose }) {
                     <div className="review-form-group">
                         <label>Comment</label>
                         <textarea type="text" 
-                        id="comment" 
+                        id="comment"
                         placeholder="Share details of your experience at this event" rows="3" required/>
                     </div>
 
                     <div className="review-form-actions review-form-full">
                         <button type="button" className="review-cancel-btn" onClick={onClose}>Cancel</button>
-                        <button type="submit" className="review-submit-btn">Create Event</button>
+                        <button type="submit" className="review-submit-btn">Post Review</button>
                     </div>
 
                 </form>
