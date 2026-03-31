@@ -16,7 +16,7 @@
     border-radius: 16px;
     padding: 28px;
     width: 100%;
-    max-width: 640px;
+    max-width: 420px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     font-family: sans-serif;
 }
@@ -25,12 +25,7 @@
     margin: 0 0 20px 0;
     font-size: 1.6rem;
     color: #1a1a2e;
-}
-
-.review-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 20px;
+    text-align: center;
 }
 
 .review-form-group {
@@ -84,7 +79,7 @@
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-top: 16px;
+    margin-top: 32px;
     margin-bottom: 0;
 }
 
