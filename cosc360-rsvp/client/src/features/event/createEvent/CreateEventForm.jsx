@@ -1,6 +1,9 @@
 import '../../../css/CreateEventForm.css';
+import { useAuth } from "../../../context/AuthContext.jsx";
 
 function CreateEventForm({ onClose }) {
+    const { user } = useAuth();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -32,6 +35,9 @@ function CreateEventForm({ onClose }) {
 
             const response = await fetch("/api/events", {
                 method: "POST",
+                headers: {
+                    "x-user-id": user.id,
+                },
                 body: formData,
             });
 
