@@ -3,12 +3,8 @@ import * as rsvpService from "../services/rsvpServices.js";
 export const createRSVP = async (req, res) => {
     const userId = req.userId;
 
-    if (!userId) {
-        return res.status(401).json({ error: "User not authenticated" });
-    }
-
     try {
-        const newRsvp = await rsvpService.createRSVP({ ...req.body, userId });
+        const newRsvp = await rsvpService.createRSVP({ ...req.body}, userId);
         res.status(201).json({ message: "RSVP created successfully!", event: newRsvp });
     } catch (error) {
         if (error.message === "You have already RSVP'd to this event!") {

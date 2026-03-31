@@ -15,7 +15,7 @@ function validateStatus(status) {
 export async function createRSVP(rsvp, userId) {
     validateStatus(rsvp.status);
 
-    rsvpData = {
+    const rsvpData = {
         eventId: rsvp.eventId,
         userId: userId,
         status: rsvp.status,

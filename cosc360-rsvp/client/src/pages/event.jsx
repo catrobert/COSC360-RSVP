@@ -41,10 +41,6 @@ function EventPage() {
             const eventIsUpcoming = isUpcoming(event.date, event.endTime);
             const status = result[0]?.status;
 
-            console.log("status:", status);
-            console.log("eventIsUpcoming:", eventIsUpcoming);
-            console.log("result:", result);
-
             if (status === 'yes' && !eventIsUpcoming) {
                 setReviewingEvent(id);
             } else if (status === 'no' || status === 'saved') {
