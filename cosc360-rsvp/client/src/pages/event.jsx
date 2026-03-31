@@ -25,7 +25,7 @@ function EventPage() {
 
     async function handleReviewClick() {
         try {
-            const response = await fetch(`/rsvp/events/${id}`, {
+            const response = await fetch(`/api/rsvp/events/${id}`, {
                 headers: {
                     "x-user-id": user._id || user.id,
                 }
@@ -39,13 +39,22 @@ function EventPage() {
             }
 
             const eventIsUpcoming = isUpcoming(event.date, event.endTime);
+            const status = result[0]?.status;
 
-            if (result[0]?.status === 'yes' && eventIsUpcoming) {
-                setReviewingEvent(event._id);
+            console.log("status:", status);
+            console.log("eventIsUpcoming:", eventIsUpcoming);
+            console.log("result:", result);
+
+            if (status === 'yes' && !eventIsUpcoming) {
+                setReviewingEvent(id);
+            } else if (status === 'no' || status === 'saved') {
+                alert("You have not RSVP'd to this event, and therefore cannot review.")
+            } else if (status === 'yes' && eventIsUpcoming) {
+                alert("Please wait until after the event to leave a review.");
             }
 
         } catch (error) {
-            console.log("Error getting RSVP status: ", error);
+            console.log("Error getting RSVP status: ", error.message);
         }
     }
     

@@ -34,5 +34,5 @@ export async function findEventsByStatus(userId, status) {
 }
 
 export async function getRSVPstatus(userId, eventId) {
-    return await EventModel.find( {userId: userId, eventId: eventId} );
+    return await RSVPModel.find( {userId: userId, eventId: eventId} );
 }
