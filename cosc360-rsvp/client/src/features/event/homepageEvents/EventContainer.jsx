@@ -95,7 +95,7 @@ const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick 
             price={event.price}
             image={event.image}
             onClick={() => onEventClick?.(eventId)}
-            reviewButton={showReviewButton}
+            showReviewButton={showReviewButton}
             onReviewClick={onReviewClick}
           />
         );

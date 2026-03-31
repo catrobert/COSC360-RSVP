@@ -1,4 +1,4 @@
-import ReviewCard from "../features/event/singleEvent/ReviewCard";
+import ReviewCard from "../features/event/reviews/ReviewCard";
 import SingleEventContainer from "../features/event/singleEvent/SingleEventContainer";
 import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
