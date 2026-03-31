@@ -17,8 +17,12 @@ function MyEvents() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    function isUpcoming(eventDate) {
-        return new Date(eventDate) >= new Date();
+    function isUpcoming(eventDate, endTime) {
+        const [hours, minutes] = endTime.split(':');
+        const eventDateTime = new Date(eventDate);
+        eventDateTime.setHours(hours, minutes);
+
+        return eventDateTime > new Date();
     }
 
     function handleEventClick(eventId) {
@@ -54,10 +58,10 @@ function MyEvents() {
                 );
 
                 // Split each bucket into upcoming and previous by event date.
-                setUpcomingHostedEvents(hostedEvents.filter((event) => isUpcoming(event.date)));
-                setPreviousHostedEvents(hostedEvents.filter((event) => !isUpcoming(event.date)));
-                setUpcomingAttendingEvents(attendingEvents.filter((event) => isUpcoming(event.date)));
-                setPreviousAttendedEvents(attendingEvents.filter((event) => !isUpcoming(event.date)));
+                setUpcomingHostedEvents(hostedEvents.filter((event) => isUpcoming(event.date, event.endTime)));
+                setPreviousHostedEvents(hostedEvents.filter((event) => !isUpcoming(event.date, event.endTime)));
+                setUpcomingAttendingEvents(attendingEvents.filter((event) => isUpcoming(event.date, event.endTime)));
+                setPreviousAttendedEvents(attendingEvents.filter((event) => !isUpcoming(event.date, event.endTime)));
             } catch (error) {
                 console.log("Error fetching My Events data:", error);
                 setUpcomingHostedEvents([]);
