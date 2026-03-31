@@ -26,7 +26,7 @@ function EventDetails({ event }) {
             <p className="event-detail"><MapPin className="detail-icon" /> {event.location}</p>
             <p className="event-detail"><Clock className="detail-icon" /> {start} - {end}</p>
             <p className="event-detail"><Users className="detail-icon" /> {event.attendance ?? 0} people going</p>
-            <p className="event-detail">Host: {event.createdBy?.username ?? event.createdBy?.toString?.() ?? event.createdBy ?? "—"}</p>
+            <p className="event-detail">Host: {event.createdBy?.username ?? "Group 123456789"}</p>
         </div>
     );
 }

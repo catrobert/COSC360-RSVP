@@ -37,7 +37,7 @@ function ReviewList({ reviews }) {
         <div>
             <ul className="reviews-list-container"> 
                 {reviews.map((review, index) => (
-                    <ReviewItem key={index} review={review} rating={"⭐".repeat(review.rating)} />
+                    <ReviewItem key={index} index={index} review={review} rating={"⭐".repeat(review.rating)} />
                 ))}
             </ul>
             <button className="add-review-button">Add Review</button>
@@ -47,11 +47,11 @@ function ReviewList({ reviews }) {
 }
 
 
-function ReviewItem({review }) {
+function ReviewItem({review, index }) {
     return (
         <>
             <div className="review-title">
-                <div>{review.userId}</div> {/* TODO: switch this use userId to join username in user table and display that */}
+                <div>{review.userId?.username ?? `Reviewer ${index + 1}`}</div> {/* TODO: switch this use userId to join username in user table and display that */}
                 <div>{review.rating}</div>
             </div>
             <p className="review-text">{review.comment}</p>

@@ -21,5 +21,5 @@ export async function findBySearchTerm(query) {
 }
 
 export async function findEvent(id) {
-    return await EventModel.findById(id).populate('createdBy', 'username');
+    return await EventModel.findById(id).populate('createdBy', 'username').populate('reviews.userId', 'username');
 }
