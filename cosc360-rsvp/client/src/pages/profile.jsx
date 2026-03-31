@@ -66,6 +66,7 @@ function ProfilePage(){
                 method: "PUT",
                 body: form,
             });
+            console.log("Save Response: ", data);
             setProfile(data.user);
             setEditing(false);
             setSaveStatus("Changes saved!");
@@ -175,7 +176,12 @@ function ProfilePage(){
                     </div>
                     {/*Save Button*/}
                     {editing && (
-                        <button className="profile-save-btn" onClick={handleSave}>
+                        <button className="profile-save-btn" onClick={()=> {
+                            console.log("Button Clicked!");
+                            handleSave();
+                        }}
+                        
+                        >
                             Save Changes
                         </button>
                     )}

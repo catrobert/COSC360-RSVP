@@ -24,6 +24,7 @@ export const updateProfile = async (req, res) => {
     try{
         const userId = req.query.userId;
         const updates = req.body;
+        console.log("Updating user: ", userId, updates);
 
         if(!userId) {
             return res.status(400).json({ error: "Missing userId"});
@@ -37,6 +38,7 @@ export const updateProfile = async (req, res) => {
             return res.status(404).json({ error: "User not found"});
         }
 
+        res.json({user});
 
     } catch (err){
         res.status(500).json({ error: "Something went wrong"});

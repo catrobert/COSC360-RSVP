@@ -28,7 +28,7 @@ export async function getUserById(id) {
 export async function updateUserById (id, updates) {
     return await UserSchema.findByIdAndUpdate(
         id,
-        { $set: updates},
-        { returnDocument: "after", runValidators: true}
+        updates,
+        { returnDocument: "after"}
     ).select("-password");
 }
