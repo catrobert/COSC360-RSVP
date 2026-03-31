@@ -15,6 +15,11 @@ function ProfilePage(){
         firstName: "",
         lastName: "",
         username:"",
+        description: [{
+            birthday:"",
+            gender:"",
+            location:"",
+        }]
     });
     const [saveStatus, setSaveStatus] = useState("");
 
@@ -28,6 +33,12 @@ function ProfilePage(){
                     firstName: data.user.firstName,
                     lastName: data.user.lastName,
                     username: data.user.username,
+                    description: [{
+                        birthday: data.user.description?.[0]?.birthday 
+                        ? new Date(data.user.description[0].birthday).toISOString().split("T")[0] : "",
+                        gender: data.user.description?.[0]?.gender || "",
+                        location: data.user.description?.[0]?.location || "",
+                    }]
                 });
 
             } catch (err){
@@ -39,6 +50,14 @@ function ProfilePage(){
 
     function handleChange(e){
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value}));
+    }
+
+    function handleDescriptionChange(e) {
+        const {name, value} = e.target;
+        setForm((prev) => ({
+            ...prev,
+            description: [{ ...prev.description[0], [name]: value}]
+        }));
     }
 
     async function handleSave(){
@@ -73,7 +92,7 @@ function ProfilePage(){
                             <p>@{profile.username}</p>
                         </div>
                     </div>
-                </div>
+                
 
                     {/*Personal Info*/}
                     <div className="profile-section">
@@ -114,6 +133,46 @@ function ProfilePage(){
                         </div>
                     </div>
 
+                    {/*Description*/}
+                    <div className="profile-section">
+                        <div className="profile-section-header">
+                            <h3>Description</h3>
+                        </div>
+
+                        <div className="profile-fields">
+                            <input
+                                className="profile-input"
+                                name="birthday"
+                                type="date"
+                                value={form.description[0].birthday}
+                                onChange={handleDescriptionChange}
+                                disabled={!editing}
+                            />
+
+                            <select
+                                className="profile-select"
+                                name="gender"
+                                value={form.description[0].gender}
+                                onChange={handleDescriptionChange}
+                                disabled={!editing}
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Prefer Not To Say">Prefer Not To Say</option>
+                            
+                            </select>
+
+                            <input
+                                className="profile-input"
+                                name="location"
+                                value={form.description[0].location}
+                                onChange={handleDescriptionChange}
+                                disabled={!editing}
+                                placeholder="Location"
+                            />
+                        </div>
+                    </div>
                     {/*Save Button*/}
                     {editing && (
                         <button className="profile-save-btn" onClick={handleSave}>
@@ -123,6 +182,7 @@ function ProfilePage(){
 
                     {saveStatus && <p className="profile-status-msg">{saveStatus}</p>}
             </div>
+          </div>
         </div>
     );
 
