@@ -12,8 +12,14 @@ function validateStatus(status) {
     }
 }
 
-export async function createRSVP(rsvpData) {
-    validateStatus(rsvpData.status);
+export async function createRSVP(rsvp, userId) {
+    validateStatus(rsvp.status);
+
+    rsvpData = {
+        eventId: rsvp.eventId,
+        userId: userId,
+        status: rsvp.status,
+    }
 
     const existingRSVP = await rsvpRepository.findRSVP(rsvpData.eventId, rsvpData.userId);
 

@@ -1,7 +1,7 @@
 import * as rsvpService from "../services/rsvpServices.js";
 
 export const createRSVP = async (req, res) => {
-    const userId = req.user?.id;
+    const userId = req.userId;
 
     if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
