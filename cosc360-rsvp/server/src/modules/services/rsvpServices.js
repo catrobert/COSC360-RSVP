@@ -41,3 +41,7 @@ export async function getRSVPsByStatus(userId, status) {
 
     return await rsvpRepository.findEventsByStatus(userId, status);
 }
+
+export async function getRSVPstatus(userId, eventId) {
+    return await rsvpRepository.getRSVPstatus(userId, eventId);
+}

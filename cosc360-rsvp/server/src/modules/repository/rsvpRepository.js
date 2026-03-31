@@ -32,3 +32,7 @@ export async function findEventsByStatus(userId, status) {
         }
     ).populate("eventId");
 }
+
+export async function getRSVPstatus(userId, eventId) {
+    return await EventModel.find( {userId: userId, eventId: eventId} );
+}

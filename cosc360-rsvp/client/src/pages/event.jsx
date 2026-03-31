@@ -15,8 +15,38 @@ function EventPage() {
     const [reviewingEvent, setReviewingEvent] = useState(null);
     const { user } = useAuth();
 
+    function isUpcoming(eventDate, endTime) {
+        const [hours, minutes] = endTime.split(':');
+        const eventDateTime = new Date(eventDate);
+        eventDateTime.setHours(hours, minutes);
+
+        return eventDateTime > new Date();
+    }
+
     async function handleReviewClick() {
-        setReviewingEvent(id);
+        try {
+            const response = await fetch(`/rsvp/events/${id}`, {
+                headers: {
+                    "x-user-id": user._id || user.id,
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.error) {
+                alert(result.error);
+                return;
+            }
+
+            const eventIsUpcoming = isUpcoming(event.date, event.endTime);
+
+            if (result[0]?.status === 'yes' && eventIsUpcoming) {
+                setReviewingEvent(event._id);
+            }
+
+        } catch (error) {
+            console.log("Error getting RSVP status: ", error);
+        }
     }
     
     async function handleRsvpClick() {

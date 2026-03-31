@@ -64,3 +64,16 @@ export const getRSVPsByStatus = async (req, res) => {
     }
 }
 
+export const getRSVPstatus = async (req, res) => {
+    const userId = req.userId;
+    const eventId = req.params.id;
+
+    try {
+        const rsvpStatus = await rsvpService.getRSVPstatus(userId, eventId);
+        res.status(200).json({ rsvpStatus });
+    } catch (error) {
+        res.status(500).json( { error: "Could not retrieve RSVP status" });
+    }
+
+}
+
