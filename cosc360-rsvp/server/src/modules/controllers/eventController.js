@@ -58,7 +58,11 @@ export const createReview = async (req, res) => {
 
         res.status(201).json({ message: "Successfully created event!", review: newReview });
     } catch (error) {
-         console.log("Error creating review:", error);
+        if (error.message === "You have already reviewed this event") {
+            return res.status(400).json( {error: error.message})
+        }
+
+        console.log("Error creating review:", error);
         res.status(500).json({ error: "Could not post review"});
     }
 }

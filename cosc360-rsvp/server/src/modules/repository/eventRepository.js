@@ -30,3 +30,7 @@ export async function createReview(data, eventId) {
     await event.save();
     return event.toJSON();
 }
+
+export async function findReview(userId, eventId) {
+    return await EventModel.findOne( {_id: eventId, "reviews.userId": userId } );
+}

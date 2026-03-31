@@ -38,6 +38,12 @@ export async function createReview(data, eventId, userId) {
         comment: data.comment
     }
 
+    const existingReview = await eventRepository.findReview(userId, eventId);
+
+    if (existingReview) {
+        throw new Error("You have already reviewed this event!") 
+    }
+
     return await eventRepository.createReview(reviewData, eventId);
 }
 
