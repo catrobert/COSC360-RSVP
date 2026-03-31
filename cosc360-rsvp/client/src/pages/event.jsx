@@ -7,11 +7,17 @@ import "../css/Event.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
 
 function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    const [reviewingEvent, setReviewingEvent] = useState(null);
     const { user } = useAuth();
+
+    async function handleReviewClick() {
+        setReviewingEvent(id);
+    }
     
     async function handleRsvpClick() {
         // Use logged in user id when available and keep demo fallback for local testing.
@@ -99,8 +105,10 @@ function EventPage() {
                     <h1 className="event-page-title">{event.name}</h1>
                     <div className="event-page-content">
                         <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
-                        <ReviewCard reviews={event.reviews} />
+                        <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} />
                     </div>
+
+                    {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={ () => setReviewingEvent(null) }/>}
                 </div>
             </div>
         </div>
