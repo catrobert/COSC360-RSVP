@@ -1,0 +1,95 @@
+import "../../../css/reviewModal.css";
+import { useAuth } from "../../../context/AuthContext.jsx";
+
+function ReviewModal({ eventId, onClose }) {
+    const { user } = useAuth();
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const form = e.target;
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredFields.forEach( (field) => {
+            const existingError = field.parentNode.querySelector('.review-error');
+            if (existingError) {
+                existingError.remove();
+            }
+
+            if (field.value === '') {
+                isValid = false;
+                field.style.border = '2px solid red';
+
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'review-error';
+                errorDiv.textContent = 'This field is required';
+                field.parentNode.appendChild(errorDiv);
+            } else {
+                field.style.border = '';
+            }
+        });
+
+        if (isValid) {
+            try {
+                const formData = new FormData(form);
+
+                const response = await fetch(`api/events/review/${eventId}`, {
+                    method: "POST",
+                    headers: {
+                        "x-user-id": user._id || user.id,
+                    },
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    alert(`Something went wrong: ${result.error}`);
+                    return;
+                }
+                
+                alert("Review posted successfully!"); 
+                onClose();  
+            } catch (error) {
+                console.log("Error posting review: ", error);
+            }
+        }
+    }
+
+    return (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="review-modal" onClick={(e) => e.stopPropagation()} >
+                <h2>Leave a Review</h2>
+
+                <form
+                    id="review-event-form"
+                    method="post"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    className="review-form-grid">
+                    
+                    <div className="review-form-group">
+                        <label>Rating</label>
+                        <input type="number" id="rating" min="1" max="5" required />
+                    </div>
+
+                    <div className="review-form-group">
+                        <label>Comment</label>
+                        <input type="text" 
+                        id="comment" 
+                        placeholder="Share details of your experience at this event" rows="3"/>
+                    </div>
+
+                    <div className="review-form-actions review-form-full">
+                        <button type="button" className="review-cancel-btn" onClick={onClose}>Cancel</button>
+                        <button type="submit" className="review-submit-btn">Create Event</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    )
+}
+
+export default ReviewModal;

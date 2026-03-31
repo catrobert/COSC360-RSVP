@@ -14,8 +14,14 @@ function MyEvents() {
     const [upcomingAttendingEvents, setUpcomingAttendingEvents] = useState([]);
     const [previousHostedEvents, setPreviousHostedEvents] = useState([]);
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
+    const [reviewingEvent, setReviewingEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const { user } = useAuth();
+
+    const handleReviewClick = function(event) {
+        setReviewingEvent(event);
+    }
 
     function isUpcoming(eventDate, endTime) {
         const [hours, minutes] = endTime.split(':');
@@ -76,8 +82,6 @@ function MyEvents() {
         fetchMyEvents();
     }, []);
 
-    const { user } = useAuth();
-
     return (
         <div className="homepage-layout">        
             {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
@@ -90,8 +94,10 @@ function MyEvents() {
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Attended Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick}/>}
             </div>
+
+            {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)}/>}
         </div>
     );
 }

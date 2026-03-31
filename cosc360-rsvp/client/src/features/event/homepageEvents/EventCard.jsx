@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
 
-const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick}) => {
+const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick, showReviewButton, onReviewClick }) => {
     const [wishlisted, setWishlisted] = useState(initialWishlisted);
 
     // Keep local button state in sync with data hydrated by the parent list.
@@ -88,6 +88,8 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
                 >
                     <Bookmark size={22} fill={wishlisted ? 'gold' : 'none'} color={wishlisted ? 'gold' : '#888'} />
                 </button>
+
+                {showReviewButton && <button className="review-btn" onClick={onReviewClick}>Leave a Review</button>}
             </div>
         </div>
     )
