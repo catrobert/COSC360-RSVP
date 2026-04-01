@@ -13,7 +13,21 @@ function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
     const [reviewingEvent, setReviewingEvent] = useState(null);
+    const [rsvpStatus, setRsvpStatus] = useState("");
     const { user } = useAuth();
+    const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
+    
+    const hasReviewed = () => {
+        for (const review of event.reviews) {
+            if (review.userId?.toString() === user._id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
+
 
     function isUpcoming(eventDate, endTime) {
         const [hours, minutes] = endTime.split(':');
@@ -23,34 +37,37 @@ function EventPage() {
         return eventDateTime > new Date();
     }
 
-    async function handleReviewClick() {
-        try {
-            const response = await fetch(`/api/rsvp/events/${id}`, {
-                headers: {
-                    "x-user-id": user._id || user.id,
+    useEffect(() => {
+        async function fetchRSVPstatus(){
+            try {
+                const response = await fetch(`/api/rsvp/events/${id}`, {
+                    headers: {
+                        "x-user-id": user._id || user.id,
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    alert(result.error);
+                    return;
                 }
-            });
 
-            const result = await response.json();
-
-            if (result.error) {
-                alert(result.error);
-                return;
+                setRsvpStatus(result[0]?.status);
+            } catch (error) {
+                console.log("Error getting RSVP status: ", error.message);
             }
+        } 
+        fetchRSVPstatus();
+    }, [])
 
-            const eventIsUpcoming = isUpcoming(event.date, event.endTime);
-            const status = result[0]?.status;
-
-            if (status === 'yes' && !eventIsUpcoming) {
-                setReviewingEvent(event);
-            } else if (status === 'no' || status === 'saved') {
-                alert("You have not RSVP'd to this event, and therefore cannot review.")
-            } else if (status === 'yes' && eventIsUpcoming) {
-                alert("Please wait until after the event to leave a review.");
-            }
-
-        } catch (error) {
-            console.log("Error getting RSVP status: ", error.message);
+    async function handleReviewClick() {
+        if (rsvpStatus === 'yes' && !eventIsUpcoming) {
+            setReviewingEvent(event);
+        } else if (rsvpStatus === 'no' || rsvpStatus === 'saved') {
+            alert("You have not RSVP'd to this event, and therefore cannot review.")
+        } else if (rsvpStatus === 'yes' && eventIsUpcoming) {
+            alert("Please wait until after the event to leave a review.");
         }
     }
     
@@ -140,7 +157,7 @@ function EventPage() {
                     <h1 className="event-page-title">{event.name}</h1>
                     <div className="event-page-content">
                         <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
-                        <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} />
+                        <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} ableToReview={canReview} />
                     </div>
 
                     {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={ () => setReviewingEvent(null) }/>}

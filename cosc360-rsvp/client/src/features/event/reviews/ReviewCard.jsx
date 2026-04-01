@@ -10,12 +10,12 @@ function getAverageRating(reviews) {
     return total / reviews.length;
 }
 
-function ReviewsCard({reviews, onReviewClick}) {
+function ReviewsCard({reviews, onReviewClick, ableToReview}) {
     return (
         <aside className="reviews-container">
             <div className='reviews-background'>
                 <Header reviews={reviews} />
-                <ReviewList reviews={reviews} onReviewClick={onReviewClick} />
+                <ReviewList reviews={reviews} onReviewClick={onReviewClick} canReview={ableToReview} />
 
             </div>
         </aside>
@@ -35,7 +35,7 @@ function Header({reviews}) {
     );
 }
 
-function ReviewList({ reviews, onReviewClick }) {
+function ReviewList({ reviews, onReviewClick, canReview }) {
     return (
         <div>
             <ul className="reviews-list-container"> 
@@ -43,7 +43,7 @@ function ReviewList({ reviews, onReviewClick }) {
                     <ReviewItem key={index} index={index} review={review} />
                 ))}
             </ul>
-            <button className="add-review-button" onClick={onReviewClick}>Add Review</button>
+            <button className={canReview ? "add-review-button" : "greyed-out-review-btn"} onClick={onReviewClick}>Add Review</button>
         </div>
         
     );

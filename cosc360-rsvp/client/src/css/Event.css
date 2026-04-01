@@ -97,6 +97,15 @@ button:hover{
     cursor: pointer;
 }
 
+.greyed-out-review-btn {
+    display: block;
+    margin: 24px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: gray;
+}
+
 .reviews-container {
     display: flex;
     align-items: center;
