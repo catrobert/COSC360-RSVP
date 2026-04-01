@@ -69,6 +69,7 @@ export const getRSVPstatus = async (req, res) => {
         res.status(200).json(rsvpStatus);
     } catch (error) {
         res.status(500).json( { error: "Could not retrieve RSVP status" });
+        console.log(error);
     }
 
 }

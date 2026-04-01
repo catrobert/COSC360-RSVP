@@ -42,7 +42,7 @@ function EventPage() {
             const status = result[0]?.status;
 
             if (status === 'yes' && !eventIsUpcoming) {
-                setReviewingEvent(id);
+                setReviewingEvent(event);
             } else if (status === 'no' || status === 'saved') {
                 alert("You have not RSVP'd to this event, and therefore cannot review.")
             } else if (status === 'yes' && eventIsUpcoming) {
