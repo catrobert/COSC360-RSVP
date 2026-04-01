@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import '../css/topNav.css'
 import { Plus, Search } from 'lucide-react';
 import CreateEventForm from '../features/event/createEvent/CreateEventForm';
@@ -30,15 +30,57 @@ function TopNav () {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        setSearchQuery(searchParams.get("q") || "");
+    }, [searchParams]);
+
+    function getSearchTargetPath() {
+        if (location.pathname === "/savedevents") {
+            return "/savedevents";
+        }
+
+        if (location.pathname === "/myevents") {
+            return "/myevents";
+        }
+
+        return "/home";
+    }
+
+    function updateSearch(nextValue) {
+        const targetPath = getSearchTargetPath();
+        const targetParams = targetPath === location.pathname
+            ? new URLSearchParams(searchParams)
+            : new URLSearchParams();
+
+        if (nextValue.trim()) {
+            targetParams.set("q", nextValue.trim());
+        } else {
+            targetParams.delete("q");
+        }
+
+        const queryString = targetParams.toString();
+        navigate(queryString ? `${targetPath}?${queryString}` : targetPath, { replace: true });
+    }
 
     async function handleSearch() {
-        navigate(`/home?q=${searchQuery}`) // with this, clicking search changes the url to include search query, which we will pass to home page where events are displayed
+        updateSearch(searchQuery);
     }
 
     return (
         <>
             <div className='top-nav'>
-                <Searchbar onClick={handleSearch} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+                <Searchbar
+                    onClick={handleSearch}
+                    value={searchQuery}
+                    onChange={(e) => {
+                        const nextValue = e.target.value;
+                        setSearchQuery(nextValue);
+                        updateSearch(nextValue);
+                    }}
+                />
                 <AddEventButton onClick={() => setShowCreateForm(true)} />
             </div>
             {showCreateForm && (

@@ -24,11 +24,20 @@ export async function findRSVP(eventId, userId) {
     )
 }
 
-export async function findEventsByStatus(userId, status) {
-    return await RSVPModel.find(
-        {
-            userId: userId,
-            status: status
-        }
-    ).populate("eventId");
+export async function findEventsByStatus(userId, status, query) {
+    const eventMatch = query?.trim()
+        ? { name: { $regex: query.trim(), $options: "i" } }
+        : undefined;
+
+    const rows = await RSVPModel.find({
+        userId: userId,
+        status: status,
+    }).populate({ path: "eventId", match: eventMatch });
+
+    if (!eventMatch) {
+        return rows;
+    }
+
+    // When populate match fails, eventId is null, remove those rows.
+    return rows.filter((row) => row?.eventId);
 }

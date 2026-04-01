@@ -20,6 +20,11 @@ function LoginCard(){
       const data = await loginApi(username, password);
       login(data.user);
       setMessage(data.message);
+
+      if (data.user?.id) {
+        localStorage.setItem("userId", data.user.id);
+      }
+
       navigate("/home");
     }catch (error){
       setMessage(error.message);
