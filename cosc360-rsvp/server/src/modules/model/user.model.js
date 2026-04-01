@@ -17,7 +17,8 @@ const userSchema = new Schema(
         createdDate: { type: Date, required: true },
         description: [descriptionSchema],
         role: { type: String, enum: ["user", "admin"], default: "user", required: true },
-        adminCreatedDate: { type: Date }
+        adminCreatedDate: { type: Date },
+        profilePhoto: { type: String }
     }
 )
 

@@ -44,3 +44,29 @@ export const updateProfile = async (req, res) => {
         res.status(500).json({ error: "Something went wrong"});
     }
 }
+
+export const uploadPhoto = async (req, res) => {
+    try{
+        const userId = req.query.userId;
+
+        if(!userId){
+            return res.status(400).json({ error: "Missing userId"});
+        }
+
+        if(!req.file){
+            return res.status(400).json({ error: "No file uplaoded"});
+        }
+
+        const photoPath = "/uploads/" + req.file.filename;
+        const user = await updateUserById(userId, {profilePhoto: photoPath });
+
+        if(!user){
+            return res.status(404).json({ error: "User not found"});
+        }
+
+        res.json({ user });
+    } catch (err){
+        console.error("Error uploading photo: ", err);
+        res.status(500).json({ error: "Something went wrong"});
+    }
+}

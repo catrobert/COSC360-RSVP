@@ -2,6 +2,7 @@ import { Calendar, LogOutIcon, Save, FileBadge } from 'lucide-react';
 import "../css/sidebar.css";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext.jsx";
+import { useState, useEffect } from 'react';
 
 const menuItems = [
     { icon: Calendar, label: "Browse Events" },
@@ -24,6 +25,24 @@ function Sidebar({ profilePicture }) {
     const { user, logout } = useAuth();
     const fullName = user ? `${user.firstName} ${user.lastName}` : '';
 
+    const[photo, setPhoto] = useState(null);
+
+    useEffect(() => {
+        async function fetchPhoto(){
+            try{
+                const data = await fetch(`/api/users/profile?userId=${user.id}`);
+                const json = await data.json();
+                if(json.user?.profilePhoto){
+                    setPhoto(json.user.profilePhoto);
+                }
+            }catch(err){
+                console.error("Error fetching photo: ", err);
+            }
+        }
+
+        if(user?.id) fetchPhoto();
+    }, [user]);
+
     function handleLogout(){
         logout();
         navigate('/login');
@@ -45,7 +64,15 @@ function Sidebar({ profilePicture }) {
             <div className="menu-container">
                 <div className='profile-section'>
                     <div className='profile-picture'>
-                        {profilePicture}
+                        {photo ? (
+                            <img
+                               src={photo}
+                               alt="Profile"
+                               style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit:"cover"}}
+                            />
+                        ) : (
+                            profilePicture
+                        )}
                     </div>
                     <div className="sidebar-header">
                         <h4>{fullName}</h4>

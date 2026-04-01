@@ -134,3 +134,30 @@
     margin-top: 0.5rem;
 }
 
+.profile-picture-wrapper{
+    position: relative;
+    width:80px;
+    height:80px;
+}
+
+.profile-picture-img{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-photo-upload-btn{
+    position: absolute;
+    bottom: 0;
+    right:0;
+    background: #4a90d9;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.7rem;
+}
