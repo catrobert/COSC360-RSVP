@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import EventContainer from "../features/event/homepageEvents/EventContainer";
 import Sidebar from "../components/sidebar";
 import AdminSidebar from "../components/AdminSidebar";
@@ -12,6 +13,8 @@ function SavedEvents() {
     const [savedEvents, setSavedEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const query = searchParams.get("q") || "";
 
     function handleEventClick(eventId) {
         navigate(`/event/${eventId}`);
@@ -21,9 +24,15 @@ function SavedEvents() {
         async function fetchSavedEvents() {
             // Use the active user id header required by RSVP middleware.
             const userId = localStorage.getItem("userId") || "000000000000000000000001";
+            setLoading(true);
+
+            const params = new URLSearchParams({ status: "saved" });
+            if (query.trim()) {
+                params.set("q", query.trim());
+            }
 
             try {
-                const response = await fetch("/api/rsvp/events?status=saved", {
+                const response = await fetch(`/api/rsvp/events?${params.toString()}`, {
                     headers: {
                         "x-user-id": userId,
                     },
@@ -52,7 +61,7 @@ function SavedEvents() {
         }
 
         fetchSavedEvents();
-    }, []);
+    }, [query]);
 
     const { user } = useAuth();
 
