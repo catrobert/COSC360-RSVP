@@ -62,8 +62,10 @@ function EventPage() {
     }, [])
 
     async function handleReviewClick() {
-        if (rsvpStatus === 'yes' && !eventIsUpcoming) {
+        if (canReview) {
             setReviewingEvent(event);
+        } else if (hasReviewed()) {
+            alert("You have already reviewed this event!")
         } else if (rsvpStatus === 'no' || rsvpStatus === 'saved') {
             alert("You have not RSVP'd to this event, and therefore cannot review.")
         } else if (rsvpStatus === 'yes' && eventIsUpcoming) {
