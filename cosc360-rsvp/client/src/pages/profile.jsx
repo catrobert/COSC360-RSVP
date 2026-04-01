@@ -97,16 +97,10 @@ function ProfilePage(){
 
                     {/*Personal Info*/}
                     <div className="profile-section">
-                        <div className="profile-section-header">
                             <h3>Personal Info</h3>
-                            <button
-                                className="profile-edit-btn"
-                                onClick={() => setEditing(!editing)}>
-                                    Edit
-                                    </button>
-                        </div>
-
                         <div className="profile-fields">
+                        <div className="profile-field-group">   
+                            <label>First Name</label>
                             <input
                                 className="profile-input"
                                 name="firstName"
@@ -115,6 +109,9 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="First Name"
                             />
+                         </div>
+                         <div className="profile-field-group">    
+                            <label>Last Name</label>
                             <input
                                 className="profile-input"
                                 name="lastName"
@@ -123,6 +120,10 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="Last Name"
                             />
+                        </div>
+
+                        <div className="profile-field-group">     
+                            <label>Username</label>
                             <input
                                 className="profile-input"
                                 name="username"
@@ -131,16 +132,20 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="Username"
                             />
+                            
+                        </div>
                         </div>
                     </div>
 
                     {/*Description*/}
                     <div className="profile-section">
-                        <div className="profile-section-header">
+                        
                             <h3>Description</h3>
-                        </div>
+                        
 
                         <div className="profile-fields">
+                           <div className="profile-field-group"> 
+                            <label>Birthday</label>
                             <input
                                 className="profile-input"
                                 name="birthday"
@@ -149,7 +154,9 @@ function ProfilePage(){
                                 onChange={handleDescriptionChange}
                                 disabled={!editing}
                             />
-
+                            </div>
+                            <div className="profile-field-group"> 
+                            <label>Gender</label>
                             <select
                                 className="profile-select"
                                 name="gender"
@@ -163,7 +170,10 @@ function ProfilePage(){
                                 <option value="Prefer Not To Say">Prefer Not To Say</option>
                             
                             </select>
-
+                            </div>
+                            
+                            <div className="profile-field-group"> 
+                            <label>Location</label>
                             <input
                                 className="profile-input"
                                 name="location"
@@ -172,19 +182,22 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="Location"
                             />
+                            </div>
                         </div>
                     </div>
-                    {/*Save Button*/}
-                    {editing && (
-                        <button className="profile-save-btn" onClick={()=> {
-                            console.log("Button Clicked!");
-                            handleSave();
-                        }}
-                        
-                        >
-                            Save Changes
-                        </button>
-                    )}
+                    {/*Save/Edit Button*/}
+                    <div className ="profile-btn-row">
+                        <button
+                            className="profile-edit-btn"
+                            onClick={() => setEditing(!editing)}>
+                                {editing ? "Cancel" : "Edit"}
+                            </button>
+                            {editing && (
+                                <button className="profile-save-btn" onClick={handleSave}>
+                                    Save Changes
+                                </button>
+                            )}
+                    </div>
 
                     {saveStatus && <p className="profile-status-msg">{saveStatus}</p>}
             </div>
