@@ -102,3 +102,16 @@
     width: fit-content;
 }
 
+.edit-btn {
+    display: block;
+    font-size: 0.85rem;
+    margin: 0.5rem auto;
+    width: fit-content;
+    background: none;
+    border: 1px solid navy;
+    color: navy;
+    border-radius: 4px;
+    padding: 2px 10px;
+    cursor: pointer;
+}
+

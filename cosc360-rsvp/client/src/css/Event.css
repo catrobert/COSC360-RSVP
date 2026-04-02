@@ -93,6 +93,21 @@ button:hover{
     color: white;
 }
 
+#edit-button {
+    display: flex;
+    background-color: white;
+    color: navy;
+    margin-left: auto;
+    flex-grow: 0;
+    border-radius: 20pt;
+    border-color: navy;
+}
+
+#edit-button:hover {
+    background-color: navy;
+    color: white;
+}
+
 #event-header {
     display: flex;
     flex-direction: row;

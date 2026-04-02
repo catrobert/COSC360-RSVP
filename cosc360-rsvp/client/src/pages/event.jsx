@@ -8,23 +8,22 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
-
-const loggedInUser = "000000000000000000000001"; // hardcoded for now
+import CreateEventForm from "../features/event/createEvent/CreateEventForm.jsx";
 
 function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
     const [reviewingEvent, setReviewingEvent] = useState(null);
+    const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { user } = useAuth();
     const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
     const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
   
-    const userCreated = function (userId = "000000000000000000000001") { // hardcoded for now
-        if (loggedInUser === userId) {
-            return true;
-        }
-        return false;
+    const userCreated = function () {
+        if (!user || !event) return false;
+        const creatorId = event.createdBy?._id?.toString() || event.createdBy?.toString();
+        return user.role === "admin" || creatorId === (user._id || user.id);
     }
 
     async function handleDeleteEventClick() {
@@ -183,6 +182,7 @@ function EventPage() {
             <TopNav />
                 <div id="event-header">
                     <h1 id= "event-page-title">{event.name}</h1>
+                    {userCreated() && (<button id="edit-button" onClick={() => setEditingEvent(event)}>Edit Event</button>)}
                     {userCreated() && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
                 </div>
                 <div className="event-page-content">
@@ -190,6 +190,7 @@ function EventPage() {
                     <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} ableToReview={canReview} />
                 </div>
                 {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={ () => setReviewingEvent(null) }/>}
+                {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); if (updated) setEvent(updated); }} />}
             </div>
         </div>
     );
