@@ -34,5 +34,23 @@ export async function findEventsByStatus(userId, status) {
 }
 
 export async function getRSVPstatus(userId, eventId) {
-    return await RSVPModel.find( {userId: userId, eventId: eventId} );
+    return await RSVPModel.find( {userId: userId, eventId: eventId} );  
+}
+
+export async function findEventsByStatus(userId, status, query) {
+    const eventMatch = query?.trim()
+        ? { name: { $regex: query.trim(), $options: "i" } }
+        : undefined;
+
+    const rows = await RSVPModel.find({
+        userId: userId,
+        status: status,
+    }).populate({ path: "eventId", match: eventMatch });
+
+    if (!eventMatch) {
+        return rows;
+    }
+
+    // When populate match fails, eventId is null, remove those rows.
+    return rows.filter((row) => row?.eventId);
 }

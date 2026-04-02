@@ -36,10 +36,10 @@ export async function updateRSVP(rsvpData) {
     return await rsvpRepository.updateRSVP(rsvpData.eventId, rsvpData.userId, rsvpData.status);
 }
 
-export async function getRSVPsByStatus(userId, status) {
+export async function getRSVPsByStatus(userId, status, query) {
     validateStatus(status);
 
-    return await rsvpRepository.findEventsByStatus(userId, status);
+    return await rsvpRepository.findEventsByStatus(userId, status, query);
 }
 
 export async function getRSVPstatus(userId, eventId) {

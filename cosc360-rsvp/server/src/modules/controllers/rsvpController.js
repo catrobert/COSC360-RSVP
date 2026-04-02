@@ -42,14 +42,14 @@ export const updateRSVP = async (req, res) => {
 
 export const getRSVPsByStatus = async (req, res) => {
     const userId = req.user?.id;
-    const { status } = req.query;
+    const { status, q } = req.query;
 
     if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
     }
 
     try {
-        const events = await rsvpService.getRSVPsByStatus(userId, status);
+        const events = await rsvpService.getRSVPsByStatus(userId, status, q);
         res.status(200).json({ events });
     } catch (error) {
         if (error.message === "Invalid RSVP status" || error.message === "RSVP status is required") {

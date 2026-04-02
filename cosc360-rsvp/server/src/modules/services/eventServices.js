@@ -12,6 +12,10 @@ export async function getEventById(id) {
     return await eventRepository.findEvent(id);
 }
 
+export async function deleteEvent(id) {
+    return await eventRepository.deleteEvent(id);
+}
+
 export async function createEvent(data, userId) {
     const eventData = {
         name: data.name,

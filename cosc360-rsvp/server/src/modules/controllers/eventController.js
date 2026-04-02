@@ -66,3 +66,19 @@ export const createReview = async (req, res) => {
         res.status(500).json({ error: "Could not post review" });
     }
 }
+
+export const deleteEvent = async (req, res) => {
+    try {
+        const deletedEvent = await eventService.deleteEvent(req.params.id);
+
+        if (!deletedEvent) {
+            return res.status(404).json({ error: "Event not found" });
+        }
+
+        res.json({ message: "Event deleted successfully!", event: deletedEvent });
+    } catch (error) {
+        console.log("Error deleting event: ", error);
+        res.status(500).json({ error: "Could not delete event" });
+
+    }
+}

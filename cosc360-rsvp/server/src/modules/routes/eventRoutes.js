@@ -9,6 +9,7 @@ router.get("/", eventController.getEvents);
 router.post("/", authMiddleware, uploadImage.single("image"), eventController.createEvent);
 router.post("/review/:id", authMiddleware, eventController.createReview);
 router.get("/:id", eventController.getEventById);
+router.delete("/:id", eventController.deleteEvent);
 
 // *** to be implemented later ***
 // router.delete("/:id", deleteEvent);

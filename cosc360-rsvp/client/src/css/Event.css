@@ -23,9 +23,15 @@ button:hover{
     gap: 1rem;
 }
 
+#event-content {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
 #event-image {
     max-width: 100%;
-    max-height: 40%;
+    max-height: 70%;
     height: auto;
     border-radius: 10px;
     object-fit: cover;
@@ -70,6 +76,42 @@ button:hover{
     flex-direction: row;
     gap: 0.5rem;
     align-items: center;
+}
+
+#delete-button {
+    display: flex;
+    background-color: white;
+    color: rgb(206, 5, 5);
+    margin-left: auto;
+    flex-grow: 0;
+    border-radius: 20pt; 
+    border-color: rgb(206, 5, 5);
+}
+
+#delete-button:hover {
+    background-color: rgb(138, 37, 37);
+    color: white;
+}
+
+#event-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem 1rem 1rem 1rem;
+}
+
+
+.event-page-title {
+    margin: 0 0 20px 0;
+    font-size: 1.5rem;
+    color: #1a1a2e;
+}
+
+.event-page-content {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    padding: 0 1rem 1rem 1rem;
 }
 
 /* Review Section */
