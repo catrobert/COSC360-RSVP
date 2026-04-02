@@ -13,7 +13,7 @@ function averageRating(reviews) {
     return (sum / reviews.length);
 }
 
-const EventContainer = ({ events, onEventClick }) => {
+const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick }) => {
   const [savedEventIds, setSavedEventIds] = useState(new Set());
 
   useEffect(() => {
@@ -95,6 +95,8 @@ const EventContainer = ({ events, onEventClick }) => {
             price={event.price}
             image={event.image}
             onClick={() => onEventClick?.(eventId)}
+            showReviewButton={showReviewButton}
+            onReviewClick={() => onReviewClick(event)}
           />
         );
       })}

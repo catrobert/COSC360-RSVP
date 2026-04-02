@@ -1,4 +1,4 @@
-import ReviewCard from "../features/event/singleEvent/ReviewCard";
+import ReviewCard from "../features/event/reviews/ReviewCard";
 import SingleEventContainer from "../features/event/singleEvent/SingleEventContainer";
 import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
@@ -7,12 +7,19 @@ import "../css/Event.css";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
 
 const loggedInUser = "000000000000000000000001"; // hardcoded for now
 
 function EventPage() {
     const { id } = useParams();
     const [event, setEvent] = useState(null);
+    const [reviewingEvent, setReviewingEvent] = useState(null);
+    const [rsvpStatus, setRsvpStatus] = useState("");
+    const { user } = useAuth();
+    const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
+    const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
+  
     const userCreated = function (userId = "000000000000000000000001") { // hardcoded for now
         if (loggedInUser === userId) {
             return true;
@@ -38,7 +45,59 @@ function EventPage() {
             console.log("Error deleting event: ", error);
         }
     }
-    const { user } = useAuth();
+    
+    const hasReviewed = () => {
+        for (const review of event.reviews) {
+            if (review.userId?.toString() === user._id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isUpcoming(eventDate, endTime) {
+        const [hours, minutes] = endTime.split(':');
+        const eventDateTime = new Date(eventDate);
+        eventDateTime.setHours(hours, minutes);
+
+        return eventDateTime > new Date();
+    }
+
+    useEffect(() => {
+        async function fetchRSVPstatus(){
+            try {
+                const response = await fetch(`/api/rsvp/events/${id}`, {
+                    headers: {
+                        "x-user-id": user._id || user.id,
+                    }
+                });
+
+                const result = await response.json();
+
+                if (result.error) {
+                    alert(result.error);
+                    return;
+                }
+
+                setRsvpStatus(result[0]?.status);
+            } catch (error) {
+                console.log("Error getting RSVP status: ", error.message);
+            }
+        } 
+        fetchRSVPstatus();
+    }, [])
+
+    async function handleReviewClick() {
+        if (canReview) {
+            setReviewingEvent(event);
+        } else if (hasReviewed()) {
+            alert("You have already reviewed this event!")
+        } else if (rsvpStatus === 'no' || rsvpStatus === 'saved') {
+            alert("You have not RSVP'd to this event, and therefore cannot review.")
+        } else if (rsvpStatus === 'yes' && eventIsUpcoming) {
+            alert("Please wait until after the event to leave a review.");
+        }
+    }
     
     async function handleRsvpClick() {
         // Use logged in user id when available and keep demo fallback for local testing.
@@ -128,8 +187,9 @@ function EventPage() {
                 </div>
                 <div className="event-page-content">
                     <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
-                    <ReviewCard reviews={event.reviews} />
+                    <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} ableToReview={canReview} />
                 </div>
+                {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={ () => setReviewingEvent(null) }/>}
             </div>
         </div>
     );

@@ -1,14 +1,10 @@
 import * as rsvpService from "../services/rsvpServices.js";
 
 export const createRSVP = async (req, res) => {
-    const userId = req.user?.id;
-
-    if (!userId) {
-        return res.status(401).json({ error: "User not authenticated" });
-    }
+    const userId = req.userId;
 
     try {
-        const newRsvp = await rsvpService.createRSVP({ ...req.body, userId });
+        const newRsvp = await rsvpService.createRSVP({ ...req.body}, userId);
         res.status(201).json({ message: "RSVP created successfully!", event: newRsvp });
     } catch (error) {
         if (error.message === "You have already RSVP'd to this event!") {
@@ -62,5 +58,19 @@ export const getRSVPsByStatus = async (req, res) => {
 
         res.status(500).json({ error: `Could not retrieve ${status} events` });
     }
+}
+
+export const getRSVPstatus = async (req, res) => {
+    const userId = req.userId;
+    const eventId = req.params.id;
+
+    try {
+        const rsvpStatus = await rsvpService.getRSVPstatus(userId, eventId);
+        res.status(200).json(rsvpStatus);
+    } catch (error) {
+        res.status(500).json( { error: "Could not retrieve RSVP status" });
+        console.log(error);
+    }
+
 }
 

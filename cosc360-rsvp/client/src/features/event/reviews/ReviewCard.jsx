@@ -10,11 +10,14 @@ function getAverageRating(reviews) {
     return total / reviews.length;
 }
 
-function ReviewsCard({reviews}) {
+function ReviewsCard({reviews, onReviewClick, ableToReview}) {
     return (
         <aside className="reviews-container">
-            <Header reviews={reviews} />
-            <ReviewList reviews={reviews} />
+            <div className='reviews-background'>
+                <Header reviews={reviews} />
+                <ReviewList reviews={reviews} onReviewClick={onReviewClick} canReview={ableToReview} />
+
+            </div>
         </aside>
     );
 }
@@ -32,15 +35,15 @@ function Header({reviews}) {
     );
 }
 
-function ReviewList({ reviews }) {
+function ReviewList({ reviews, onReviewClick, canReview }) {
     return (
         <div>
             <ul className="reviews-list-container"> 
                 {reviews.map((review, index) => (
-                    <ReviewItem key={index} index={index} review={review} rating={"⭐".repeat(review.rating)} />
+                    <ReviewItem key={index} index={index} review={review} />
                 ))}
             </ul>
-            <button className="add-review-button">Add Review</button>
+            <button className={canReview ? "add-review-button" : "greyed-out-review-btn"} onClick={onReviewClick}>Add Review</button>
         </div>
         
     );
@@ -52,7 +55,7 @@ function ReviewItem({review, index }) {
         <>
             <div className="review-title">
                 <div>{review.userId?.username ?? `Reviewer ${index + 1}`}</div> {/* TODO: switch this use userId to join username in user table and display that */}
-                <div>{review.rating}</div>
+                <div>{"⭐".repeat(review.rating)}</div>
             </div>
             <p className="review-text">{review.comment}</p>
         </>
