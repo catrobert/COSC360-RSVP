@@ -138,7 +138,7 @@ function ProfilePage(){
                 
 
                     {/*Personal Info*/}
-                    <div className="profile-section">
+                    <div className="profile-card">
                             <h3>Personal Info</h3>
                         <div className="profile-fields">
                         <div className="profile-field-group">   
@@ -180,7 +180,7 @@ function ProfilePage(){
                     </div>
 
                     {/*Description*/}
-                    <div className="profile-section">
+                    <div className="profile-card">
                         
                             <h3>Description</h3>
                         
