@@ -62,7 +62,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
             <div className="event-card-image">
                 <img src={image || "https://picsum.photos/300/160"} alt="Event Image" />
             </div>
-            <div className="event-body">
+            <div className={`event-body ${onEditClick ? 'has-edit' : ''}`}>
                 <div className="event-body-top">
                     <h2>{name || "Default Name"}</h2>
                     <div className="event-rating">

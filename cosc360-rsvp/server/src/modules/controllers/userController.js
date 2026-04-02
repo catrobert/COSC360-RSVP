@@ -1,4 +1,4 @@
-import { getUserById, updateUserById } from "../services/userServices.js";
+import { getUserById, updateUserById, getAllUsers } from "../services/userServices.js";
 
 export const getProfile = async (req, res) => {
     try {
@@ -70,3 +70,16 @@ export const uploadPhoto = async (req, res) => {
         res.status(500).json({ error: "Something went wrong"});
     }
 }
+
+export const listUsers = async (req, res) => {
+    try {
+        if (req.userRole !== "admin") {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+        const users = await getAllUsers();
+        res.json({ users });
+    } catch (err) {
+        console.error("Error listing users:", err);
+        res.status(500).json({ error: "Could not load users" });
+    }
+};

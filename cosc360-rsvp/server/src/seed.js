@@ -51,7 +51,11 @@ export async function seedIfEmpty() {
 
 }
 
-// Allow running directly: node seed.js
+// Allow running directly: node seed.js — uses seedIfEmpty so it never wipes existing data
 if (process.argv[1].endsWith("seed.js")) {
-  seed().catch(console.error);
+  (async () => {
+    await mongoose.connect(process.env.MONGO_URI);
+    await seedIfEmpty();
+    await mongoose.disconnect();
+  })().catch(console.error);
 }

@@ -41,24 +41,29 @@ function CreateEventForm({ onClose, initialData = null, eventId = null }) {
             const url = isEditing ? `/api/events/${eventId}` : "/api/events";
             const method = isEditing ? "PUT" : "POST";
 
-            const response = await fetch(url, {
-                method,
-                headers: { "x-user-id": user._id || user.id },
-                body: formData,
-            });
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: { "x-user-id": user._id || user.id },
+                    body: formData,
+                });
 
-            const result = await response.json();
-            if (result.error) {
-                alert(result.error);
-            } else {
-                alert(result.message);
-                onClose(result.event);
+                const result = await response.json();
+                if (result.error) {
+                    alert(result.error);
+                } else {
+                    alert(result.message);
+                    onClose(result.event);
+                }
+            } catch (error) {
+                console.log("Error submitting event form:", error);
+                alert("Something went wrong. Please try again.");
             }
         }
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-overlay" onClick={() => onClose()}>
             <div className="create-event-modal" onClick={(e) => e.stopPropagation()}>
                 <h2>{isEditing ? "Edit Event" : "Create Event"}</h2>
 
@@ -165,7 +170,7 @@ function CreateEventForm({ onClose, initialData = null, eventId = null }) {
                     </div>
 
                     <div className="ce-form-actions ce-form-full">
-                        <button type="button" className="ce-cancel-btn" onClick={onClose}>Cancel</button>
+                        <button type="button" className="ce-cancel-btn" onClick={() => onClose()}>Cancel</button>
                         <button type="submit" className="ce-submit-btn">{isEditing ? "Save Changes" : "Create Event"}</button>
                     </div>
                 </form>

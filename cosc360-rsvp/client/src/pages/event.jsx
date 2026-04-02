@@ -182,11 +182,14 @@ function EventPage() {
             <TopNav />
                 <div id="event-header">
                     <h1 id= "event-page-title">{event.name}</h1>
-                    {userCreated() && (<button id="edit-button" onClick={() => setEditingEvent(event)}>Edit Event</button>)}
-                    {userCreated() && (<button id="delete-button" onClick={handleDeleteEventClick}>Delete Event</button>)}
                 </div>
                 <div className="event-page-content">
-                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
+                    <SingleEventContainer
+                        event={event}
+                        onRsvpClick={handleRsvpClick}
+                        onEditClick={userCreated() ? () => setEditingEvent(event) : undefined}
+                        onDeleteClick={userCreated() ? handleDeleteEventClick : undefined}
+                    />
                     <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} ableToReview={canReview} />
                 </div>
                 {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={ () => setReviewingEvent(null) }/>}
