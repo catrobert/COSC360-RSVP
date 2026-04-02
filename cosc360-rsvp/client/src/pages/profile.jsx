@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { apiClient } from "../lib/api-client.js";
 import "../css/Home.css";
 import "../css/Profile.css";
+import { CirclePlus } from 'lucide-react';
 
 function ProfilePage(){
     const { user } = useAuth();
@@ -77,6 +78,27 @@ function ProfilePage(){
         }
     }
 
+    async function handlePhotoUpload(e){
+        const file = e.target.files[0];
+        if(!file) return;
+
+        const formData = new FormData();
+        formData.append("profilePhoto", file);
+
+        const response = await fetch(`/api/users/profile/photo?userId=${user.id}`, {
+            method: "POST",
+            body: formData,
+        });
+
+        const data = await response.json();
+
+        if(response.ok){
+            setProfile(data.user);
+        }else{
+            console.error("Photo upload failed: ", data.error);
+        }
+    }
+
     if (!profile) return <div>Loading...</div>;
 
     return(
@@ -87,7 +109,27 @@ function ProfilePage(){
                 <div className="profile-container">
                     {/*Profile pic*/}
                     <div className = "profile-picture-section">
-                        <div className="profile-picture">XXX</div>
+                      <div className="profile-picture-wrapper">
+                        {profile.profilePhoto ? (
+                            <img
+                                src={profile.profilePhoto}
+                                alt="Profile"
+                                className="profile-picture-img"
+                            />    
+                        ): ( 
+                            <div className="profile-picture"></div>
+                        )}  
+                        <label className="profile-photo-upload-btn" htmlFor="photo-upload">
+                            <CirclePlus/>
+                        </label> 
+                        <input 
+                            id="photo-upload"
+                            type="file"
+                            accept="image/*"
+                            style={{ display: "none"}}
+                            onChange={handlePhotoUpload}
+                        />  
+                     </div>   
                         <div className="profile-name">
                             <h2>{profile.firstName} {profile.lastName}</h2>
                             <p>@{profile.username}</p>
@@ -96,17 +138,11 @@ function ProfilePage(){
                 
 
                     {/*Personal Info*/}
-                    <div className="profile-section">
-                        <div className="profile-section-header">
+                    <div className="profile-card">
                             <h3>Personal Info</h3>
-                            <button
-                                className="profile-edit-btn"
-                                onClick={() => setEditing(!editing)}>
-                                    Edit
-                                    </button>
-                        </div>
-
                         <div className="profile-fields">
+                        <div className="profile-field-group">   
+                            <label>First Name</label>
                             <input
                                 className="profile-input"
                                 name="firstName"
@@ -115,6 +151,9 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="First Name"
                             />
+                         </div>
+                         <div className="profile-field-group">    
+                            <label>Last Name</label>
                             <input
                                 className="profile-input"
                                 name="lastName"
@@ -123,6 +162,10 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="Last Name"
                             />
+                        </div>
+
+                        <div className="profile-field-group">     
+                            <label>Username</label>
                             <input
                                 className="profile-input"
                                 name="username"
@@ -131,16 +174,20 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="Username"
                             />
+                            
+                        </div>
                         </div>
                     </div>
 
                     {/*Description*/}
-                    <div className="profile-section">
-                        <div className="profile-section-header">
+                    <div className="profile-card">
+                        
                             <h3>Description</h3>
-                        </div>
+                        
 
                         <div className="profile-fields">
+                           <div className="profile-field-group"> 
+                            <label>Birthday</label>
                             <input
                                 className="profile-input"
                                 name="birthday"
@@ -149,7 +196,9 @@ function ProfilePage(){
                                 onChange={handleDescriptionChange}
                                 disabled={!editing}
                             />
-
+                            </div>
+                            <div className="profile-field-group"> 
+                            <label>Gender</label>
                             <select
                                 className="profile-select"
                                 name="gender"
@@ -163,7 +212,10 @@ function ProfilePage(){
                                 <option value="Prefer Not To Say">Prefer Not To Say</option>
                             
                             </select>
-
+                            </div>
+                            
+                            <div className="profile-field-group"> 
+                            <label>Location</label>
                             <input
                                 className="profile-input"
                                 name="location"
@@ -172,19 +224,22 @@ function ProfilePage(){
                                 disabled={!editing}
                                 placeholder="Location"
                             />
+                            </div>
                         </div>
                     </div>
-                    {/*Save Button*/}
-                    {editing && (
-                        <button className="profile-save-btn" onClick={()=> {
-                            console.log("Button Clicked!");
-                            handleSave();
-                        }}
-                        
-                        >
-                            Save Changes
-                        </button>
-                    )}
+                    {/*Save/Edit Button*/}
+                    <div className ="profile-btn-row">
+                        <button
+                            className="profile-edit-btn"
+                            onClick={() => setEditing(!editing)}>
+                                {editing ? "Cancel" : "Edit"}
+                            </button>
+                            {editing && (
+                                <button className="profile-save-btn" onClick={handleSave}>
+                                    Save Changes
+                                </button>
+                            )}
+                    </div>
 
                     {saveStatus && <p className="profile-status-msg">{saveStatus}</p>}
             </div>

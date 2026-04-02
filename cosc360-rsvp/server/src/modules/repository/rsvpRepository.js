@@ -24,15 +24,6 @@ export async function findRSVP(eventId, userId) {
     )
 }
 
-export async function findEventsByStatus(userId, status) {
-    return await RSVPModel.find(
-        {
-            userId: userId,
-            status: status
-        }
-    ).populate("eventId");
-}
-
 export async function getRSVPstatus(userId, eventId) {
     return await RSVPModel.find( {userId: userId, eventId: eventId} );  
 }

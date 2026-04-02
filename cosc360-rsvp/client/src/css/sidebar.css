@@ -7,7 +7,7 @@
   max-width: 240px;
   background-color: #f8f9ff;
   border-right: 1px solid #e0e4f0;
-  padding: 20px 12px;
+  padding: 12px 12px;
   box-sizing: border-box;
   position: sticky;
   top: 0;
@@ -18,35 +18,37 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e4f0;
 }
 
-
 .sidebar-header {
-  font-weight: bold;
-  margin-bottom: 20px;
-  color: #1a1a2e;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 0;
+}
+
+.sidebar-header h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2a2b58;
 }
 
 .sidebar-header p {
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
 }
-
-.sidebar-header h4 {
-  margin: 14px 0 4px 0;
-  font-size: 16px;
-  color: #888;
-}
-
 
 .profile-picture {
-  width: 54px;
-  height: 54px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  margin-bottom: 10px;
   background-color: #e0e4f0;
+  flex-shrink: 0;
 }
 
 .menu-item {
@@ -76,7 +78,8 @@
 
 .view-profile{
   cursor: pointer;
-  color: #4a90d9;
+  color: navy;
+  font-weight: 500;
 }
 
 .view-profile:hover{
@@ -88,5 +91,5 @@
 .sidebar .menu-container h4 {
   display: flex;
   justify-content: center;
-  color:blue;
+  color: #2a2b58;
 }
