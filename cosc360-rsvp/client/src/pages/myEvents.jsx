@@ -7,6 +7,7 @@ import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 import "../css/Home.css";
 import { useAuth } from "../context/AuthContext.jsx";
+import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
 
 // todo: if previously attended event, swap out review stars for "Leave a Review" button
 
@@ -15,12 +16,23 @@ function MyEvents() {
     const [upcomingAttendingEvents, setUpcomingAttendingEvents] = useState([]);
     const [previousHostedEvents, setPreviousHostedEvents] = useState([]);
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
+    const [reviewingEvent, setReviewingEvent] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const { user } = useAuth();
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
 
-    function isUpcoming(eventDate) {
-        return new Date(eventDate) >= new Date();
+    const handleReviewClick = function(event) {
+        setReviewingEvent(event);  
+    }
+
+    function isUpcoming(eventDate, endTime) {
+        const [hours, minutes] = endTime.split(':');
+        const eventDateTime = new Date(eventDate);
+        eventDateTime.setHours(hours, minutes);
+
+        return eventDateTime > new Date();
     }
 
     function handleEventClick(eventId) {
@@ -66,10 +78,10 @@ function MyEvents() {
                 );
 
                 // Split each bucket into upcoming and previous by event date.
-                setUpcomingHostedEvents(hostedEvents.filter((event) => isUpcoming(event.date)));
-                setPreviousHostedEvents(hostedEvents.filter((event) => !isUpcoming(event.date)));
-                setUpcomingAttendingEvents(attendingEvents.filter((event) => isUpcoming(event.date)));
-                setPreviousAttendedEvents(attendingEvents.filter((event) => !isUpcoming(event.date)));
+                setUpcomingHostedEvents(hostedEvents.filter((event) => isUpcoming(event.date, event.endTime)));
+                setPreviousHostedEvents(hostedEvents.filter((event) => !isUpcoming(event.date, event.endTime)));
+                setUpcomingAttendingEvents(attendingEvents.filter((event) => isUpcoming(event.date, event.endTime)));
+                setPreviousAttendedEvents(attendingEvents.filter((event) => !isUpcoming(event.date, event.endTime)));
             } catch (error) {
                 console.log("Error fetching My Events data:", error);
                 setUpcomingHostedEvents([]);
@@ -82,8 +94,6 @@ function MyEvents() {
         fetchMyEvents();
     }, [query]);
 
-    const { user } = useAuth();
-
     return (
         <div className="homepage-layout">        
             {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
@@ -94,10 +104,12 @@ function MyEvents() {
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Attending Events</h1>
                 {<EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
-                {<EventContainer events={previousHostedEvents} onEventClick={handleEventClick} />}
-                <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previous Attended Events</h1>
-                {<EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} />}
+                <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Attended Events</h1>
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick}/>}
             </div>
+
+            {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)}/>}
         </div>
     );
 }

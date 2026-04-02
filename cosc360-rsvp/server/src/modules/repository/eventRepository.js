@@ -21,9 +21,16 @@ export async function findBySearchTerm(query) {
 }
 
 export async function findEvent(id) {
-    return await EventModel.findById(id);
+    return await EventModel.findById(id).populate('createdBy', 'username').populate('reviews.userId', 'username');
 }
 
-export async function deleteEvent(id) {
-    return await EventModel.findByIdAndDelete(id);
+export async function createReview(data, eventId) {
+    const event = await EventModel.findById(eventId);
+    event.reviews.push(data);
+    await event.save();
+    return event.toJSON();
+}
+
+export async function findReview(userId, eventId) {
+    return await EventModel.findOne( {_id: eventId, "reviews.userId": userId } );
 }

@@ -95,3 +95,10 @@
     color: #666;
 }
 
+.review-btn {
+    display: block;
+    font-size: 0.85rem;
+    margin: 1rem auto;
+    width: fit-content;
+}
+

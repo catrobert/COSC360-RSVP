@@ -12,8 +12,14 @@ function validateStatus(status) {
     }
 }
 
-export async function createRSVP(rsvpData) {
-    validateStatus(rsvpData.status);
+export async function createRSVP(rsvp, userId) {
+    validateStatus(rsvp.status);
+
+    const rsvpData = {
+        eventId: rsvp.eventId,
+        userId: userId,
+        status: rsvp.status,
+    }
 
     const existingRSVP = await rsvpRepository.findRSVP(rsvpData.eventId, rsvpData.userId);
 
@@ -34,4 +40,8 @@ export async function getRSVPsByStatus(userId, status, query) {
     validateStatus(status);
 
     return await rsvpRepository.findEventsByStatus(userId, status, query);
+}
+
+export async function getRSVPstatus(userId, eventId) {
+    return await rsvpRepository.getRSVPstatus(userId, eventId);
 }
