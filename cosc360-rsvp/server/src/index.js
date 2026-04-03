@@ -19,8 +19,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
 const PORT = 3000;
 
-await connectDB();
-await seedIfEmpty();
+if (process.env.NODE_ENV !== "test"){
+  await connectDB();
+  await seedIfEmpty();
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  })
+}
 
 app.use(cors( { origin: ["http://localhost:5173", "http://localhost:5174"] } ));
 app.use(express.json());
@@ -36,6 +41,4 @@ app.use("/api/reset-password", resetPasswordRouter);
 app.use("/api/users", userRouter);
 
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+export default app;
