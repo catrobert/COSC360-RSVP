@@ -78,10 +78,6 @@ button:hover{
     align-items: center;
 }
 
-.event-owner-actions {
-    display: flex;
-    gap: 8px;
-}
 
 .event-edit-btn {
     border-radius: 20pt;
@@ -96,11 +92,18 @@ button:hover{
     border-color: rgb(206, 5, 5);
     padding: 8px 18px;
     cursor: pointer;
+    flex-grow: 0;
 }
 
 .event-delete-btn:hover {
     background-color: rgb(138, 37, 37);
     color: white;
+}
+
+.align-btns-right {
+    display: flex;
+    margin-left: auto;
+    gap: 0.5rem;
 }
 
 #event-header {
