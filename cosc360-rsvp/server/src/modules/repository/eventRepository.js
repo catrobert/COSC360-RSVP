@@ -34,3 +34,7 @@ export async function createReview(data, eventId) {
 export async function findReview(userId, eventId) {
     return await EventModel.findOne( {_id: eventId, "reviews.userId": userId } );
 }
+
+export async function deleteEvent(id){
+    return await EventModel.findByIdAndDelete(id);
+}
