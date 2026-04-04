@@ -67,6 +67,26 @@ export const createReview = async (req, res) => {
     }
 }
 
+export const updateEvent = async (req, res) => {
+    try {
+        const data = { ...req.body };
+        if (req.file) {
+            data.image = "/uploads/" + req.file.filename;
+        }
+        const event = await eventService.updateEvent(req.params.id, data, req.userId, req.userRole);
+        if (!event) {
+            return res.status(404).json({ error: "Event not found" });
+        }
+        res.json({ message: "Event updated successfully!", event });
+    } catch (error) {
+        if (error.message === "Forbidden") {
+            return res.status(403).json({ error: "You are not the creator of this event" });
+        }
+        console.log("Error updating event: ", error);
+        res.status(500).json({ error: "Could not update event" });
+    }
+};
+
 export const deleteEvent = async (req, res) => {
     try {
         const deletedEvent = await eventService.deleteEvent(req.params.id);

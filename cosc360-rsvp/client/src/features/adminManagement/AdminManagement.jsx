@@ -1,63 +1,104 @@
-import React from 'react';
-import { Settings, Trash2, Cog } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Pencil, Search } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
+import CreateEventForm from '../event/createEvent/CreateEventForm.jsx';
 
-//mock user/event data to be replaced with API calls
-const mockUsers = [
-    {id: 1, name: 'Cat Hudson', email: 'cat1234@gmail.com'},
-    {id: 2, name: 'Dudley Dog', email: 'bingbong@gmail.com'},
-    {id: 3, name: 'Ryder Floof', email: 'imadog@gmail.com'},
-];
+const AdminManagement = () => {
+    const [users, setUsers] = useState([]);
+    const [events, setEvents] = useState([]);
+    const [userSearch, setUserSearch] = useState('');
+    const [eventSearch, setEventSearch] = useState('');
+    const [editingEvent, setEditingEvent] = useState(null);
+    const { user } = useAuth();
+    const navigate = useNavigate();
 
-const mockEvents = [
-    {id: 12, title: 'Summer Festival', date:'July 16 2026'},
-    {id: 22, title: 'Winter Festival', date: 'December 24 2026'},
-    {id: 32, title: 'Ariana Grande Concert', date: 'May 10 2026'},
-    {id: 42, title: 'Jazz in the Park', date: 'June 21 2026'},
-];
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const [usersRes, eventsRes] = await Promise.all([
+                    fetch('/api/users', { headers: { 'x-user-id': user._id || user.id } }),
+                    fetch('/api/events'),
+                ]);
+                const usersData = await usersRes.json();
+                const eventsData = await eventsRes.json();
+                setUsers(usersData.users || []);
+                const allEvents = eventsData.events ?? eventsData;
+                setEvents(Array.isArray(allEvents) ? allEvents : []);
+            } catch (err) {
+                console.log('Error fetching admin data:', err);
+            }
+        }
+        fetchData();
+    }, []);
 
-const AdminManagement = ({users=mockUsers, events = mockEvents}) => {
-return(
-    <div className="admin-management">
-        <div className = "admin-panel">
-            <div className = "search-bar">
-                <input type="text" placeholder="Search Users"/>
-                <span className="search-icon"></span>
-            </div>
-            <div className="list">
-                {users.map((user) => (
-                    <div className = "list-item" key={user.id}>
-                        <span>{user.name} | {user.email}</span>
-                        <button className = "btn-block">Block</button>
-                    </div>    
-                ))}
-            </div>
-        </div>
+    const filteredUsers = users.filter(u =>
+        `${u.firstName} ${u.lastName} ${u.username}`.toLowerCase().includes(userSearch.toLowerCase())
+    );
 
-        <div className="divider"/>
+    const filteredEvents = events.filter(e =>
+        e.name?.toLowerCase().includes(eventSearch.toLowerCase())
+    );
 
-        <div className="admin-panel">
-            <div className="search-bar">
-                <input type="text" placeholder="Search Events"/>
-                <span className="search-icon"></span>
-            </div>
+    function formatDate(dateStr) {
+        return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
 
-            <div className ="list">
-                {events.map((event)=>(
-                    <div className="list-item" key={event.id}>
-                        <span>{event.title} | {event.date}</span>
-                        <div className="event-actions">
-                            <button className="settings-btn">
-                                <Cog size={20} color="grey"/>
-                            </button>
-                            <button className="delete-btn">
-                                <Trash2 size={20} color="red" />
-                            </button>
+    function handleEditClose(updatedEvent) {
+        setEditingEvent(null);
+        if (updatedEvent) {
+            setEvents(prev => prev.map(e => e._id === updatedEvent._id ? updatedEvent : e));
+        }
+    }
+
+    return (
+        <div className="admin-management">
+            <div className="admin-panel">
+                <h2 className="admin-panel-title">Users</h2>
+                <div className="admin-search-container">
+                    <input type="text" placeholder="Search users..." value={userSearch} onChange={e => setUserSearch(e.target.value)} />
+                    <Search size={18} color="gray" className="search-icon" />
+                </div>
+                <div className="list">
+                    {filteredUsers.map((u) => (
+                        <div className="list-item" key={u._id}>
+                            <span>{u.firstName} {u.lastName} | {u.username} | {u.role}</span>
                         </div>
-                    </div>    
-                ))}
+                    ))}
+                </div>
             </div>
+
+            <div className="divider" />
+
+            <div className="admin-panel">
+                <h2 className="admin-panel-title">Events</h2>
+                <div className="admin-search-container">
+                    <input type="text" placeholder="Search events..." value={eventSearch} onChange={e => setEventSearch(e.target.value)} />
+                    <Search size={18} color="gray" className="search-icon" />
+                </div>
+                <div className="list">
+                    {filteredEvents.map((event) => (
+                        <div className="list-item" key={event._id}>
+                            <span>{event.name} | {formatDate(event.date)}</span>
+                            <div className="event-actions">
+                                <button className="settings-btn" onClick={() => setEditingEvent(event)}>
+                                    <Pencil size={18} color="navy" />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {editingEvent && (
+                <CreateEventForm
+                    initialData={editingEvent}
+                    eventId={editingEvent._id}
+                    onClose={handleEditClose}
+                />
+            )}
         </div>
-    </div>
-);
+    );
 };
+
 export default AdminManagement;

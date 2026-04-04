@@ -8,6 +8,7 @@ import TopNav from "../components/topNav";
 import "../css/Home.css";
 import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
+import CreateEventForm from "../features/event/createEvent/CreateEventForm.jsx";
 
 // todo: if previously attended event, swap out review stars for "Leave a Review" button
 
@@ -17,6 +18,7 @@ function MyEvents() {
     const [previousHostedEvents, setPreviousHostedEvents] = useState([]);
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
     const [reviewingEvent, setReviewingEvent] = useState(null);
+    const [editingEvent, setEditingEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { user } = useAuth();
@@ -100,16 +102,17 @@ function MyEvents() {
             <div className="main-content">
                 <TopNav />
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
-                {<EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} />}
+                {<EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Attending Events</h1>
                 {<EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Attended Events</h1>
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick}/>}
             </div>
 
             {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)}/>}
+            {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); }} />}
         </div>
     );
 }

@@ -32,3 +32,7 @@ export async function updateUserById (id, updates) {
         { returnDocument: "after"}
     ).select("-password");
 }
+
+export async function getAllUsers() {
+    return await UserSchema.find().select("-password");
+}

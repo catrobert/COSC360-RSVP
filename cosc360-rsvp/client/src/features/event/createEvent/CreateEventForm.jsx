@@ -1,8 +1,13 @@
 import '../../../css/CreateEventForm.css';
 import { useAuth } from "../../../context/AuthContext.jsx";
 
-function CreateEventForm({ onClose }) {
+function CreateEventForm({ onClose, initialData = null, eventId = null }) {
     const { user } = useAuth();
+    const isEditing = !!eventId;
+
+    const defaultDate = initialData?.date
+        ? new Date(initialData.date).toISOString().split("T")[0]
+        : "";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,28 +38,34 @@ function CreateEventForm({ onClose }) {
         if (isValid) {
             const formData = new FormData(form);
 
-            const response = await fetch("/api/events", {
-                method: "POST",
-                headers: {
-                    "x-user-id": user._id || user.id,
-                },
-                body: formData,
-            });
+            const url = isEditing ? `/api/events/${eventId}` : "/api/events";
+            const method = isEditing ? "PUT" : "POST";
 
-            const result = await response.json();
-            if (result.error) {
-                alert(result.error);
-            } else {
-                alert(result.message);
-                onClose();
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: { "x-user-id": user._id || user.id },
+                    body: formData,
+                });
+
+                const result = await response.json();
+                if (result.error) {
+                    alert(result.error);
+                } else {
+                    alert(result.message);
+                    onClose(result.event);
+                }
+            } catch (error) {
+                console.log("Error submitting event form:", error);
+                alert("Something went wrong. Please try again.");
             }
         }
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-overlay" onClick={() => onClose()}>
             <div className="create-event-modal" onClick={(e) => e.stopPropagation()}>
-                <h2>Create Event</h2>
+                <h2>{isEditing ? "Edit Event" : "Create Event"}</h2>
 
                 <form
                     id="create-event-form"
@@ -70,6 +81,7 @@ function CreateEventForm({ onClose }) {
                             id="ce-name"
                             name="name"
                             placeholder="Your event name..."
+                            defaultValue={initialData?.name || ""}
                             required
                         />
                     </div>
@@ -81,6 +93,7 @@ function CreateEventForm({ onClose }) {
                             id="ce-location"
                             name="location"
                             placeholder="Your event location..."
+                            defaultValue={initialData?.location || ""}
                             required
                         />
                     </div>
@@ -93,6 +106,7 @@ function CreateEventForm({ onClose }) {
                             name="date"
                             min="2020-01-01"
                             max="2099-12-31"
+                            defaultValue={defaultDate}
                             required
                         />
                     </div>
@@ -106,6 +120,7 @@ function CreateEventForm({ onClose }) {
                             placeholder="0.00"
                             min="0"
                             step="0.01"
+                            defaultValue={initialData?.price ?? ""}
                             required
                         />
                     </div>
@@ -116,6 +131,7 @@ function CreateEventForm({ onClose }) {
                             type="time"
                             id="ce-startTime"
                             name="startTime"
+                            defaultValue={initialData?.startTime || ""}
                             required
                         />
                     </div>
@@ -126,12 +142,13 @@ function CreateEventForm({ onClose }) {
                             type="time"
                             id="ce-endTime"
                             name="endTime"
+                            defaultValue={initialData?.endTime || ""}
                             required
                         />
                     </div>
 
                     <div className="ce-form-group ce-form-full">
-                        <label>Event Image</label>
+                        <label>Event Image {isEditing && <span style={{ fontWeight: 400, color: "#888" }}>(leave blank to keep existing)</span>}</label>
                         <input
                             type="file"
                             id="ce-image"
@@ -147,13 +164,14 @@ function CreateEventForm({ onClose }) {
                             name="description"
                             placeholder="Event description..."
                             rows="3"
+                            defaultValue={initialData?.description || ""}
                             required
                         />
                     </div>
 
                     <div className="ce-form-actions ce-form-full">
-                        <button type="button" className="ce-cancel-btn" onClick={onClose}>Cancel</button>
-                        <button type="submit" className="ce-submit-btn">Create Event</button>
+                        <button type="button" className="ce-cancel-btn" onClick={() => onClose()}>Cancel</button>
+                        <button type="submit" className="ce-submit-btn">{isEditing ? "Save Changes" : "Create Event"}</button>
                     </div>
                 </form>
             </div>

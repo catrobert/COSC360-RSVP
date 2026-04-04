@@ -48,5 +48,6 @@ export async function authMiddleware(req, res, next) {
     }
 
     req.userId = userId; // req.userId now available to everything after
+    req.userRole = user.role; // req.userRole now available to everything after
     next();
 }

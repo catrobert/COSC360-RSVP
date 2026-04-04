@@ -9,10 +9,7 @@ router.get("/", eventController.getEvents);
 router.post("/", authMiddleware, uploadImage.single("image"), eventController.createEvent);
 router.post("/review/:id", authMiddleware, eventController.createReview);
 router.get("/:id", eventController.getEventById);
+router.put("/:id", authMiddleware, uploadImage.single("image"), eventController.updateEvent);
 router.delete("/:id", eventController.deleteEvent);
-
-// *** to be implemented later ***
-// router.delete("/:id", deleteEvent);
-// router.put("/:id", editEvent);
 
 export default router;

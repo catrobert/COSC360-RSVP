@@ -35,6 +35,28 @@ export async function createEvent(data, userId) {
     return await eventRepository.createEvent(eventData);
 }
 
+export async function updateEvent(id, data, userId, userRole) {
+    const event = await eventRepository.findEvent(id);
+    if (!event) return null;
+    const isAdmin = userRole === "admin";
+    if (!isAdmin && event.createdBy._id.toString() !== userId.toString()) {
+        throw new Error("Forbidden");
+    }
+    const updateData = {
+        name: data.name,
+        date: new Date(data.date),
+        location: data.location,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        price: parseFloat(data.price),
+        description: data.description,
+    };
+    if (data.image) {
+        updateData.image = data.image;
+    }
+    return await eventRepository.updateEvent(id, updateData);
+}
+
 export async function createReview(data, eventId, userId) {
     const reviewData = {
         userId: userId,
