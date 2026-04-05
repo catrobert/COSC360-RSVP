@@ -18,7 +18,7 @@ export const createRSVP = async (req, res) => {
 export const updateRSVP = async (req, res) => {
     const { eventId } = req.params;
     const { status } = req.body;
-    const userId = req.user?.id;
+    const userId = req.userId;
 
     if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
@@ -41,7 +41,7 @@ export const updateRSVP = async (req, res) => {
 }
 
 export const getRSVPsByStatus = async (req, res) => {
-    const userId = req.user?.id;
+    const userId = req.userId;
     const { status, q } = req.query;
 
     if (!userId) {

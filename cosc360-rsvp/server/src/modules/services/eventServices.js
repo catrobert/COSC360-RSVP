@@ -1,6 +1,20 @@
 import * as eventRepository from "../repository/eventRepository.js";
+import * as rsvpRepository from "../repository/rsvpRepository.js";
 
-export async function getEvents(query) { 
+function eventHasEnded(eventDate, endTime) {
+    const eventDateTime = new Date(eventDate);
+
+    if (typeof endTime === "string" && endTime.includes(":")) {
+        const [hours, minutes] = endTime.split(":").map(Number);
+        if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
+            eventDateTime.setHours(hours, minutes, 0, 0);
+        }
+    }
+
+    return eventDateTime <= new Date();
+}
+
+export async function getEvents(query) {
     if (!query) {
         return await eventRepository.findAll();
     } else {
@@ -58,6 +72,21 @@ export async function updateEvent(id, data, userId, userRole) {
 }
 
 export async function createReview(data, eventId, userId) {
+    const event = await eventRepository.findEvent(eventId);
+
+    if (!event) {
+        throw new Error("Event not found");
+    }
+
+    const rsvp = await rsvpRepository.findRSVP(eventId, userId);
+    if (!rsvp || rsvp.status !== "yes") {
+        throw new Error("You must RSVP yes before reviewing this event!");
+    }
+
+    if (!eventHasEnded(event.date, event.endTime)) {
+        throw new Error("You can only review events that have ended!");
+    }
+
     const reviewData = {
         userId: userId,
         rating: data.rating,
@@ -67,7 +96,7 @@ export async function createReview(data, eventId, userId) {
     const existingReview = await eventRepository.findReview(userId, eventId);
 
     if (existingReview) {
-        throw new Error("You have already reviewed this event!") 
+        throw new Error("You have already reviewed this event!")
     }
 
     return await eventRepository.createReview(reviewData, eventId);

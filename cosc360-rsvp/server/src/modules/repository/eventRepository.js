@@ -37,6 +37,8 @@ export async function findReview(userId, eventId) {
 
 export async function updateEvent(id, data) {
     return await EventModel.findByIdAndUpdate(id, data, { new: true, runValidators: true }).populate('createdBy', 'username');
+}
+
 export async function deleteEvent(id){
     return await EventModel.findByIdAndDelete(id);
 }
