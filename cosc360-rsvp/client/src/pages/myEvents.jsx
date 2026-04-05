@@ -110,7 +110,7 @@ function MyEvents() {
 
     return (
         <div className="homepage-layout">        
-            {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
+            {activeUser.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
             <div className="main-content">
                 <TopNav />
                 <h1 style={{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
