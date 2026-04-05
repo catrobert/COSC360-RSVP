@@ -22,6 +22,7 @@ function MyEvents() {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { user } = useAuth();
+    const activeUserId = user?.id || user?._id;
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
 
@@ -43,7 +44,16 @@ function MyEvents() {
 
     useEffect(() => {
         async function fetchMyEvents() {
-            const userId = localStorage.getItem("userId") || "000000000000000000000001";
+            if (!activeUserId) {
+                setUpcomingHostedEvents([]);
+                setPreviousHostedEvents([]);
+                setUpcomingAttendingEvents([]);
+                setPreviousAttendedEvents([]);
+                setLoading(false);
+                return;
+            }
+
+            setLoading(true);
 
             const eventParams = new URLSearchParams();
             if (query.trim()) {
@@ -61,7 +71,7 @@ function MyEvents() {
                     fetch(`/api/events${eventParams.toString() ? `?${eventParams.toString()}` : ""}`),
                     fetch(`/api/rsvp/events?${rsvpParams.toString()}`, {
                         headers: {
-                            "x-user-id": userId,
+                            "x-user-id": activeUserId,
                         },
                     }),
                 ]);
@@ -76,7 +86,10 @@ function MyEvents() {
 
                 // Hosted events are the events created by the active user.
                 const hostedEvents = (allEvents || []).filter(
-                    (event) => event?.createdBy?.toString?.() === userId
+                    (event) => {
+                        const creatorId = event?.createdBy?._id?.toString?.() || event?.createdBy?.toString?.();
+                        return creatorId === activeUserId.toString();
+                    }
                 );
 
                 // Split each bucket into upcoming and previous by event date.
@@ -90,11 +103,13 @@ function MyEvents() {
                 setPreviousHostedEvents([]);
                 setUpcomingAttendingEvents([]);
                 setPreviousAttendedEvents([]);
+            } finally {
+                setLoading(false);
             }
         }
 
         fetchMyEvents();
-    }, [query]);
+    }, [query, activeUserId]);
 
     return (
         <div className="homepage-layout">        

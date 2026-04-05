@@ -13,6 +13,8 @@ function SavedEvents() {
     const [savedEvents, setSavedEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const activeUserId = user?.id || user?._id;
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
 
@@ -22,8 +24,12 @@ function SavedEvents() {
 
     useEffect(() => {
         async function fetchSavedEvents() {
-            // Use the active user id header required by RSVP middleware.
-            const userId = localStorage.getItem("userId") || "000000000000000000000001";
+            if (!activeUserId) {
+                setSavedEvents([]);
+                setLoading(false);
+                return;
+            }
+
             setLoading(true);
 
             const params = new URLSearchParams({ status: "saved" });
@@ -34,7 +40,7 @@ function SavedEvents() {
             try {
                 const response = await fetch(`/api/rsvp/events?${params.toString()}`, {
                     headers: {
-                        "x-user-id": userId,
+                        "x-user-id": activeUserId,
                     },
                 });
 
@@ -61,13 +67,11 @@ function SavedEvents() {
         }
 
         fetchSavedEvents();
-    }, [query]);
-
-    const { user } = useAuth();
+    }, [query, activeUserId]);
 
     return (
-        <div className="homepage-layout">        
-            {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
+        <div className="homepage-layout">
+            {user?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />
                 <h1 style={{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Saved Events</h1>

@@ -15,16 +15,17 @@ function Homepage() {
 
     const query = searchParams.get("q"); // get the search params sent over from search bar in top nav component
 
-    function handleEventClick (eventId) {
-        navigate(`/event/${eventId.toString()}`);
+    function handleEventClick(eventId) {
+        if (!eventId) return;
+        navigate(`/event/${eventId}`);
     }
 
 
-    useEffect( () => {
+    useEffect(() => {
         async function fetchEvents() {
             try {
                 let url = "/api/events";
-            
+
                 if (query) {
                     url += `?q=${query}`;
                 }
@@ -46,11 +47,11 @@ function Homepage() {
 
         fetchEvents();
 
-    }, [query]) 
+    }, [query])
 
     return (
-        <div className="homepage-layout">        
-            {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
+        <div className="homepage-layout">
+            {user?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />
                 <EventContainer events={events} onEventClick={handleEventClick} />
