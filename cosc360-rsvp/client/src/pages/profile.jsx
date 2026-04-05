@@ -8,8 +8,8 @@ import "../css/Home.css";
 import "../css/Profile.css";
 import { CirclePlus } from 'lucide-react';
 
-function ProfilePage(){
-    const { user } = useAuth();
+function ProfilePage() {
+    const { activeUser, activeUserId } = useAuth();
     const [profile, setProfile] = useState(null);
     const [editing, setEditing] = useState(false);
     const [form, setForm] = useState({
@@ -28,7 +28,7 @@ function ProfilePage(){
         async function fetchProfile(){
             try{
 
-                const data = await apiClient(`/users/profile?userId=${user.id}`);
+                const data = await apiClient(`/users/profile?userId=${activeUserId}`);
                 setProfile(data.user);
                 setForm({
                     firstName: data.user.firstName,
@@ -46,8 +46,8 @@ function ProfilePage(){
                 console.error("Error fetching profile:", err);
             }
         }
-        if (user?.id) fetchProfile();
-    }, [user]);
+        if (activeUserId) fetchProfile();
+    }, [activeUserId]);
 
     function handleChange(e){
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value}));
@@ -61,9 +61,9 @@ function ProfilePage(){
         }));
     }
 
-    async function handleSave(){
-        try{
-            const data = await apiClient(`/users/profile?userId=${user.id}`, {
+    async function handleSave() {
+        try {
+            const data = await apiClient(`/users/profile?userId=${activeUserId}`, {
                 method: "PUT",
                 body: form,
             });
@@ -85,7 +85,7 @@ function ProfilePage(){
         const formData = new FormData();
         formData.append("profilePhoto", file);
 
-        const response = await fetch(`/api/users/profile/photo?userId=${user.id}`, {
+        const response = await fetch(`/api/users/profile/photo?userId=${activeUserId}`, {
             method: "POST",
             body: formData,
         });
@@ -101,9 +101,9 @@ function ProfilePage(){
 
     if (!profile) return <div>Loading...</div>;
 
-    return(
-        <div className = "homepage-layout">
-            {user?.role === "admin" ? <AdminSidebar /> : <Sidebar/>}
+    return (
+        <div className="homepage-layout">
+            {activeUser?.role === "admin" ? <AdminSidebar /> : <Sidebar />}
             <div className="main-content">
                 <TopNav/>
                 <div className="profile-container">
