@@ -5,8 +5,7 @@ import { useAuth } from '../../../context/AuthContext.jsx';
 
 const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick, showReviewButton, onReviewClick, onEditClick }) => {
     const [wishlisted, setWishlisted] = useState(initialWishlisted);
-    const { user } = useAuth();
-    const activeUserId = user?.id || user?._id;
+    const { activeUserId } = useAuth();
 
     // Keep local button state in sync with data hydrated by the parent list.
     useEffect(() => {

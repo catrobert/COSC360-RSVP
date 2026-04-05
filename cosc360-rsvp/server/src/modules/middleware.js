@@ -23,14 +23,15 @@ export const uploadImage = multer({
 
 
 export const requireUser = (req, res, next) => {
-	const userId = req.header("x-user-id");
+    const userId = req.header("x-user-id");
 
-	if (!userId) {
-		return res.status(401).json({ error: "User not authenticated" });
-	}
+    if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+    }
 
-	req.user = { id: userId };
-	next();
+    req.userId = userId;
+    req.user = { id: userId };
+    next();
 };
 
 
@@ -38,7 +39,7 @@ export async function authMiddleware(req, res, next) {
     const userId = req.headers['x-user-id'];
 
     if (!userId) {
-        return res.status(401).json({error: "Missing user ID header" });
+        return res.status(401).json({ error: "Missing user ID header" });
     }
 
     const user = await userRepository.findUser(userId);
@@ -47,7 +48,8 @@ export async function authMiddleware(req, res, next) {
         return res.status(404).json({ error: "User not found" });
     }
 
-    req.userId = userId; // req.userId now available to everything after
-    req.userRole = user.role; // req.userRole now available to everything after
+    req.userId = userId;
+    req.userRole = user.role;
+    req.user = { id: userId };
     next();
 }

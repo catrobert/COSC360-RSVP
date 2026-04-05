@@ -13,8 +13,7 @@ function SavedEvents() {
     const [savedEvents, setSavedEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const { user } = useAuth();
-    const activeUserId = user?.id || user?._id;
+    const { activeUser, activeUserId } = useAuth();
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
 
@@ -71,7 +70,7 @@ function SavedEvents() {
 
     return (
         <div className="homepage-layout">
-            {user?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
+            {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />
                 <h1 style={{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Saved Events</h1>

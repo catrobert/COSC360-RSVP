@@ -2,8 +2,8 @@ import "../../../css/reviewModal.css";
 import { useAuth } from "../../../context/AuthContext.jsx";
 
 function ReviewModal({ event, onClose }) {
-    const { user } = useAuth();
-    
+    const { activeUserId } = useAuth();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -11,7 +11,7 @@ function ReviewModal({ event, onClose }) {
         const requiredFields = form.querySelectorAll('[required]');
         let isValid = true;
 
-        requiredFields.forEach( (field) => {
+        requiredFields.forEach((field) => {
             const existingError = field.parentNode.querySelector('.review-error');
             if (existingError) {
                 existingError.remove();
@@ -39,12 +39,17 @@ function ReviewModal({ event, onClose }) {
         });
 
         if (isValid) {
+            if (!activeUserId) {
+                alert("Please log in to continue.");
+                return;
+            }
+
             try {
-             const response = await fetch(`/api/events/review/${event._id}`, {   
+                const response = await fetch(`/api/events/review/${event._id}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "x-user-id": user._id || user.id,
+                        "x-user-id": activeUserId,
                     },
                     body: JSON.stringify({
                         rating: Number(form.rating.value),
@@ -58,9 +63,9 @@ function ReviewModal({ event, onClose }) {
                     alert(`Something went wrong: ${result.error}`);
                     return;
                 }
-                
-                alert("Review posted successfully!"); 
-                onClose();  
+
+                alert("Review posted successfully!");
+                onClose();
             } catch (error) {
                 console.log("Error posting review: ", error);
             }
@@ -78,7 +83,7 @@ function ReviewModal({ event, onClose }) {
                     onSubmit={handleSubmit}
                     noValidate
                     className="review-form-grid">
-                    
+
                     <div className="review-form-group">
                         <label>Rating (1-5)</label>
                         <input type="number" id="rating" min="1" max="5" required />
@@ -86,9 +91,9 @@ function ReviewModal({ event, onClose }) {
 
                     <div className="review-form-group">
                         <label>Comment</label>
-                        <textarea type="text" 
-                        id="comment"
-                        placeholder="Share details of your experience at this event" rows="3" required/>
+                        <textarea type="text"
+                            id="comment"
+                            placeholder="Share details of your experience at this event" rows="3" required />
                     </div>
 
                     <div className="review-form-actions review-form-full">

@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "seed": "node --env-file=server/.env server/src/seed.js",
-    "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --verbose"
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --verbose"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -33,6 +33,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "cross-env": "^7.0.3",
     "globals": "^16.5.0",
     "jest": "^30.3.0",
     "mongodb-memory-server": "^11.0.1",

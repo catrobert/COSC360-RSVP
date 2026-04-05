@@ -16,15 +16,14 @@ function EventPage() {
     const [reviewingEvent, setReviewingEvent] = useState(null);
     const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
-    const { user } = useAuth();
-    const activeUserId = user?.id || user?._id;
+    const { activeUser, activeUserId } = useAuth();
     const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
     const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
 
     const userCreated = function () {
-        if (!user || !event) return false;
+        if (!activeUser || !activeUserId || !event) return false;
         const creatorId = event.createdBy?._id?.toString() || event.createdBy?.toString();
-        return user.role === "admin" || creatorId === (user._id || user.id);
+        return activeUser.role === "admin" || creatorId === activeUserId;
     }
 
     async function handleDeleteEventClick() {

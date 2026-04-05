@@ -4,7 +4,7 @@ import EventCard from './EventCard.jsx';
 import { useAuth } from '../../../context/AuthContext.jsx';
 
 function averageRating(reviews) {
-  if (reviews.length === 0 || !reviews) {
+  if (!reviews || reviews.length === 0) {
     return "N/A";
   }
   let sum = 0;
@@ -16,8 +16,7 @@ function averageRating(reviews) {
 
 const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick, onEditClick }) => {
   const [savedEventIds, setSavedEventIds] = useState(new Set());
-  const { user } = useAuth();
-  const activeUserId = user?.id || user?._id;
+  const { activeUserId } = useAuth();
 
   useEffect(() => {
     // Load saved RSVP rows once so bookmarks render correctly on first paint.

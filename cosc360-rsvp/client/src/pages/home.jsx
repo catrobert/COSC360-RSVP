@@ -11,7 +11,7 @@ function Homepage() {
     const [events, setEvents] = useState([]);
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { activeUser } = useAuth();
 
     const query = searchParams.get("q"); // get the search params sent over from search bar in top nav component
 
@@ -51,7 +51,7 @@ function Homepage() {
 
     return (
         <div className="homepage-layout">
-            {user?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
+            {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />
                 <EventContainer events={events} onEventClick={handleEventClick} />
