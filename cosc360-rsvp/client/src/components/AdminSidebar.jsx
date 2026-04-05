@@ -27,15 +27,15 @@ const MenuItem = ({ icon: Icon, label, clickItem }) => {
 
 function AdminSidebar({ profilePicture }) {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
-    const fullName = user ? `${user.firstName} ${user.lastName}` : '';
+    const { activeUser, activeUserId, logout } = useAuth();
+    const fullName = activeUser ? `${activeUser.firstName} ${activeUser.lastName}` : '';
 
     const [photo, setPhoto] = useState(null);
 
     useEffect(() => {
         async function fetchPhoto() {
             try {
-                const data = await fetch(`/api/users/profile?userId=${user.id}`);
+                const data = await fetch(`/api/users/profile?userId=${activeUserId}`);
                 const json = await data.json();
                 if (json.user?.profilePhoto) {
                     setPhoto(json.user.profilePhoto);
@@ -45,12 +45,11 @@ function AdminSidebar({ profilePicture }) {
             }
         }
 
-        if (user?.id) fetchPhoto();
-    }, [user]);
+        if (activeUserId) fetchPhoto();
+    }, [activeUserId]);
 
     function handleLogout() {
         logout();
-        localStorage.removeItem("userId");
         navigate("/login");
     }
 

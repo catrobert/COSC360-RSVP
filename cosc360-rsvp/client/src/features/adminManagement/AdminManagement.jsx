@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Pencil, Search } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
-import { useNavigate } from 'react-router-dom';
 import CreateEventForm from '../event/createEvent/CreateEventForm.jsx';
 
 const AdminManagement = () => {
@@ -10,14 +9,19 @@ const AdminManagement = () => {
     const [userSearch, setUserSearch] = useState('');
     const [eventSearch, setEventSearch] = useState('');
     const [editingEvent, setEditingEvent] = useState(null);
-    const { user } = useAuth();
-    const navigate = useNavigate();
+    const { activeUserId } = useAuth();
 
     useEffect(() => {
+        if (!activeUserId) {
+            setUsers([]);
+            setEvents([]);
+            return;
+        }
+
         async function fetchData() {
             try {
                 const [usersRes, eventsRes] = await Promise.all([
-                    fetch('/api/users', { headers: { 'x-user-id': user._id || user.id } }),
+                    fetch('/api/users', { headers: { 'x-user-id': activeUserId } }),
                     fetch('/api/events'),
                 ]);
                 const usersData = await usersRes.json();
@@ -30,7 +34,7 @@ const AdminManagement = () => {
             }
         }
         fetchData();
-    }, []);
+    }, [activeUserId]);
 
     const filteredUsers = users.filter(u =>
         `${u.firstName} ${u.lastName} ${u.username}`.toLowerCase().includes(userSearch.toLowerCase())

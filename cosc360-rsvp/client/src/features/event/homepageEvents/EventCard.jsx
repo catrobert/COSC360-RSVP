@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
+import { useAuth } from '../../../context/AuthContext.jsx';
 
 const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick, showReviewButton, onReviewClick, onEditClick }) => {
     const [wishlisted, setWishlisted] = useState(initialWishlisted);
+    const { activeUserId } = useAuth();
 
     // Keep local button state in sync with data hydrated by the parent list.
     useEffect(() => {
@@ -14,8 +16,10 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
         e.stopPropagation();
 
         if (!eventId) return;
-
-        const userId = localStorage.getItem("userId") || "000000000000000000000001";
+        if (!activeUserId) {
+            alert("Please log in to save events.");
+            return;
+        }
 
         const nextWishlisted = !wishlisted;
         const nextStatus = nextWishlisted ? "saved" : "no";
@@ -26,7 +30,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-user-id": userId,
+                    "x-user-id": activeUserId,
                 },
                 body: JSON.stringify({ status: nextStatus }),
             });
@@ -37,7 +41,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "x-user-id": userId,
+                        "x-user-id": activeUserId,
                     },
                     body: JSON.stringify({ eventId, status: "saved" }),
                 });

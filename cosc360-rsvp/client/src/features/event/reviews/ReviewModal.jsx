@@ -2,8 +2,8 @@ import "../../../css/reviewModal.css";
 import { useAuth } from "../../../context/AuthContext.jsx";
 
 function ReviewModal({ event, onClose }) {
-    const { user } = useAuth();
-    
+    const { activeUserId } = useAuth();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -39,12 +39,17 @@ function ReviewModal({ event, onClose }) {
         });
 
         if (isValid) {
+            if (!activeUserId) {
+                alert("Please log in to continue.");
+                return;
+            }
+
             try {
              const response = await fetch(`/api/events/review/${event._id}`, {   
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "x-user-id": user._id || user.id,
+                        "x-user-id": activeUserId,
                     },
                     body: JSON.stringify({
                         rating: Number(form.rating.value),

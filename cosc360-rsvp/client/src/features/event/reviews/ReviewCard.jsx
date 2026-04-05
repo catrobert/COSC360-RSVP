@@ -2,7 +2,7 @@ import '../../../css/Event.css';
 
 
 function getAverageRating(reviews) {
-    if (reviews.length === 0) {
+    if (!Array.isArray(reviews) || reviews.length === 0) {
         return null;
     }
 
@@ -10,7 +10,7 @@ function getAverageRating(reviews) {
     return total / reviews.length;
 }
 
-function ReviewsCard({reviews, onReviewClick, ableToReview}) {
+function ReviewsCard({ reviews, onReviewClick, ableToReview }) {
     return (
         <aside className="reviews-container">
             <div className='reviews-background'>
@@ -22,12 +22,12 @@ function ReviewsCard({reviews, onReviewClick, ableToReview}) {
     );
 }
 
-function Header({reviews}) {
+function Header({ reviews }) {
     const avg = getAverageRating(reviews);
     return (
         <header className="reviews-header">
             <h3 className="reviews-title">Reviews</h3>
-            { avg ? <h1 className="overall-number-rating">{avg.toFixed(1)}</h1> : <p className="no-reviews">No Reviews Yet</p>}
+            {avg ? <h1 className="overall-number-rating">{avg.toFixed(1)}</h1> : <p className="no-reviews">No Reviews Yet</p>}
             <div className="stars">
                 {avg ? "⭐".repeat(Math.round(avg)) : ""}
             </div>
@@ -36,21 +36,23 @@ function Header({reviews}) {
 }
 
 function ReviewList({ reviews, onReviewClick, canReview }) {
+    const safeReviews = Array.isArray(reviews) ? reviews : [];
+
     return (
         <div>
-            <ul className="reviews-list-container"> 
-                {reviews.map((review, index) => (
+            <ul className="reviews-list-container">
+                {safeReviews.map((review, index) => (
                     <ReviewItem key={index} index={index} review={review} />
                 ))}
             </ul>
             <button className={canReview ? "add-review-button" : "greyed-out-review-btn"} onClick={onReviewClick}>Add Review</button>
         </div>
-        
+
     );
 }
 
 
-function ReviewItem({review, index }) {
+function ReviewItem({ review, index }) {
     return (
         <>
             <div className="review-title">
@@ -61,6 +63,6 @@ function ReviewItem({review, index }) {
         </>
     );
 }
- 
+
 
 export default ReviewsCard;

@@ -22,33 +22,33 @@ const MenuItem = ({ icon: Icon, label, clickItem }) => {
 
 function Sidebar({ profilePicture }) {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
-    const fullName = user ? `${user.firstName} ${user.lastName}` : '';
+    const { activeUser, activeUserId, logout } = useAuth();
+    const fullName = activeUser ? `${activeUser.firstName} ${activeUser.lastName}` : '';
 
-    const[photo, setPhoto] = useState(null);
+    const [photo, setPhoto] = useState(null);
 
     useEffect(() => {
-        async function fetchPhoto(){
-            try{
-                const data = await fetch(`/api/users/profile?userId=${user.id}`);
+        async function fetchPhoto() {
+            try {
+                const data = await fetch(`/api/users/profile?userId=${activeUserId}`);
                 const json = await data.json();
-                if(json.user?.profilePhoto){
+                if (json.user?.profilePhoto) {
                     setPhoto(json.user.profilePhoto);
                 }
-            }catch(err){
+            } catch (err) {
                 console.error("Error fetching photo: ", err);
             }
         }
 
-        if(user?.id) fetchPhoto();
-    }, [user]);
+        if (activeUserId) fetchPhoto();
+    }, [activeUserId]);
 
-    function handleLogout(){
+    function handleLogout() {
         logout();
         navigate('/login');
     }
 
-    function handleSidebarClick(index){
+    function handleSidebarClick(index) {
         if (index === 0) {
             navigate(`/home`);
         } else if (index === 1) {
@@ -66,9 +66,9 @@ function Sidebar({ profilePicture }) {
                     <div className='profile-picture'>
                         {photo ? (
                             <img
-                               src={photo}
-                               alt="Profile"
-                               style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit:"cover"}}
+                                src={photo}
+                                alt="Profile"
+                                style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }}
                             />
                         ) : (
                             profilePicture
@@ -82,8 +82,8 @@ function Sidebar({ profilePicture }) {
             </div>
             <div className="menu-container">
                 {menuItems.map((item, index) => (
-                    <MenuItem 
-                        key={index} 
+                    <MenuItem
+                        key={index}
                         icon={item.icon}
                         label={item.label}
                         clickItem={() => handleSidebarClick(index)} />
@@ -93,10 +93,10 @@ function Sidebar({ profilePicture }) {
                 <MenuItem
                     icon={LogOutIcon}
                     label="Logout"
-                    clickItem={handleLogout} /> 
+                    clickItem={handleLogout} />
             </div>
         </div>
-    
+
     )
 };
 

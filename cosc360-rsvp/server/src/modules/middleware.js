@@ -29,8 +29,8 @@ export const requireUser = (req, res, next) => {
 		return res.status(401).json({ error: "User not authenticated" });
 	}
 
-	req.user = { id: userId };
-	next();
+    req.userId = userId;
+    next();
 };
 
 
@@ -47,7 +47,7 @@ export async function authMiddleware(req, res, next) {
         return res.status(404).json({ error: "User not found" });
     }
 
-    req.userId = userId; // req.userId now available to everything after
-    req.userRole = user.role; // req.userRole now available to everything after
+    req.userId = userId;
+    req.userRole = user.role;
     next();
 }
