@@ -103,9 +103,9 @@ function MyEvents() {
             <div className="main-content">
                 <TopNav />
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
-                {<EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Attending Events</h1>
-                {<EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Attended Events</h1>
