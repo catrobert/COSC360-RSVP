@@ -106,6 +106,20 @@
     width: fit-content;
 }
 
+.delete-rsvp-btn {
+    display: block;
+    font-size: 0.85rem;
+    margin: 1rem auto;
+    width: fit-content;
+}
+
+.delete-rsvp-btn:hover {
+    background-color: white;
+    color: navy;
+    border: 1px solid navy;
+    width: 160px;
+}
+
 .edit-btn {
     position: absolute;
     bottom: 10px;

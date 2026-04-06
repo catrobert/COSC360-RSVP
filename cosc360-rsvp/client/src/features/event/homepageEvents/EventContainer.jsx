@@ -13,7 +13,7 @@ function averageRating(reviews) {
     return (sum / reviews.length);
 }
 
-const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick, onEditClick }) => {
+const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick, onEditClick, showDeleteRsvpButton, onDeleteRsvpClick }) => {
   const [savedEventIds, setSavedEventIds] = useState(new Set());
 
   useEffect(() => {
@@ -98,6 +98,8 @@ const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick,
             showReviewButton={showReviewButton}
             onReviewClick={() => onReviewClick(event)}
             onEditClick={onEditClick ? () => onEditClick(event) : undefined}
+            onDeleteRsvpClick={onDeleteRsvpClick}
+            showDeleteRsvpButton={showDeleteRsvpButton}
           />
         );
       })}
