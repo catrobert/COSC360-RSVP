@@ -84,6 +84,7 @@ function MyEvents() {
                 setPreviousHostedEvents(hostedEvents.filter((event) => !isUpcoming(event.date, event.endTime)));
                 setUpcomingAttendingEvents(attendingEvents.filter((event) => isUpcoming(event.date, event.endTime)));
                 setPreviousAttendedEvents(attendingEvents.filter((event) => !isUpcoming(event.date, event.endTime)));
+                setLoading(false);
             } catch (error) {
                 console.log("Error fetching My Events data:", error);
                 setUpcomingHostedEvents([]);
