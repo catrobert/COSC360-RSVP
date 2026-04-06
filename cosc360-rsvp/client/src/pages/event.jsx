@@ -17,14 +17,25 @@ function EventPage() {
     const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { user } = useAuth();
-    const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
-    const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
-  
+
+    const hasReviewed = () => {
+        for (const review of event.reviews) {
+            if (review.userId?.toString() === user._id) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     const userCreated = function () {
         if (!user || !event) return false;
         const creatorId = event.createdBy?._id?.toString() || event.createdBy?.toString();
         return user.role === "admin" || creatorId === (user._id || user.id);
     }
+
+    const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
+    const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
+  
 
     async function handleDeleteEventClick() {
         try {
@@ -45,14 +56,6 @@ function EventPage() {
         }
     }
     
-    const hasReviewed = () => {
-        for (const review of event.reviews) {
-            if (review.userId?.toString() === user._id) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     function isUpcoming(eventDate, endTime) {
         const [hours, minutes] = endTime.split(':');

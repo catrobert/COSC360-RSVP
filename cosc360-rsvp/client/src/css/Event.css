@@ -176,6 +176,7 @@ button:hover{
     border-radius: 6px;
     padding: 1rem;
     gap: 1rem;
+    max-width: 380px;
 }
 
 .reviews-list-container {
