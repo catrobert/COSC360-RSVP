@@ -47,13 +47,15 @@ export async function getRSVPstatus(userId, eventId) {
 }
 
 export async function declineRSVP(userId, eventId) {
-    const hasRSVP = await rsvpRepository.findRSVP(userId, eventId);
+    const hasRSVP = await rsvpRepository.findRSVP(eventId, userId);
+    console.log("rsvp found:", hasRSVP);
+    console.log("userId:", userId, "eventId:", eventId);
 
     if (!hasRSVP) {
         throw new Error("You have not RSVP'd to this event, so there is no RSVP to cancel");
     }
 
-    if (hasRSVP[0]?.status !== 'yes') {
+    if (hasRSVP?.status !== 'yes') {
         throw new Error("You have not RSVP'd 'yes' to this event, so there is no RSVP to cancel")
     }
 

@@ -76,7 +76,7 @@ export const getRSVPstatus = async (req, res) => {
 
 export const declineRSVP = async (req, res) => {
     const userId = req.userId;
-    const eventId = req.params.id;
+    const eventId = req.params.eventId;
 
     try {
         const deletedRSVP = await rsvpService.declineRSVP(userId, eventId);

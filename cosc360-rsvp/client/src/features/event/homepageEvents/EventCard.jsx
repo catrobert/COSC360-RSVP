@@ -96,7 +96,7 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
                 {showDeleteRsvpButton && <button className='delete-rsvp-btn' 
                 onMouseEnter={() => setIsHovering(true)} 
                 onMouseLeave={() => setIsHovering(false)} 
-                onClick={(e) => {e.stopPropagation(); onDeleteRsvpClick()}}>{isHovering ? 'Remove RSVP' : 'Changed your mind?'}</button>}
+                onClick={(e) => {e.stopPropagation(); onDeleteRsvpClick(eventId)}}>{isHovering ? 'Remove RSVP' : 'Changed your mind?'}</button>}
             </div>
         </div>
     )
