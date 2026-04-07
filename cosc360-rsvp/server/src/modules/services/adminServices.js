@@ -32,9 +32,44 @@ async function getOverview() {
     const users = await adminRepository.getAllUsers();
     const totalUsers = users.length();
 
-    return overviewObj = {totalEvents: totalEvents, 
+    const overviewObj = {totalEvents: totalEvents, 
         totalAttendance: totalAttend, totalUpcoming: totalUpcoming, 
         totalPast: totalPast, totalUsers: totalUsers};
+    
+    return overviewObj;
+}
+
+async function getEventsInsights() {
+    const events = await eventRepository.getEvents(null);
+
+    const totalEvents = events.length();
+    let totalAttendance = 0;
+    let totalPrice = 0;
+
+    for (let event of events) {
+        totalAttendance += event.attendance;
+        totalPrice += event.price;
+    }
+
+    const avgAttendance = totalAttendance / totalEvents; 
+    const avgPrice = totalPrice / totalEvents;
+
+    const bestAttendance = events.reduce((prev, current) => {
+        return (prev.attendance > current.attendance) ? prev : current;
+    });
+
+    const bestByAttendance = bestAttendance.name;
+
+    const bestReviews = events.reduce((prev, current) => {
+        return (prev.reviews.rating > current.reviews.rating) ? prev : current;
+    });
+
+    const bestByReviews = bestReviews.name;
+
+    const eventsObj = {averageAttendance: avgAttendance, averagePrice: avgPrice, 
+        mostPopularByAttendance: bestByAttendance, mostPopularByReviews: bestByReviews};
+
+    return eventsObj;
 }
 
 function eventIsUpcoming(eventDate, endTime) {
