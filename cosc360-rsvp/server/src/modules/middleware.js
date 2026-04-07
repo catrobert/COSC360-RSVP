@@ -44,7 +44,7 @@ export async function authMiddleware(req, res, next) {
     const user = await userRepository.findUser(userId);
 
     if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(401).json({ error: "User not authenticated" });
     }
 
     req.userId = userId; // req.userId now available to everything after
