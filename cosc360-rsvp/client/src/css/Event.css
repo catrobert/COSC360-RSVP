@@ -71,6 +71,15 @@ button:hover{
     align-self: flex-start;
 }
 
+#greyed-rsvp-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    align-self: flex-start;
+    background-color: gray;
+    border-color: gray;
+    cursor: default;
+}
+
 .rsvp-section {
     display: flex;
     flex-direction: row;
@@ -165,6 +174,13 @@ button:hover{
     font-size: 16px;
     cursor: pointer;
     background-color: gray;
+    border-color: gray;
+    cursor: default;
+}
+
+.greyed-out-review-btn:hover{
+    background-color: gray;
+    border-color: gray;
 }
 
 .reviews-container {

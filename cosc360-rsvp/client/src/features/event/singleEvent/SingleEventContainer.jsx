@@ -2,7 +2,7 @@ import '../../../css/Event.css';
 import EventDetails from './EventDetails';
 
 
-function SingleEventContainer({ event, onRsvpClick }) {
+function SingleEventContainer({ event, ableToRsvp, onRsvpClick }) {
     return (
         <div id="event-container">
             <img id="event-image" src={event.image || "https://picsum.photos/800/400"} alt={event.name} /> 
@@ -11,7 +11,7 @@ function SingleEventContainer({ event, onRsvpClick }) {
                 <p id="event-description">{event.description}</p>
             </div>
             <div className="rsvp-section">
-                <button id="rsvp-button" onClick={onRsvpClick}>RSVP</button>
+                <button id={ableToRsvp ? "rsvp-button" : "greyed-rsvp-btn"} onClick={onRsvpClick}>RSVP</button>
                 <span>${(Number(event.price) || 0).toFixed(2)} / ticket</span>
             </div>
         </div>
