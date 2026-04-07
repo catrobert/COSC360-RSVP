@@ -10,22 +10,28 @@
 
 .analytics-main-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
     gap: 24px;
+    margin: 0 1.5rem;
 }
 
 .main-cards-details {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    column-gap: 24px;
+    gap: 24px;
     background-color: rgb(247, 251, 255);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     border-radius: 14px;
     padding: 16px;
+
 }
 
-.main-cards-details {
-    display: flex;
-    align-items: center;
-    column-gap: 24px;
+.details-statistic {
+    font-family: 'Inter', sans-serif;
+    font-size: 5vh;
+}
+
+.details-name {
+    text-align: center;
 }

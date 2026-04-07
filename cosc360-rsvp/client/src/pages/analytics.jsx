@@ -5,12 +5,36 @@ import "../css/adminAnalytics.css"
 import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from 'lucide-react';
 
 function Analytics() {
-    const analyticsItems = [
+    const analyticsOverviewItems = [
         {label: "Total Number of Events", statistic: 2, icon: CalendarPlus2},
         {label: "Total Event Attendance", statistic: 3, icon: BadgeCheck},
         {label: "Total Registered Users", statistic: 4, icon: UserCheck},
         {label: "Total Upcoming Events", statistic: 5, icon: ClockAlert},
         {label: "Total Past Events", statistic: 6, icon: CalendarSync},
+    ];
+
+    const eventInsights = [
+        {label: "Most Popular Event by Attendance", statistic: 2, icon: CalendarPlus2},
+        {label: "Most Popular Event by Rating", statistic: 3, icon: BadgeCheck},
+        {label: "Average Ticket Price", statistic: 3, icon: BadgeCheck},
+        {label: "Average Attendance per Event", statistic: 3, icon: BadgeCheck},
+        {label: "Users Who Attended More Than One Event", statistic: 3, icon: BadgeCheck},
+    ];
+
+    const revenueInsights = [
+        {label: "All Time Revenue", statistic: 2, icon: CalendarPlus2},
+        {label: "Revenue By Quarter", statistic: 3, icon: BadgeCheck},
+    ];
+
+    const ratingsInsights = [
+        {label: "Average Event Rating", statistic: 2, icon: CalendarPlus2},
+        {label: "Total Number of Reviews", statistic: 3, icon: BadgeCheck},
+        {label: "Rating Distribution", statistic: 3, icon: BadgeCheck},
+    ];
+
+    const userInsights = [
+        {label: "Average User Age", statistic: 2, icon: CalendarPlus2},
+        {label: "Gender Distribution", statistic: 3, icon: BadgeCheck},
     ];
 
 
@@ -22,7 +46,7 @@ function Analytics() {
                 <h1 className="page-title">Analytics Dashboard</h1>
                 <h3 className="section-header">Overview</h3>
                 <div className="analytics-container">
-                    <div className="analytics-main-cards">{analyticsItems.map((item,index) => (
+                    <div className="analytics-main-cards">{analyticsOverviewItems.map((item,index) => (
                         <AnalyticsCard 
                         key={index} 
                         label={item.label} 
@@ -32,12 +56,49 @@ function Analytics() {
                     </div>
 
                 </div>
+                <h3 className="section-header">Events Insights</h3>
+                <div className="analytics-main-cards">{eventInsights.map((item,index) => (
+                        <AnalyticsCard 
+                        key={index} 
+                        label={item.label} 
+                        statistic={item.statistic} 
+                        icon={item.icon} />
+                    ))}
+                    </div>
+                <h3 className="section-header">Revenue Insights</h3>
+                <div className="analytics-main-cards">{revenueInsights.map((item,index) => (
+                        <AnalyticsCard 
+                        key={index} 
+                        label={item.label} 
+                        statistic={item.statistic} 
+                        icon={item.icon} />
+                    ))}
+                </div>
+                <h3 className="section-header">Ratings Insights</h3>
+                <div className="analytics-main-cards">{ratingsInsights.map((item,index) => (
+                        <AnalyticsCard 
+                        key={index} 
+                        label={item.label} 
+                        statistic={item.statistic} 
+                        icon={item.icon} />
+                    ))}
+                </div>
+                <h3 className="section-header">Users Insights</h3>
+                <div className="analytics-main-cards">{ratingsInsights.map((item,index) => (
+                        <AnalyticsCard 
+                        key={index} 
+                        label={item.label} 
+                        statistic={item.statistic} 
+                        icon={item.icon} />
+                    ))}
+                </div>
             </div>
         </div>
     );
 }
 
 export default Analytics;
+
 
 function AnalyticsCard( {label, statistic, icon: Icon } ) {
     return (
