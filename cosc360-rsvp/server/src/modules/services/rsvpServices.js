@@ -27,7 +27,7 @@ export async function createRSVP(rsvp, userId) {
         throw new Error("You have already RSVP'd to this event!");
     }
 
-    if (existingRSVP?.status === 'no') {
+    if (existingRSVP?.status === 'no' || existingRSVP?.status === 'saved') {
         return await updateRSVP(rsvpData);
     }
 
@@ -52,8 +52,6 @@ export async function getRSVPstatus(userId, eventId) {
 
 export async function declineRSVP(userId, eventId) {
     const hasRSVP = await rsvpRepository.findRSVP(eventId, userId);
-    console.log("rsvp found:", hasRSVP);
-    console.log("userId:", userId, "eventId:", eventId);
 
     if (!hasRSVP) {
         throw new Error("You have not RSVP'd to this event, so there is no RSVP to cancel");
