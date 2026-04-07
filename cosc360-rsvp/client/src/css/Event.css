@@ -156,6 +156,7 @@ button:hover{
 
 .reviews-background {
     background-color: whitesmoke;
+    min-height: 500px;
     border-radius: 6px;
 }
 
@@ -192,7 +193,8 @@ button:hover{
     border-radius: 6px;
     padding: 1rem;
     gap: 1rem;
-    max-width: 380px;
+    max-width: 350px;
+    min-height: 500px;
 }
 
 .reviews-list-container {
