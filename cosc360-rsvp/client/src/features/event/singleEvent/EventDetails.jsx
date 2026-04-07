@@ -1,5 +1,5 @@
 import '../../../css/Event.css';
-import { Calendar, MapPin, Clock, Users } from 'lucide-react';
+import { Calendar, MapPin, Clock, Users, Handshake } from 'lucide-react';
 
 function EventDetails({ event }) {
     const date = new Date(event.date).toLocaleDateString("en-US", {
@@ -26,7 +26,7 @@ function EventDetails({ event }) {
             <p className="event-detail"><MapPin className="detail-icon" /> {event.location}</p>
             <p className="event-detail"><Clock className="detail-icon" /> {start} - {end}</p>
             <p className="event-detail"><Users className="detail-icon" /> {event.attendance ?? 0} people going</p>
-            <p className="event-detail">Host: {event.createdBy?.username ?? "Group 360"}</p>
+            <p className="event-detail"><Handshake className='detail-icon' />Host: {event.createdBy?.username ?? "Group 360"}</p>
         </div>
     );
 }

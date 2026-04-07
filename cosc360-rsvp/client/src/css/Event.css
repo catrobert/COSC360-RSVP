@@ -31,7 +31,7 @@ button:hover{
 
 #event-image {
     max-width: 100%;
-    max-height: 70%;
+    max-height: 60vh;
     height: auto;
     border-radius: 10px;
     object-fit: cover;
