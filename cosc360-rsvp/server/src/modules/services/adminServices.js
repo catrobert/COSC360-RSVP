@@ -5,6 +5,7 @@ import * as adminRepository from "../repository/adminRepository.js";
 export async function getAnalytics() {
     const analytics = [
         {overview: getOverview()},
+        {eventInsights: getEventsInsights()},
 
     ];
 
@@ -15,7 +16,7 @@ export async function getAnalytics() {
 async function getOverview() {
     const events = await eventRepository.getEvents(null);
     
-    const totalEvents = events.length();
+    const totalEvents = events.length;
     let totalAttend = 0;
     let totalUpcoming = 0;
     let totalPast = 0;
@@ -30,7 +31,7 @@ async function getOverview() {
     }
 
     const users = await adminRepository.getAllUsers();
-    const totalUsers = users.length();
+    const totalUsers = users.length;
 
     const overviewObj = {totalEvents: totalEvents, 
         totalAttendance: totalAttend, totalUpcoming: totalUpcoming, 
@@ -42,7 +43,7 @@ async function getOverview() {
 async function getEventsInsights() {
     const events = await eventRepository.getEvents(null);
 
-    const totalEvents = events.length();
+    const totalEvents = events.length;
     let totalAttendance = 0;
     let totalPrice = 0;
 
@@ -66,8 +67,27 @@ async function getEventsInsights() {
 
     const bestByReviews = bestReviews.name;
 
+    const users = await adminRepository.getAllUsers();
+    let attendedMoreThanOne = 0;
+
+    for (let user in users) {
+        const userRsvps = await rsvpRepository.findEventsByStatus(user._id, 'yes');
+        const attendedEvents = 0;
+
+        userRsvps.forEach(rsvp => {
+            if (eventIsUpcoming(rsvp.eventId.date, rsvp.eventId.endTime)) {
+                attendedEvents += 1;
+            }
+        })
+
+        if (attendedEvents > 1) {
+            attendedMoreThanOne += 1;
+        }
+    }
+
     const eventsObj = {averageAttendance: avgAttendance, averagePrice: avgPrice, 
-        mostPopularByAttendance: bestByAttendance, mostPopularByReviews: bestByReviews};
+        mostPopularByAttendance: bestByAttendance, mostPopularByReviews: bestByReviews, 
+        attendedMoreThanOne: attendedMoreThanOne};
 
     return eventsObj;
 }
