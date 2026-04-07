@@ -58,6 +58,17 @@ export const createReview = async (req, res) => {
 
         res.status(201).json({ message: "Successfully created event!", review: newReview });
     } catch (error) {
+        if (error.message === "Event not found") {
+            return res.status(404).json({ error: error.message });
+        }
+
+        if (
+            error.message === "You must RSVP yes before reviewing this event!" ||
+            error.message === "You can only review events that have ended!"
+        ) {
+            return res.status(403).json({ error: error.message });
+        }
+
         if (error.message === "You have already reviewed this event!") {
             return res.status(400).json( {error: error.message})
         }

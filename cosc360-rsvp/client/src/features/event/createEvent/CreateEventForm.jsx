@@ -2,7 +2,7 @@ import '../../../css/CreateEventForm.css';
 import { useAuth } from "../../../context/AuthContext.jsx";
 
 function CreateEventForm({ onClose, initialData = null, eventId = null }) {
-    const { user } = useAuth();
+    const { activeUserId } = useAuth();
     const isEditing = !!eventId;
 
     const defaultDate = initialData?.date
@@ -36,6 +36,11 @@ function CreateEventForm({ onClose, initialData = null, eventId = null }) {
         });
 
         if (isValid) {
+            if (!activeUserId) {
+                alert("Please log in to continue.");
+                return;
+            }
+
             const formData = new FormData(form);
 
             const url = isEditing ? `/api/events/${eventId}` : "/api/events";
@@ -44,7 +49,7 @@ function CreateEventForm({ onClose, initialData = null, eventId = null }) {
             try {
                 const response = await fetch(url, {
                     method,
-                    headers: { "x-user-id": user._id || user.id },
+                    headers: { "x-user-id": activeUserId },
                     body: formData,
                 });
 

@@ -16,21 +16,25 @@ function EventPage() {
     const [reviewingEvent, setReviewingEvent] = useState(null);
     const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
+    const { activeUser, activeUserId } = useAuth();
+    const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
+    const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
+
     const { user } = useAuth();
 
-    const hasReviewed = () => {
-        for (const review of event.reviews) {
-            if (review.userId?.toString() === user._id) {
-                return true;
-            }
-        }
-        return false;
-    }
+//     const hasReviewed = () => {
+//         for (const review of event.reviews) {
+//             if (review.userId?.toString() === user._id) {
+//                 return true;
+//             }
+//         }
+//         return false;
+//     }
     
     const userCreated = function () {
-        if (!user || !event) return false;
+        if (!activeUser || !activeUserId || !event) return false;
         const creatorId = event.createdBy?._id?.toString() || event.createdBy?.toString();
-        return user.role === "admin" || creatorId === (user._id || user.id);
+        return activeUser.role === "admin" || creatorId === activeUserId;
     }
 
     const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
@@ -39,7 +43,7 @@ function EventPage() {
 
     async function handleDeleteEventClick() {
         try {
-            const response = await fetch (`/api/events/${id}`, {
+            const response = await fetch(`/api/events/${id}`, {
                 method: "DELETE"
             });
 
@@ -55,6 +59,18 @@ function EventPage() {
             console.log("Error deleting event: ", error);
         }
     }
+
+    function hasReviewed() {
+        if (!activeUserId || !event?.reviews) return false;
+
+        for (const review of event.reviews) {
+            const reviewUserId = review.userId?._id?.toString?.() || review.userId?.toString?.();
+            if (reviewUserId === activeUserId.toString()) {
+                return true;
+            }
+        }
+        return false;
+    }
     
 
     function isUpcoming(eventDate, endTime) {
@@ -66,11 +82,13 @@ function EventPage() {
     }
 
     useEffect(() => {
-        async function fetchRSVPstatus(){
+        async function fetchRSVPstatus() {
+            if (!activeUserId) return;
+
             try {
                 const response = await fetch(`/api/rsvp/events/${id}`, {
                     headers: {
-                        "x-user-id": user._id || user.id,
+                        "x-user-id": activeUserId,
                     }
                 });
 
@@ -85,9 +103,9 @@ function EventPage() {
             } catch (error) {
                 console.log("Error getting RSVP status: ", error.message);
             }
-        } 
+        }
         fetchRSVPstatus();
-    }, [])
+    }, [id, activeUserId])
 
     async function handleReviewClick() {
         if (canReview) {
@@ -100,10 +118,12 @@ function EventPage() {
             alert("Please wait until after the event to leave a review.");
         }
     }
-    
+
     async function handleRsvpClick() {
-        // Use logged in user id when available and keep demo fallback for local testing.
-        const userId = localStorage.getItem("userId") || "000000000000000000000001";
+        if (!activeUserId) {
+            alert("Please log in to RSVP.");
+            return;
+        }
 
         // Create a yes RSVP for this event id.
         const data = {
@@ -112,36 +132,45 @@ function EventPage() {
         };
 
         try {
-            const response = await fetch("/api/rsvp", {
-                method: "POST",
+            // Prefer updating an existing RSVP row (saved/no -> yes).
+            let response = await fetch(`/api/rsvp/${id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-user-id": userId,
+                    "x-user-id": activeUserId,
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify({ status: "yes" }),
             });
 
-            const result = await response.json();
-
-            if (response.status === 400) {
-                alert(`${result.error} \nNavigate to "My Events" to view.`);
-                return;
+            // If there is no existing RSVP row yet, create one.
+            if (response.status === 404) {
+                response = await fetch("/api/rsvp", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-user-id": activeUserId,
+                    },
+                    body: JSON.stringify(data),
+                });
             }
+
+            const result = await response.json();
 
             if (!response.ok) {
                 alert(`Something went wrong: ${result.error}`);
                 return;
             }
 
+            setRsvpStatus("yes");
             alert('RSVP successful! Navigate to "My Events" to view.');
-            
+
         } catch (error) {
             console.log("Error RSVP-ing to event: ", error);
         }
     }
 
 
-    useEffect( () => {
+    useEffect(() => {
         async function fetchEvent() {
             try {
                 let url = `/api/events/${id}`;
@@ -152,12 +181,12 @@ function EventPage() {
                     console.log("Error fetching event: ", data.error);
                     return;
                 }
-            
+
                 setEvent(data);
 
             } catch (e) {
                 console.log("Error fetching events: " + e);
-            }      
+            }
         }
 
         fetchEvent();
@@ -182,19 +211,19 @@ function EventPage() {
         <div className="homepage-layout">
             <Sidebar />
             <div className="main-content">
-            <TopNav />
+                <TopNav />
                 <div id="event-header">
-                    <h1 id= "event-page-title">{event.name}</h1>
+                    <h1 id="event-page-title">{event.name}</h1>
                     <div className="align-btns-right">
-                        {userCreated() && (<button className="event-edit-btn" onClick={ () => setEditingEvent(event) }>Edit Event</button>)}
+                        {userCreated() && (<button className="event-edit-btn" onClick={() => setEditingEvent(event)}>Edit Event</button>)}
                         {userCreated() && (<button className="event-delete-btn" onClick={handleDeleteEventClick}>Delete Event</button>)}
                     </div>
                 </div>
                 <div className="event-page-content">
                     <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
-                    <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} ableToReview={canReview} />
+                    <ReviewCard reviews={event.reviews || []} onReviewClick={handleReviewClick} ableToReview={canReview} />
                 </div>
-                {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={ () => setReviewingEvent(null) }/>}
+                {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}
                 {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); if (updated) setEvent(updated); }} />}
             </div>
         </div>

@@ -8,7 +8,6 @@ import TopNav from "../components/topNav";
 import "../css/Home.css";
 import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
-import CreateEventForm from "../features/event/createEvent/CreateEventForm.jsx";
 
 // todo: if previously attended event, swap out review stars for "Leave a Review" button
 
@@ -18,15 +17,14 @@ function MyEvents() {
     const [previousHostedEvents, setPreviousHostedEvents] = useState([]);
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
     const [reviewingEvent, setReviewingEvent] = useState(null);
-    const [editingEvent, setEditingEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { activeUser, activeUserId } = useAuth();
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
 
-    const handleReviewClick = function(event) {
-        setReviewingEvent(event);  
+    const handleReviewClick = function (event) {
+        setReviewingEvent(event);
     }
 
     function isUpcoming(eventDate, endTime) {
@@ -43,7 +41,16 @@ function MyEvents() {
 
     useEffect(() => {
         async function fetchMyEvents() {
-            const userId = localStorage.getItem("userId") || "000000000000000000000001";
+            if (!activeUserId) {
+                setUpcomingHostedEvents([]);
+                setPreviousHostedEvents([]);
+                setUpcomingAttendingEvents([]);
+                setPreviousAttendedEvents([]);
+                setLoading(false);
+                return;
+            }
+
+            setLoading(true);
 
             const eventParams = new URLSearchParams();
             if (query.trim()) {
@@ -61,7 +68,7 @@ function MyEvents() {
                     fetch(`/api/events${eventParams.toString() ? `?${eventParams.toString()}` : ""}`),
                     fetch(`/api/rsvp/events?${rsvpParams.toString()}`, {
                         headers: {
-                            "x-user-id": userId,
+                            "x-user-id": activeUserId,
                         },
                     }),
                 ]);
@@ -76,7 +83,10 @@ function MyEvents() {
 
                 // Hosted events are the events created by the active user.
                 const hostedEvents = (allEvents || []).filter(
-                    (event) => event?.createdBy?.toString?.() === userId
+                    (event) => {
+                        const creatorId = event?.createdBy?._id?.toString?.() || event?.createdBy?.toString?.();
+                        return creatorId === activeUserId.toString();
+                    }
                 );
 
                 // Split each bucket into upcoming and previous by event date.
@@ -91,15 +101,17 @@ function MyEvents() {
                 setPreviousHostedEvents([]);
                 setUpcomingAttendingEvents([]);
                 setPreviousAttendedEvents([]);
+            } finally {
+                setLoading(false);
             }
         }
 
         fetchMyEvents();
-    }, [query]);
+    }, [query, activeUserId]);
 
     return (
         <div className="homepage-layout">        
-            {user?.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
+            {activeUser.role === 'admin' ? ( <AdminSidebar /> ) : ( <Sidebar /> )}
             <div className="main-content">
                 <TopNav />
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
@@ -112,8 +124,7 @@ function MyEvents() {
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick}/>}
             </div>
 
-            {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)}/>}
-            {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); }} />}
+            {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}
         </div>
     );
 }
