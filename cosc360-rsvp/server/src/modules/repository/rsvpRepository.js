@@ -45,3 +45,7 @@ export async function findEventsByStatus(userId, status, query) {
     // When populate match fails, eventId is null, remove those rows.
     return rows.filter((row) => row?.eventId);
 }
+
+export async function declineRSVP(userId, eventId) {
+    return await RSVPModel.findOneAndUpdate( {userId: userId, eventId: eventId}, {status: "no"}, {new: true} );
+}

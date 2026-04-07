@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './EventCard.css';
 import EventCard from './EventCard.jsx';
 import { useAuth } from '../../../context/AuthContext.jsx';
@@ -14,7 +14,7 @@ function averageRating(reviews) {
   return (sum / reviews.length);
 }
 
-const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick, onEditClick }) => {
+const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick, onEditClick, showDeleteRsvpButton, onDeleteRsvpClick }) => {
   const [savedEventIds, setSavedEventIds] = useState(new Set());
   const { activeUserId } = useAuth();
 
@@ -103,6 +103,8 @@ const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick,
             showReviewButton={showReviewButton}
             onReviewClick={() => onReviewClick?.(event)}
             onEditClick={onEditClick ? () => onEditClick(event) : undefined}
+            onDeleteRsvpClick={onDeleteRsvpClick}
+            showDeleteRsvpButton={showDeleteRsvpButton}
           />
         );
       })}

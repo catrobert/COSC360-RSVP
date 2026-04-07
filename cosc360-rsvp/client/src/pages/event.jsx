@@ -39,6 +39,7 @@ function EventPage() {
 
     const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
     const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
+    const canRsvp = (event !== null && rsvpStatus !== 'yes' && eventIsUpcoming)
   
 
     async function handleDeleteEventClick() {
@@ -120,6 +121,13 @@ function EventPage() {
     }
 
     async function handleRsvpClick() {
+        if (!eventIsUpcoming) {
+            alert("The event has passed. You can no longer RSVP.");
+            return;
+        }
+
+        // Use logged in user id when available and keep demo fallback for local testing.
+        const userId = localStorage.getItem("userId") || "000000000000000000000001";
         if (!activeUserId) {
             alert("Please log in to RSVP.");
             return;
@@ -220,8 +228,8 @@ function EventPage() {
                     </div>
                 </div>
                 <div className="event-page-content">
-                    <SingleEventContainer event={event} onRsvpClick={handleRsvpClick} />
-                    <ReviewCard reviews={event.reviews || []} onReviewClick={handleReviewClick} ableToReview={canReview} />
+                    <SingleEventContainer event={event} ableToRsvp={canRsvp} onRsvpClick={handleRsvpClick} />
+                    <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} ableToReview={canReview} />
                 </div>
                 {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}
                 {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); if (updated) setEvent(updated); }} />}

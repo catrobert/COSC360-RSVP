@@ -18,13 +18,35 @@ function MyEvents() {
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
     const [reviewingEvent, setReviewingEvent] = useState(null);
     const [loading, setLoading] = useState(true);
+
     const navigate = useNavigate();
     const { activeUser, activeUserId } = useAuth();
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
 
-    const handleReviewClick = function (event) {
-        setReviewingEvent(event);
+    async function handleDeleteRsvpClick (eventId) {
+        const response = await fetch(`/api/rsvp/${eventId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "x-user-id": user._id || user.id,
+            },
+        });
+
+        const result = await response.json();
+
+        if (result.error) {
+            alert(result.error);
+            return;
+        }
+
+        if (response.ok) {
+            alert(result.message);
+        }
+    }
+
+    const handleReviewClick = function(event) {
+        setReviewingEvent(event);  
     }
 
     function isUpcoming(eventDate, endTime) {
@@ -117,7 +139,7 @@ function MyEvents() {
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Attending Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} showDeleteRsvpButton={true} onDeleteRsvpClick={(eventId) => {handleDeleteRsvpClick(eventId)}}/>}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Attended Events</h1>

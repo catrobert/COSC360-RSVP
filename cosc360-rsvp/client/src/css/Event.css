@@ -31,7 +31,7 @@ button:hover{
 
 #event-image {
     max-width: 100%;
-    max-height: 70%;
+    max-height: 60vh;
     height: auto;
     border-radius: 10px;
     object-fit: cover;
@@ -69,6 +69,15 @@ button:hover{
     font-size: 16px;
     cursor: pointer;
     align-self: flex-start;
+}
+
+#greyed-rsvp-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    align-self: flex-start;
+    background-color: gray;
+    border-color: gray;
+    cursor: default;
 }
 
 .rsvp-section {
@@ -114,10 +123,10 @@ button:hover{
 }
 
 
-.event-page-title {
-    margin: 0 0 20px 0;
-    font-size: 1.5rem;
+#event-page-title {
+    margin: 0 0 5px 0;
     color: #1a1a2e;
+    font-family: 'Inter', sans-serif;
 }
 
 .event-page-content {
@@ -147,6 +156,7 @@ button:hover{
 
 .reviews-background {
     background-color: whitesmoke;
+    min-height: 500px;
     border-radius: 6px;
 }
 
@@ -165,6 +175,13 @@ button:hover{
     font-size: 16px;
     cursor: pointer;
     background-color: gray;
+    border-color: gray;
+    cursor: default;
+}
+
+.greyed-out-review-btn:hover{
+    background-color: gray;
+    border-color: gray;
 }
 
 .reviews-container {
@@ -176,7 +193,8 @@ button:hover{
     border-radius: 6px;
     padding: 1rem;
     gap: 1rem;
-    max-width: 380px;
+    max-width: 350px;
+    min-height: 500px;
 }
 
 .reviews-list-container {

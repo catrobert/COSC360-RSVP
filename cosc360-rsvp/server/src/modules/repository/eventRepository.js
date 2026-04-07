@@ -42,3 +42,7 @@ export async function updateEvent(id, data) {
 export async function deleteEvent(id){
     return await EventModel.findByIdAndDelete(id);
 }
+
+export async function updateEventAttendance(eventId, count) {
+    return await EventModel.findByIdAndUpdate( eventId, { $inc: {attendance: count} }, {new: true} );
+}

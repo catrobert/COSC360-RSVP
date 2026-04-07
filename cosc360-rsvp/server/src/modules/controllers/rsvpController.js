@@ -74,3 +74,21 @@ export const getRSVPstatus = async (req, res) => {
 
 }
 
+export const declineRSVP = async (req, res) => {
+    const userId = req.userId;
+    const eventId = req.params.eventId;
+
+    try {
+        const deletedRSVP = await rsvpService.declineRSVP(userId, eventId);
+        res.status(200).json({message: "RSVP was successfully cancelled!", event: deletedRSVP});
+    } catch (error) {
+        const status = error.message == "You have not RSVP'd to this event, so there is no RSVP to cancel" ? 404 
+        : error.message === "You have not RSVP'd 'yes' to this event, so there is no RSVP to cancel" ? 403 : 500;
+
+        const message = error.message === 500 ? "Could not cancel RSVP" : error.message;
+
+        return res.status(status).json({ error: message });
+    }
+}
+
+

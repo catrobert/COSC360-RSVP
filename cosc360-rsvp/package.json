@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "server": "node --env-file=server/.env server/src/index.js",
+    "server": "node --watch --env-file=server/.env server/src/index.js",
     "server:debug": "node --watch --inspect=0.0.0.0:9229 --env-file=server/.env server/src/index.js",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "seed": "node --env-file=server/.env server/src/seed.js",
+    "start": "concurrently \"npm run server\" \"npm run dev\",
     "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --verbose"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "cross-env": "^7.0.3",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
@@ -43,7 +45,9 @@
   "jest": {
     "testEnvironment": "node",
     "transform": {},
-    "setupFilesAfterEnv":["./server/src/tests/setup.js"]
+    "setupFilesAfterEnv": [
+      "./server/src/tests/setup.js"
+    ]
   },
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
   "main": "eslint.config.js",

@@ -3,9 +3,10 @@ import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
 import { useAuth } from '../../../context/AuthContext.jsx';
 
-const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick, showReviewButton, onReviewClick, onEditClick }) => {
-    const [wishlisted, setWishlisted] = useState(initialWishlisted);
-    const { activeUserId } = useAuth();
+const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick, showReviewButton, onReviewClick, onEditClick, showDeleteRsvpButton, onDeleteRsvpClick }) => {
+const [wishlisted, setWishlisted] = useState(initialWishlisted);
+const [isHovering, setIsHovering] = useState(false);
+const { activeUserId } = useAuth();
 
     // Keep local button state in sync with data hydrated by the parent list.
     useEffect(() => {
@@ -95,6 +96,11 @@ const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name
 
                 {showReviewButton && <button className="review-btn" onClick={(e) => { e.stopPropagation(); onReviewClick(); }}>Leave a Review</button>}
                 {onEditClick && <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onEditClick(); }}>Edit</button>}
+                
+                {showDeleteRsvpButton && <button className='delete-rsvp-btn' 
+                onMouseEnter={() => setIsHovering(true)} 
+                onMouseLeave={() => setIsHovering(false)} 
+                onClick={(e) => {e.stopPropagation(); onDeleteRsvpClick(eventId)}}>{isHovering ? 'Remove RSVP' : 'Changed your mind?'}</button>}
             </div>
         </div>
     )
