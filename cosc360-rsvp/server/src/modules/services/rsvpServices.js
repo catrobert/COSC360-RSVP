@@ -23,8 +23,12 @@ export async function createRSVP(rsvp, userId) {
 
     const existingRSVP = await rsvpRepository.findRSVP(rsvpData.eventId, rsvpData.userId);
 
-    if (existingRSVP) {
+    if (existingRSVP?.status === 'yes') {
         throw new Error("You have already RSVP'd to this event!");
+    }
+
+    if (existingRSVP?.status === 'no') {
+        return await updateRSVP(rsvpData);
     }
 
     return await rsvpRepository.createRSVP(rsvpData);
