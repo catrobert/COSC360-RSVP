@@ -123,10 +123,10 @@ button:hover{
 }
 
 
-.event-page-title {
-    margin: 0 0 20px 0;
-    font-size: 1.5rem;
+#event-page-title {
+    margin: 0 0 5px 0;
     color: #1a1a2e;
+    font-family: 'Inter', sans-serif;
 }
 
 .event-page-content {
