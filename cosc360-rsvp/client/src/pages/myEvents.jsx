@@ -27,8 +27,18 @@ function MyEvents() {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q") || "";
 
-    function handleDeleteRsvpClick (event) {
-        setDeleteRsvp(event)
+    async function handleDeleteRsvpClick (event) {
+        // setDeleteRsvp(event)
+        const response = await fetch(`/api/rsvp/${event._id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "x-user-ider": user._id || user.id,
+            },
+        });
+
+        const result = await response.json();
+
     }
 
     const handleReviewClick = function(event) {

@@ -13,5 +13,6 @@ router.get("/events", rsvpController.getRSVPsByStatus);
 router.post("/", authMiddleware, rsvpController.createRSVP);
 router.get("/events/:id", authMiddleware, rsvpController.getRSVPstatus);
 router.put("/:eventId", rsvpController.updateRSVP);
+router.patch("/:id", authMiddleware, rsvpController.declineRSVP)
 
 export default router;
