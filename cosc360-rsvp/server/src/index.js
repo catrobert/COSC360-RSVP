@@ -13,6 +13,7 @@ import rsvpRoutes from "./modules/routes/rsvpRoutes.js"
 import resetPasswordRouter from "./modules/routes/resetPasswordRouter.js";
 
 import userRouter from "./modules/routes/userRouter.js";
+import adminRoutes from "./modules/routes/adminRoutes.js";
 
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -39,6 +40,7 @@ app.use("/api/rsvp", rsvpRoutes);
 app.use("/api/reset-password", resetPasswordRouter);
 
 app.use("/api/users", userRouter);
+app.use("api/admin", adminRoutes);
 
 
 export default app;
