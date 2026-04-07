@@ -92,6 +92,69 @@ async function getEventsInsights() {
     return eventsObj;
 }
 
+async function getRevenueInsights() {
+    const events = await eventRepository.getEvents(null);
+
+    let totalRevenue = 0;
+
+    const now = new Date();
+    const currentMonthYear = `${(now.getMonth() + 1)} ${now.getFullYear()}`;
+
+    let quarter1Count = 0;
+    let quarter1Revenue = 0;
+    let quarter2Count = 0;
+    let quarter2Revenue = 0;
+    let quarter3Count = 0;
+    let quarter3Revenue = 0;
+    let quarter4Count = 0;
+    let quarter4Revenue = 0;
+
+    for (let event of events) {
+        totalRevenue += (event.attendance * event.price);
+
+        if (withinLastYear(event.date)) {
+            const quarter = getQuarter(event.date);
+
+            switch(quarter) {
+                case 1:
+                    quarter1Count += 1;
+                    quarter1Revenue += (event.attendance * event.price);
+                    break;
+                case 2:
+                    quarter2Count += 1;
+                    quarter2Revenue += (event.attendance * event.price);
+                    break;
+                 case 3:
+                    quarter3Count += 1;
+                    quarter3Revenue += (event.attendance * event.price);
+                    break;
+                case 4:
+                    quarter4Count += 1;
+                    quarter4Revenue += (event.attendance * event.price);
+                    break;                                                           
+            }
+        }
+    }
+
+    const revenueObj = {totalRevenue: totalRevenue, };
+
+    return revenueObj;
+}
+
+function withinLastYear(eventDate) {
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+    return eventDate >= oneYearAgo;
+}
+
+function getQuarter(eventDate) {
+    const eventMonth = eventDate.getMonth() + 1;
+    const quarter = Math.ceil(eventMonth / 3);
+    
+    return quarter;
+}
+
 function eventIsUpcoming(eventDate, endTime) {
     const eventDateTime = new Date(eventDate);
 
