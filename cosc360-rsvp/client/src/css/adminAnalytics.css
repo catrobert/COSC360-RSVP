@@ -1,0 +1,31 @@
+.page-title {
+    font-family: 'Inter', sans-serif;
+    margin: 16px;
+}
+
+.section-header {
+    margin: 16px;
+    color: rgb(80, 80, 80);
+}
+
+.analytics-main-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.main-cards-details {
+    display: flex;
+    align-items: center;
+    column-gap: 24px;
+    background-color: rgb(247, 251, 255);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 14px;
+    padding: 16px;
+}
+
+.main-cards-details {
+    display: flex;
+    align-items: center;
+    column-gap: 24px;
+}
