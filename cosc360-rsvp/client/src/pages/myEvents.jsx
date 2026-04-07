@@ -33,11 +33,20 @@ function MyEvents() {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "x-user-ider": user._id || user.id,
+                "x-user-id": user._id || user.id,
             },
         });
 
         const result = await response.json();
+
+        if (result.error) {
+            alert(result.error);
+            return;
+        }
+
+        if (response.ok) {
+            alert(result.message);
+        }
 
     }
 
