@@ -20,11 +20,26 @@ function EventPage() {
     const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
     const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
 
+    const { user } = useAuth();
+
+//     const hasReviewed = () => {
+//         for (const review of event.reviews) {
+//             if (review.userId?.toString() === user._id) {
+//                 return true;
+//             }
+//         }
+//         return false;
+//     }
+    
     const userCreated = function () {
         if (!activeUser || !activeUserId || !event) return false;
         const creatorId = event.createdBy?._id?.toString() || event.createdBy?.toString();
         return activeUser.role === "admin" || creatorId === activeUserId;
     }
+
+    const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
+    const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
+  
 
     async function handleDeleteEventClick() {
         try {
@@ -56,6 +71,7 @@ function EventPage() {
         }
         return false;
     }
+    
 
     function isUpcoming(eventDate, endTime) {
         const [hours, minutes] = endTime.split(':');
