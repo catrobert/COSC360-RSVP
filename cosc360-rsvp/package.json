@@ -11,7 +11,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "seed": "node --env-file=server/.env server/src/seed.js",
-    "start": "concurrently \"npm run server\" \"npm run dev\",
+    "start": "concurrently \"npm run server\" \"npm run dev\"",
     "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --verbose"
   },
   "dependencies": {

@@ -17,19 +17,7 @@ function EventPage() {
     const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { activeUser, activeUserId } = useAuth();
-    const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
-    const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
-
     const { user } = useAuth();
-
-//     const hasReviewed = () => {
-//         for (const review of event.reviews) {
-//             if (review.userId?.toString() === user._id) {
-//                 return true;
-//             }
-//         }
-//         return false;
-//     }
     
     const userCreated = function () {
         if (!activeUser || !activeUserId || !event) return false;
