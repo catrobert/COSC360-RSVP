@@ -1,4 +1,5 @@
 import * as rsvpRepository from "../repository/rsvpRepository.js";
+import { updateEventAttendance } from "../repository/eventRepository.js";
 
 const VALID_STATUSES = new Set(["yes", "no", "saved"]);
 
@@ -26,6 +27,8 @@ export async function createRSVP(rsvp, userId) {
     if (existingRSVP?.status === 'yes') {
         throw new Error("You have already RSVP'd to this event!");
     }
+
+    await updateEventAttendance(rsvp.eventId, 1)
 
     if (existingRSVP?.status === 'no' || existingRSVP?.status === 'saved') {
         return await updateRSVP(rsvpData);
@@ -61,5 +64,6 @@ export async function declineRSVP(userId, eventId) {
         throw new Error("You have not RSVP'd 'yes' to this event, so there is no RSVP to cancel")
     }
 
+    await updateEventAttendance(eventId, -1)
     return await rsvpRepository.declineRSVP(userId, eventId);
 }
