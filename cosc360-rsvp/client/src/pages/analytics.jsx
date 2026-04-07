@@ -1,8 +1,10 @@
+import { useEffect } from "react";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 import "../css/Home.css";
 import "../css/adminAnalytics.css"
 import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from 'lucide-react';
+import { useAuth } from "../context/AuthContext";
 
 function Analytics() {
     const analyticsOverviewItems = [
@@ -36,6 +38,30 @@ function Analytics() {
         {label: "Average User Age", statistic: 2, icon: CalendarPlus2},
         {label: "Gender Distribution", statistic: 3, icon: BadgeCheck},
     ];
+
+        const { activeUser, activeUserId } = useAuth();
+
+    useEffect( () => {
+        if (activeUser.role !== 'admin') {
+            alert("You are not authorized to view this page.");
+            return;
+        }
+        async function fetchAdminAnalytics() {
+            const response = await fetch(`api/admin/analytics`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-user-id': activeUserId,
+                },
+            });
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(result.error);
+                return;
+            }
+        }
+        fetchAdminAnalytics();
+    }, [])
 
 
     return (
@@ -84,7 +110,7 @@ function Analytics() {
                     ))}
                 </div>
                 <h3 className="section-header">Users Insights</h3>
-                <div className="analytics-main-cards">{ratingsInsights.map((item,index) => (
+                <div className="analytics-main-cards">{userInsights.map((item,index) => (
                         <AnalyticsCard 
                         key={index} 
                         label={item.label} 
@@ -92,6 +118,7 @@ function Analytics() {
                         icon={item.icon} />
                     ))}
                 </div>
+                <h3 className="section-header">Visualizations</h3>
             </div>
         </div>
     );
