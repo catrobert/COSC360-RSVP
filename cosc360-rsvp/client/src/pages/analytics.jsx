@@ -18,6 +18,10 @@ function Analytics() {
     const [ratingDistributionData, setRatingDistributionData] = useState([]);
     const [genderDistributionData, setGenderDistributionData] = useState([]);
 
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    const oneYearAgoFormatted = oneYearAgo.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
     useEffect( () => {
         if (activeUser.role !== 'admin') {
             alert("You are not authorized to view this page.");
@@ -120,7 +124,7 @@ function Analytics() {
                 <h3 className="section-header">Visualizations</h3>
                 <div className="charts-grid">
                     <div className="chart-card">
-                        <h4 className="section-header">Revenue by Quarter</h4>
+                        <h4 className="section-header">Revenue by Quarter ({oneYearAgoFormatted} - Present)</h4>
                         <BarChart width={500} height={250} data={revenueEventData}>
                             <CartesianGrid />
                             <XAxis dataKey="quarter" />
@@ -130,7 +134,7 @@ function Analytics() {
                         </BarChart>
                     </div>
                     <div className="chart-card">
-                        <h4 className="section-header">Events by Quarter</h4>
+                        <h4 className="section-header">Events by Quarter ({oneYearAgoFormatted} - Present)</h4>
                         <BarChart width={500} height={250} data={revenueEventData}>
                             <CartesianGrid />
                             <XAxis dataKey="quarter" />

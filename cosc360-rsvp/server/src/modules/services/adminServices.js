@@ -147,7 +147,6 @@ async function getRevenueInsights() {
 
 async function getRatingsInsights() {
     const events = await eventRepository.findAll();
-    const totalEvents = events.length;
 
     let totalRating = 0;
     let totalReviews = 0;
