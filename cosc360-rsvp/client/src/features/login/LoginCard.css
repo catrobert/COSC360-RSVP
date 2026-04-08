@@ -10,6 +10,7 @@
         justify-content: center;
         flex-direction: column;
         height: 40vh;
+        position: relative;
 }
 
 .title{
@@ -108,4 +109,14 @@
 a{
     font-size:16px;
     text-align:center;
+}
+
+.login-card-close{
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    color:white;
 }

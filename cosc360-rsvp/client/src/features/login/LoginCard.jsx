@@ -3,10 +3,11 @@ import "./LoginCard.css";
 import { loginApi } from "./api/Login.js";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { XCircle } from "lucide-react";
 
 
 
-function LoginCard() {
+function LoginCard({ onSuccess, onClose }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -21,7 +22,11 @@ function LoginCard() {
       login(data.user);
       setMessage(data.message);
 
-      navigate("/home");
+      if (onSuccess){
+        onSuccess();
+      } else {
+        navigate("/home");
+      }
     } catch (error) {
       setMessage(error.message);
     }
@@ -31,7 +36,9 @@ function LoginCard() {
   return (
     <div className="auth-background">
       <div className="login-container">
-
+        {onClose && (
+          <XCircle className="login-card-close" onClick={onClose}/>
+        )}
         <form id="login" onSubmit={handleSubmit}>
           <h2 className="title">Welcome Back!</h2>
           <input className="textField"
