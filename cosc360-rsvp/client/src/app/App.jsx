@@ -22,7 +22,7 @@ function App() {
       <Routes>
 
         {/* Root redirect */}
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* Public Routes - Unregistered User Pages to Go here too?*/}
         <Route path="/register" element={<RegisterForm />} />

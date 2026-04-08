@@ -56,6 +56,7 @@ function LoginCard({ onSuccess, onClose }) {
           <button id="login-btn" type="submit">Login</button>
           <Link to="/reset-password" id="forgotPassword">Forgot Password?</Link>
           <Link to="/register">Create Account</Link>
+          <Link to="/home">Continue as Guest</Link>
 
           <p>{message}</p>
         </form>
