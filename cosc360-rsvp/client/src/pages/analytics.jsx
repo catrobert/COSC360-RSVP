@@ -3,7 +3,7 @@ import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 import "../css/Home.css";
 import "../css/adminAnalytics.css"
-import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from 'lucide-react';
+import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync, Trophy, Star, Ticket, Users, Repeat, DollarSign, StarHalf, MessageSquare, Cake } from 'lucide-react';
 import { useAuth } from "../context/AuthContext";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
@@ -46,28 +46,28 @@ function Analytics() {
              ]);
 
             setEventInsights([
-                {label: "Most Popular Event by Attendance", statistic: result.eventInsights.mostPopularByAttendance, icon: CalendarPlus2},
-                {label: "Most Popular Event by Rating", statistic: result.eventInsights.mostPopularByReviews, icon: BadgeCheck},
-                {label: "Average Ticket Price", statistic: result.eventInsights.averagePrice, icon: BadgeCheck, isCurrency: true},
-                {label: "Average Attendance per Event", statistic: result.eventInsights.averageAttendance, icon: BadgeCheck},
-                {label: "Users Who Attended More Than One Event", statistic: result.eventInsights.attendedMoreThanOne, icon: BadgeCheck},
+                {label: "Most Popular Event by Attendance", statistic: result.eventInsights.mostPopularByAttendance, icon: Trophy},
+                {label: "Most Popular Event by Rating", statistic: result.eventInsights.mostPopularByReviews, icon: Star},
+                {label: "Average Ticket Price", statistic: result.eventInsights.averagePrice, icon: Ticket, isCurrency: true},
+                {label: "Average Attendance per Event", statistic: result.eventInsights.averageAttendance, icon: Users},
+                {label: "Users Who Attended More Than One Event", statistic: result.eventInsights.attendedMoreThanOne, icon: Repeat},
             ]);
 
             setRevenueInsights([
-                {label: "All Time Revenue", statistic: result.revenueInsights.totalRevenue, icon: CalendarPlus2, isCurrency: true},
+                {label: "All Time Revenue", statistic: result.revenueInsights.totalRevenue, icon: DollarSign, isCurrency: true},
             ]);
 
             setRevenueEventData(result.revenueInsights.histogram);
             
             setRatingsInsights([
-                {label: "Average Event Rating", statistic: result.ratingsInsights.averageRating, icon: CalendarPlus2},
-                {label: "Total Number of Reviews", statistic: result.ratingsInsights.totalReviews, icon: BadgeCheck},
+                {label: "Average Event Rating", statistic: result.ratingsInsights.averageRating, icon: StarHalf},
+                {label: "Total Number of Reviews", statistic: result.ratingsInsights.totalReviews, icon: MessageSquare},
             ]);
 
             setRatingDistributionData(result.ratingsInsights.ratingDistribution);
 
             setUserInsights([
-                {label: "Average User Age", statistic: result.userInsights.averageAge, icon: CalendarPlus2},
+                {label: "Average User Age", statistic: result.userInsights.averageAge, icon: Cake},
             ]);
 
             setGenderDistributionData(result.userInsights.genderDistribution);
