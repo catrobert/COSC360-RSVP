@@ -97,10 +97,6 @@ async function getRevenueInsights() {
     const events = await eventRepository.getEvents(null);
 
     let totalRevenue = 0;
-
-    const now = new Date();
-    const currentMonthYear = `${(now.getMonth() + 1)} ${now.getFullYear()}`;
-
     let quarter1Count = 0;
     let quarter1Revenue = 0;
     let quarter2Count = 0;
@@ -226,12 +222,16 @@ async function getUserInsights() {
         switch(gender) {
             case "Male":
                 maleCount += 1;
+                break;
             case "Female":
                 femaleCount += 1;
+                break;
             case "Other":
                 otherCount += 1;
+                break;
             case "Prefer Not To Say":
                 preferNotCount +=1;
+                break;
         }
     }
 
