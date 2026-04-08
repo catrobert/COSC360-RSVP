@@ -159,11 +159,10 @@ async function getRatingsInsights() {
     let total5star = 0;
 
     for (let event of events) {
-        totalRating += event.reviews.rating;
         totalReviews += event.reviews.length;
-
         for (let review of event.reviews) {
             const rating = review.rating;
+            totalRating += rating;
 
             switch (rating) {
                 case 1:
@@ -193,7 +192,13 @@ async function getRatingsInsights() {
             {rating: 5, count: total5star},
         ]
 
-    const avgRating = totalRating / totalEvents;
+    let avgRating = 0;
+    
+    if (totalReviews === 0 || totalRating === 0) {
+        avgRating = 'N/A';
+    } else {
+       avgRating = totalRating / totalReviews;
+    }
 
     const ratingObj = {averageRating: avgRating, totalReviews: totalReviews};
 
@@ -211,29 +216,40 @@ async function getUserInsights() {
     let preferNotCount = 0;
     let otherCount = 0;
 
-    for (let user of users) {
-        let bday = user.description.birthday;
-        let userAge = getAge(bday);
+    for (let user of users) {    
+        let bday = user.description[0].birthday;
 
-        if (userAge == null) continue;
-        totalAge += userAge;
-
-        let gender = user.description.gender;
-
-        switch(gender) {
-            case "Male":
-                maleCount += 1;
-                break;
-            case "Female":
-                femaleCount += 1;
-                break;
-            case "Other":
-                otherCount += 1;
-                break;
-            case "Prefer Not To Say":
-                preferNotCount +=1;
-                break;
+        if (bday) {
+            let userAge = getAge(bday);
+            totalAge += userAge;
         }
+
+        let gender = user.description[0].gender;
+
+        if (gender) {
+            switch(gender) {
+                case "Male":
+                    maleCount += 1;
+                    break;
+                case "Female":
+                    femaleCount += 1;
+                    break;
+                case "Other":
+                    otherCount += 1;
+                    break;
+                case "Prefer Not To Say":
+                    preferNotCount +=1;
+                    break;
+            }
+        }
+    }
+
+    let avgAge = 0;
+
+    if (totalAge === 0 || totalUsers == 0) {
+       avgAge = 'N/A'
+    } else {
+        avgAge = totalAge / totalUsers;
     }
 
     const genderDistribution = [
@@ -243,16 +259,10 @@ async function getUserInsights() {
         {gender: "Prefer Not To Say", count: preferNotCount},
     ];
 
-    const avgAge = totalAge / totalUsers;
-
     return {averageAge: avgAge, genderDistribution: genderDistribution};
 }
 
 function getAge(bday) {
-    if (!bday) {
-        return null;
-    }
-
     const now = new Date();
     let age = now.getFullYear() - bday.getFullYear();
 

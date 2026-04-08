@@ -7,38 +7,6 @@ import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from '
 import { useAuth } from "../context/AuthContext";
 
 function Analytics() {
-    // const overviewInsights = [
-    //     {label: "Total Number of Events", statistic: 2, icon: CalendarPlus2},
-    //     {label: "Total Event Attendance", statistic: 3, icon: BadgeCheck},
-    //     {label: "Total Registered Users", statistic: 4, icon: UserCheck},
-    //     {label: "Total Upcoming Events", statistic: 5, icon: ClockAlert},
-    //     {label: "Total Past Events", statistic: 6, icon: CalendarSync},
-    // ];
-
-    // const eventInsights = [
-    //     {label: "Most Popular Event by Attendance", statistic: 2, icon: CalendarPlus2},
-    //     {label: "Most Popular Event by Rating", statistic: 3, icon: BadgeCheck},
-    //     {label: "Average Ticket Price", statistic: 3, icon: BadgeCheck},
-    //     {label: "Average Attendance per Event", statistic: 3, icon: BadgeCheck},
-    //     {label: "Users Who Attended More Than One Event", statistic: 3, icon: BadgeCheck},
-    // ];
-
-    // const revenueInsights = [
-    //     {label: "All Time Revenue", statistic: 2, icon: CalendarPlus2},
-    //     {label: "Revenue By Quarter", statistic: 3, icon: BadgeCheck},
-    // ];
-
-    // const ratingsInsights = [
-    //     {label: "Average Event Rating", statistic: 2, icon: CalendarPlus2},
-    //     {label: "Total Number of Reviews", statistic: 3, icon: BadgeCheck},
-    //     {label: "Rating Distribution", statistic: 3, icon: BadgeCheck},
-    // ];
-
-    // const userInsights = [
-    //     {label: "Average User Age", statistic: 2, icon: CalendarPlus2},
-    //     {label: "Gender Distribution", statistic: 3, icon: BadgeCheck},
-    // ];
-
     const { activeUser, activeUserId } = useAuth();
     const [overviewInsights, setOverviewInsights] = useState([]);
     const [eventInsights, setEventInsights] = useState([]);
@@ -76,13 +44,13 @@ function Analytics() {
             setEventInsights([
                 {label: "Most Popular Event by Attendance", statistic: result.eventInsights.mostPopularByAttendance, icon: CalendarPlus2},
                 {label: "Most Popular Event by Rating", statistic: result.eventInsights.mostPopularByReviews, icon: BadgeCheck},
-                {label: "Average Ticket Price", statistic: result.eventInsights.averagePrice, icon: BadgeCheck},
+                {label: "Average Ticket Price", statistic: result.eventInsights.averagePrice, icon: BadgeCheck, isCurrency: true},
                 {label: "Average Attendance per Event", statistic: result.eventInsights.averageAttendance, icon: BadgeCheck},
                 {label: "Users Who Attended More Than One Event", statistic: result.eventInsights.attendedMoreThanOne, icon: BadgeCheck},
             ]);
 
             setRevenueInsights([
-                {label: "All Time Revenue", statistic: result.revenueInsights.totalRevenue, icon: CalendarPlus2},
+                {label: "All Time Revenue", statistic: result.revenueInsights.totalRevenue, icon: CalendarPlus2, isCurrency: true},
                 // {label: "Revenue By Quarter", statistic: result.revenueInsights.histogram, icon: BadgeCheck},
             ]);
             
@@ -164,11 +132,12 @@ function Analytics() {
 export default Analytics;
 
 
-function AnalyticsCard( {label, statistic, icon: Icon } ) {
+function AnalyticsCard( {label, statistic, icon: Icon, isCurrency } ) {
     return (
         <div className="main-cards-details">
             <Icon className="details-icon" />
-            <h1 className="details-statistic">{statistic}</h1>
+            {typeof statistic === 'string' ? (<h1 className="details-statistic">{statistic}</h1>) 
+            : isCurrency ? (<h1 className="details-statistic">`$${statistic}`</h1>) : (<h1 className="details-statistic">{statistic}</h1>)}
             <p className="details-name">{label}</p>
         </div>
     )
