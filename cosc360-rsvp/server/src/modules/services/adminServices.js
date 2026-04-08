@@ -15,7 +15,7 @@ export async function getAnalytics() {
 
 
 async function getOverview() {
-    const events = await eventRepository.getEvents(null);
+    const events = await eventRepository.findAll();
     
     const totalEvents = events.length;
     let totalAttend = 0;
@@ -42,7 +42,7 @@ async function getOverview() {
 }
 
 async function getEventsInsights() {
-    const events = await eventRepository.getEvents(null);
+    const events = await eventRepository.findAll();
 
     const totalEvents = events.length;
     let totalAttendance = 0;
@@ -94,7 +94,7 @@ async function getEventsInsights() {
 }
 
 async function getRevenueInsights() {
-    const events = await eventRepository.getEvents(null);
+    const events = await eventRepository.findAll();
 
     let totalRevenue = 0;
     let quarter1Count = 0;
@@ -146,7 +146,7 @@ async function getRevenueInsights() {
 }
 
 async function getRatingsInsights() {
-    const events = await eventRepository.getEvents(null);
+    const events = await eventRepository.findAll();
     const totalEvents = events.length;
 
     let totalRating = 0;
@@ -248,6 +248,10 @@ async function getUserInsights() {
 }
 
 function getAge(bday) {
+    if (!bday) {
+        return null;
+    }
+    
     const now = new Date();
     let age = now.getFullYear() - bday.getFullYear();
 

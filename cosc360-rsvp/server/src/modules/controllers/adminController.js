@@ -2,9 +2,7 @@ import * as adminService from "../services/adminServices.js";
 
 export const getAnalytics = async (req, res) => {
     try {
-        userId = req.userId;
-
-        const role = await adminService.getRole(userId);
+        const role = req.userRole;
 
         if (role !== 'admin') {
             return res.status(403).json( { error: "You are not permitted to view this page" });

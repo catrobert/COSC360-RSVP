@@ -40,7 +40,7 @@ app.use("/api/rsvp", rsvpRoutes);
 app.use("/api/reset-password", resetPasswordRouter);
 
 app.use("/api/users", userRouter);
-app.use("api/admin", adminRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 export default app;
