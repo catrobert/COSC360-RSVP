@@ -222,6 +222,8 @@ async function getUserInsights() {
         if (bday) {
             let userAge = getAge(bday);
             totalAge += userAge;
+        } else {
+            continue;
         }
 
         let gender = user.description[0].gender;
@@ -241,6 +243,8 @@ async function getUserInsights() {
                     preferNotCount +=1;
                     break;
             }
+        } else {
+            continue;
         }
     }
 

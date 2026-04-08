@@ -5,7 +5,7 @@ import "../css/Home.css";
 import "../css/adminAnalytics.css"
 import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from 'lucide-react';
 import { useAuth } from "../context/AuthContext";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 function Analytics() {
     const { activeUser, activeUserId } = useAuth();
@@ -14,7 +14,9 @@ function Analytics() {
     const [revenueInsights, setRevenueInsights] = useState([]);
     const [ratingsInsights, setRatingsInsights] = useState([]);
     const [userInsights, setUserInsights] = useState([]);
-    const [histogramData, setHistogramData] = useState([]);
+    const [revenueEventData, setRevenueEventData] = useState([]);
+    const [ratingDistributionData, setRatingDistributionData] = useState([]);
+    const [genderDistributionData, setGenderDistributionData] = useState([]);
 
     useEffect( () => {
         if (activeUser.role !== 'admin') {
@@ -53,22 +55,22 @@ function Analytics() {
 
             setRevenueInsights([
                 {label: "All Time Revenue", statistic: result.revenueInsights.totalRevenue, icon: CalendarPlus2, isCurrency: true},
-                // {label: "Revenue By Quarter", statistic: result.revenueInsights.histogram, icon: BadgeCheck},
             ]);
 
-            setHistogramData(result.revenueInsights.histogram);
-            console.log(result.revenueInsights.histogram); 
+            setRevenueEventData(result.revenueInsights.histogram);
             
             setRatingsInsights([
                 {label: "Average Event Rating", statistic: result.ratingsInsights.averageRating, icon: CalendarPlus2},
                 {label: "Total Number of Reviews", statistic: result.ratingsInsights.totalReviews, icon: BadgeCheck},
-                // {label: "Rating Distribution", statistic: result.ratingsInsights.ratingDistribution, icon: BadgeCheck},
             ]);
+
+            setRatingDistributionData(result.ratingsInsights.ratingDistribution);
 
             setUserInsights([
                 {label: "Average User Age", statistic: result.userInsights.averageAge, icon: CalendarPlus2},
-                // {label: "Gender Distribution", statistic: result.userInsights.genderDistribution, icon: BadgeCheck},
             ]);
+
+            setGenderDistributionData(result.userInsights.genderDistribution);
         }
         fetchAdminAnalytics();
     }, [])
@@ -132,7 +134,7 @@ function Analytics() {
                 </div>
                 <h3 className="section-header">Visualizations</h3>
                 <h4 className="section-header">Revenue by Quarter</h4>
-                <BarChart width={600} height={300} data={histogramData}>
+                <BarChart width={600} height={300} data={revenueEventData}>
                     <CartesianGrid />
                     <XAxis dataKey="quarter" />
                     <YAxis />
@@ -141,12 +143,30 @@ function Analytics() {
                 </BarChart>
 
                 <h4 className="section-header">Events by Quarter</h4>
-                <BarChart width={600} height={300} data={histogramData}>
+                <BarChart width={600} height={300} data={revenueEventData}>
                     <CartesianGrid />
                     <XAxis dataKey="quarter" />
                     <YAxis allowDecimals={false} />
                     <Tooltip />
                     <Bar dataKey="count" fill="#bedfff" name="Events" />
+                </BarChart>
+
+                <h4 className="section-header">Event Rating Distribution</h4>
+                <BarChart width={600} height={300} data={ratingDistributionData}>
+                    <CartesianGrid />
+                    <XAxis dataKey="rating" />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#92c7fb" name="Count" />
+                </BarChart>
+
+                <h4 className="section-header">User Gender Distribution</h4>
+                <BarChart width={600} height={300} data={genderDistributionData}>
+                    <CartesianGrid />
+                    <XAxis dataKey="gender" />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#78a6d5" name="Count" />
                 </BarChart>
             </div>
         </div>
