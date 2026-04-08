@@ -5,41 +5,47 @@ import "../css/Home.css";
 import "../css/adminAnalytics.css"
 import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from 'lucide-react';
 import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
 
 function Analytics() {
-    const analyticsOverviewItems = [
-        {label: "Total Number of Events", statistic: 2, icon: CalendarPlus2},
-        {label: "Total Event Attendance", statistic: 3, icon: BadgeCheck},
-        {label: "Total Registered Users", statistic: 4, icon: UserCheck},
-        {label: "Total Upcoming Events", statistic: 5, icon: ClockAlert},
-        {label: "Total Past Events", statistic: 6, icon: CalendarSync},
-    ];
+    // const overviewInsights = [
+    //     {label: "Total Number of Events", statistic: 2, icon: CalendarPlus2},
+    //     {label: "Total Event Attendance", statistic: 3, icon: BadgeCheck},
+    //     {label: "Total Registered Users", statistic: 4, icon: UserCheck},
+    //     {label: "Total Upcoming Events", statistic: 5, icon: ClockAlert},
+    //     {label: "Total Past Events", statistic: 6, icon: CalendarSync},
+    // ];
 
-    const eventInsights = [
-        {label: "Most Popular Event by Attendance", statistic: 2, icon: CalendarPlus2},
-        {label: "Most Popular Event by Rating", statistic: 3, icon: BadgeCheck},
-        {label: "Average Ticket Price", statistic: 3, icon: BadgeCheck},
-        {label: "Average Attendance per Event", statistic: 3, icon: BadgeCheck},
-        {label: "Users Who Attended More Than One Event", statistic: 3, icon: BadgeCheck},
-    ];
+    // const eventInsights = [
+    //     {label: "Most Popular Event by Attendance", statistic: 2, icon: CalendarPlus2},
+    //     {label: "Most Popular Event by Rating", statistic: 3, icon: BadgeCheck},
+    //     {label: "Average Ticket Price", statistic: 3, icon: BadgeCheck},
+    //     {label: "Average Attendance per Event", statistic: 3, icon: BadgeCheck},
+    //     {label: "Users Who Attended More Than One Event", statistic: 3, icon: BadgeCheck},
+    // ];
 
-    const revenueInsights = [
-        {label: "All Time Revenue", statistic: 2, icon: CalendarPlus2},
-        {label: "Revenue By Quarter", statistic: 3, icon: BadgeCheck},
-    ];
+    // const revenueInsights = [
+    //     {label: "All Time Revenue", statistic: 2, icon: CalendarPlus2},
+    //     {label: "Revenue By Quarter", statistic: 3, icon: BadgeCheck},
+    // ];
 
-    const ratingsInsights = [
-        {label: "Average Event Rating", statistic: 2, icon: CalendarPlus2},
-        {label: "Total Number of Reviews", statistic: 3, icon: BadgeCheck},
-        {label: "Rating Distribution", statistic: 3, icon: BadgeCheck},
-    ];
+    // const ratingsInsights = [
+    //     {label: "Average Event Rating", statistic: 2, icon: CalendarPlus2},
+    //     {label: "Total Number of Reviews", statistic: 3, icon: BadgeCheck},
+    //     {label: "Rating Distribution", statistic: 3, icon: BadgeCheck},
+    // ];
 
-    const userInsights = [
-        {label: "Average User Age", statistic: 2, icon: CalendarPlus2},
-        {label: "Gender Distribution", statistic: 3, icon: BadgeCheck},
-    ];
+    // const userInsights = [
+    //     {label: "Average User Age", statistic: 2, icon: CalendarPlus2},
+    //     {label: "Gender Distribution", statistic: 3, icon: BadgeCheck},
+    // ];
 
-        const { activeUser, activeUserId } = useAuth();
+    const { activeUser, activeUserId } = useAuth();
+    const [overviewInsights, setOverviewInsights] = useState([]);
+    const [eventInsights, setEventInsights] = useState([]);
+    const [revenueInsights, setRevenueInsights] = useState([]);
+    const [ratingsInsights, setRatingsInsights] = useState([]);
+    const [userInsights, setUserInsights] = useState([]);
 
     useEffect( () => {
         if (activeUser.role !== 'admin') {
@@ -59,6 +65,14 @@ function Analytics() {
                 alert(result.error);
                 return;
             }
+
+            for (let analytic of result.analytics) {
+                setOverviewInsights(analytic.overview);
+                setEventInsights(analytic.eventInsights);
+                setRevenueInsights(analytic.revenueInsights);
+                setRatingsInsights(analytic.ratingsInsights);
+                setUserInsights(analytic.userInsights);
+            }
         }
         fetchAdminAnalytics();
     }, [])
@@ -72,7 +86,7 @@ function Analytics() {
                 <h1 className="page-title">Analytics Dashboard</h1>
                 <h3 className="section-header">Overview</h3>
                 <div className="analytics-container">
-                    <div className="analytics-main-cards">{analyticsOverviewItems.map((item,index) => (
+                    <div className="analytics-main-cards">{overviewInsights.map((item,index) => (
                         <AnalyticsCard 
                         key={index} 
                         label={item.label} 

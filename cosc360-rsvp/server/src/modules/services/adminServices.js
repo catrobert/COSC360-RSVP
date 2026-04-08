@@ -4,11 +4,11 @@ import * as adminRepository from "../repository/adminRepository.js";
 
 export async function getAnalytics() {
     const analytics = [
-        {overview: getOverview()},
-        {eventInsights: getEventsInsights()},
-        {revenueInsights: getRevenueInsights()},
-        {ratingsInsights: getRatingsInsights()},
-        {userInsights: getUserInsights()},
+        {overview: await getOverview()},
+        {eventInsights: await getEventsInsights()},
+        {revenueInsights: await getRevenueInsights()},
+        {ratingsInsights: await getRatingsInsights()},
+        {userInsights: await getUserInsights()},
     ];
     return analytics;
 }
@@ -71,9 +71,9 @@ async function getEventsInsights() {
     const users = await adminRepository.getAllUsers();
     let attendedMoreThanOne = 0;
 
-    for (let user in users) {
+    for (let user of users) {
         const userRsvps = await rsvpRepository.findEventsByStatus(user._id, 'yes');
-        const attendedEvents = 0;
+        let attendedEvents = 0;
 
         userRsvps.forEach(rsvp => {
             if (eventIsUpcoming(rsvp.eventId.date, rsvp.eventId.endTime)) {
@@ -215,6 +215,7 @@ async function getUserInsights() {
         let bday = user.description.birthday;
         let userAge = getAge(bday);
 
+        if (age == null) continue;
         totalAge += userAge;
 
         let gender = user.description.gender;
@@ -237,9 +238,9 @@ async function getUserInsights() {
 
     const genderDistribution = [
         {gender: "Male", count: maleCount},
-        {gender: "Female", count: maleCount},
-        {gender: "Other", count: maleCount},
-        {gender: "Prefer Not To Say", count: maleCount},
+        {gender: "Female", count: femaleCount},
+        {gender: "Other", count: otherCount},
+        {gender: "Prefer Not To Say", count: preferNotCount},
     ];
 
     const avgAge = totalAge / totalUsers;
@@ -251,11 +252,11 @@ function getAge(bday) {
     if (!bday) {
         return null;
     }
-    
+
     const now = new Date();
     let age = now.getFullYear() - bday.getFullYear();
 
-    const hadBdayThisYear = now.getMonth() > birthday.getMonth() || (now.getMonth() === birthday.getMonth() && now.getDate() >= birthday.getDate());
+    const hadBdayThisYear = now.getMonth() > bday.getMonth() || (now.getMonth() === bday.getMonth() && now.getDate() >= bday.getDate());
 
     if (!hadBdayThisYear) {
         age -= 1;
