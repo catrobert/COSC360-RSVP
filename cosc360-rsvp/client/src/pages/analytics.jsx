@@ -93,7 +93,8 @@ function Analytics() {
                         key={index} 
                         label={item.label} 
                         statistic={item.statistic} 
-                        icon={item.icon} />
+                        icon={item.icon}
+                        isCurrency={item.isCurrency} />
                     ))}
                     </div>
                 <h3 className="section-header">Revenue Insights</h3>
@@ -102,7 +103,8 @@ function Analytics() {
                         key={index} 
                         label={item.label} 
                         statistic={item.statistic} 
-                        icon={item.icon} />
+                        icon={item.icon}
+                        isCurrency={item.isCurrency} />
                     ))}
                 </div>
                 <h3 className="section-header">Ratings Insights</h3>
@@ -137,7 +139,7 @@ function AnalyticsCard( {label, statistic, icon: Icon, isCurrency } ) {
         <div className="main-cards-details">
             <Icon className="details-icon" />
             {typeof statistic === 'string' ? (<h1 className="details-statistic">{statistic}</h1>) 
-            : isCurrency ? (<h1 className="details-statistic">`$${statistic}`</h1>) : (<h1 className="details-statistic">{statistic}</h1>)}
+            : isCurrency ? (<h1 className="details-statistic">${statistic}</h1>) : (<h1 className="details-statistic">{statistic}</h1>)}
             <p className="details-name">{label}</p>
         </div>
     )
