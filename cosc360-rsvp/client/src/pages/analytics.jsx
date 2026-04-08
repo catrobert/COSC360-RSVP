@@ -5,6 +5,7 @@ import "../css/Home.css";
 import "../css/adminAnalytics.css"
 import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from 'lucide-react';
 import { useAuth } from "../context/AuthContext";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from 'recharts';
 
 function Analytics() {
     const { activeUser, activeUserId } = useAuth();
@@ -13,6 +14,7 @@ function Analytics() {
     const [revenueInsights, setRevenueInsights] = useState([]);
     const [ratingsInsights, setRatingsInsights] = useState([]);
     const [userInsights, setUserInsights] = useState([]);
+    const [histogramData, setHistogramData] = useState([]);
 
     useEffect( () => {
         if (activeUser.role !== 'admin') {
@@ -53,6 +55,9 @@ function Analytics() {
                 {label: "All Time Revenue", statistic: result.revenueInsights.totalRevenue, icon: CalendarPlus2, isCurrency: true},
                 // {label: "Revenue By Quarter", statistic: result.revenueInsights.histogram, icon: BadgeCheck},
             ]);
+
+            setHistogramData(result.revenueInsights.histogram);
+            console.log(result.revenueInsights.histogram); 
             
             setRatingsInsights([
                 {label: "Average Event Rating", statistic: result.ratingsInsights.averageRating, icon: CalendarPlus2},
@@ -126,6 +131,23 @@ function Analytics() {
                     ))}
                 </div>
                 <h3 className="section-header">Visualizations</h3>
+                <h4 className="section-header">Revenue by Quarter</h4>
+                <BarChart width={600} height={300} data={histogramData}>
+                    <CartesianGrid />
+                    <XAxis dataKey="quarter" />
+                    <YAxis />
+                    <Tooltip formatter={(value) => `$${value}`} />
+                    <Bar dataKey="revenue" fill="#97b0cb" name="Revenue" />
+                </BarChart>
+
+                <h4 className="section-header">Events by Quarter</h4>
+                <BarChart width={600} height={300} data={histogramData}>
+                    <CartesianGrid />
+                    <XAxis dataKey="quarter" />
+                    <YAxis allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="count" fill="#bedfff" name="Events" />
+                </BarChart>
             </div>
         </div>
     );
@@ -138,7 +160,7 @@ function AnalyticsCard( {label, statistic, icon: Icon, isCurrency } ) {
     return (
         <div className="main-cards-details">
             <Icon className="details-icon" />
-            {typeof statistic === 'string' ? (<h1 className="details-statistic">{statistic}</h1>) 
+            {typeof statistic === 'string' ? (<h1 className="details-statistic-word">{statistic}</h1>) 
             : isCurrency ? (<h1 className="details-statistic">${statistic}</h1>) : (<h1 className="details-statistic">{statistic}</h1>)}
             <p className="details-name">{label}</p>
         </div>
