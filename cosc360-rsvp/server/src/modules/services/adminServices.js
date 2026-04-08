@@ -136,9 +136,71 @@ async function getRevenueInsights() {
         }
     }
 
+    const histogramVals = [
+        { quarter: "Q1", count: quarter1Count, revenue: quarter1Revenue },
+        { quarter: "Q2", count: quarter2Count, revenue: quarter2Revenue },
+        { quarter: "Q3", count: quarter3Count, revenue: quarter3Revenue },
+        { quarter: "Q4", count: quarter4Count, revenue: quarter4Revenue },
+    ];  
+
     const revenueObj = {totalRevenue: totalRevenue, };
 
-    return revenueObj;
+    return { ...revenueObj, histogram: histogramVals};
+}
+
+async function getRatingsInsights() {
+    const events = await eventRepository.getEvents(null);
+    const totalEvents = events.length;
+
+    let totalRating = 0;
+    let totalReviews = 0;
+
+    let total1star = 0;
+    let total2star = 0;
+    let total3star = 0;
+    let total4star = 0;
+    let total5star = 0;
+
+    for (let event of events) {
+        totalRating += event.reviews.rating;
+        totalReviews += event.reviews.length;
+
+        for (let review of event.reviews) {
+            const rating = review.rating;
+
+            switch (rating) {
+                case 1:
+                    total1star += 1;
+                    break;
+                case 2:
+                    total2star += 1;
+                    break;
+                case 3:
+                    total3star += 1;
+                    break;
+                case 4:
+                    total4star += 1;
+                    break;
+                case 5:
+                    total5star += 1;
+                    break;    
+            }
+        }
+    }
+
+    const ratingDistribution = [
+            {rating: 1, count: total1star},
+            {rating: 2, count: total2star},
+            {rating: 3, count: total3star},
+            {rating: 4, count: total4star},
+            {rating: 5, count: total5star},
+        ]
+
+    const avgRating = totalRating / totalEvents;
+
+    const ratingObj = {averageRating: avgRating, totalReviews: totalReviews};
+
+    return {...ratingObj, ratingDistribution: ratingDistribution};
 }
 
 function withinLastYear(eventDate) {
