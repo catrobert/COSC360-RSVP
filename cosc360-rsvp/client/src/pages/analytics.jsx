@@ -1,11 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AdminSidebar from "../components/AdminSidebar";
 import TopNav from "../components/topNav";
 import "../css/Home.css";
 import "../css/adminAnalytics.css"
 import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync } from 'lucide-react';
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
 
 function Analytics() {
     // const overviewInsights = [
@@ -66,13 +65,37 @@ function Analytics() {
                 return;
             }
 
-            for (let analytic of result.analytics) {
-                setOverviewInsights(analytic.overview);
-                setEventInsights(analytic.eventInsights);
-                setRevenueInsights(analytic.revenueInsights);
-                setRatingsInsights(analytic.ratingsInsights);
-                setUserInsights(analytic.userInsights);
-            }
+            setOverviewInsights([
+                {label: "Total Number of Events", statistic: result.overview.totalEvents, icon: CalendarPlus2},
+                {label: "Total Event Attendance", statistic: result.overview.totalAttendance, icon: BadgeCheck},
+                {label: "Total Registered Users", statistic: result.overview.totalUsers, icon: UserCheck},
+                {label: "Total Upcoming Events", statistic: result.overview.totalUpcoming, icon: ClockAlert},
+                {label: "Total Past Events", statistic: result.overview.totalPast, icon: CalendarSync},
+             ]);
+
+            setEventInsights([
+                {label: "Most Popular Event by Attendance", statistic: result.eventInsights.mostPopularByAttendance, icon: CalendarPlus2},
+                {label: "Most Popular Event by Rating", statistic: result.eventInsights.mostPopularByReviews, icon: BadgeCheck},
+                {label: "Average Ticket Price", statistic: result.eventInsights.averagePrice, icon: BadgeCheck},
+                {label: "Average Attendance per Event", statistic: result.eventInsights.averageAttendance, icon: BadgeCheck},
+                {label: "Users Who Attended More Than One Event", statistic: result.eventInsights.attendedMoreThanOne, icon: BadgeCheck},
+            ]);
+
+            setRevenueInsights([
+                {label: "All Time Revenue", statistic: result.revenueInsights.totalRevenue, icon: CalendarPlus2},
+                // {label: "Revenue By Quarter", statistic: result.revenueInsights.histogram, icon: BadgeCheck},
+            ]);
+            
+            setRatingsInsights([
+                {label: "Average Event Rating", statistic: result.ratingsInsights.averageRating, icon: CalendarPlus2},
+                {label: "Total Number of Reviews", statistic: result.ratingsInsights.totalReviews, icon: BadgeCheck},
+                // {label: "Rating Distribution", statistic: result.ratingsInsights.ratingDistribution, icon: BadgeCheck},
+            ]);
+
+            setUserInsights([
+                {label: "Average User Age", statistic: result.userInsights.averageAge, icon: CalendarPlus2},
+                // {label: "Gender Distribution", statistic: result.userInsights.genderDistribution, icon: BadgeCheck},
+            ]);
         }
         fetchAdminAnalytics();
     }, [])

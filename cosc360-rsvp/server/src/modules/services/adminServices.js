@@ -3,13 +3,13 @@ import * as rsvpRepository from "../repository/rsvpRepository.js";
 import * as adminRepository from "../repository/adminRepository.js";
 
 export async function getAnalytics() {
-    const analytics = [
-        {overview: await getOverview()},
-        {eventInsights: await getEventsInsights()},
-        {revenueInsights: await getRevenueInsights()},
-        {ratingsInsights: await getRatingsInsights()},
-        {userInsights: await getUserInsights()},
-    ];
+    const analytics = {
+        overview: await getOverview(),
+        eventInsights: await getEventsInsights(),
+        revenueInsights: await getRevenueInsights(),
+        ratingsInsights: await getRatingsInsights(),
+        userInsights: await getUserInsights(),
+    };
     return analytics;
 }
 
@@ -215,7 +215,7 @@ async function getUserInsights() {
         let bday = user.description.birthday;
         let userAge = getAge(bday);
 
-        if (age == null) continue;
+        if (userAge == null) continue;
         totalAge += userAge;
 
         let gender = user.description.gender;
