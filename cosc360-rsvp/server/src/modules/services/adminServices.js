@@ -6,9 +6,10 @@ export async function getAnalytics() {
     const analytics = [
         {overview: getOverview()},
         {eventInsights: getEventsInsights()},
-
+        {revenueInsights: getRevenueInsights()},
+        {ratingsInsights: getRatingsInsights()},
+        {userInsights: getUserInsights()},
     ];
-
     return analytics;
 }
 
