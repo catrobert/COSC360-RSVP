@@ -42,3 +42,17 @@
 .details-name {
     text-align: center;
 }
+
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding: 24px 16px 24px 32px;
+}
+
+.chart-card {
+    background-color: rgb(252, 254, 255);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}

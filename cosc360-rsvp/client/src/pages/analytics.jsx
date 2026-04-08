@@ -133,41 +133,48 @@ function Analytics() {
                     ))}
                 </div>
                 <h3 className="section-header">Visualizations</h3>
-                <h4 className="section-header">Revenue by Quarter</h4>
-                <BarChart width={600} height={300} data={revenueEventData}>
-                    <CartesianGrid />
-                    <XAxis dataKey="quarter" />
-                    <YAxis />
-                    <Tooltip formatter={(value) => `$${value}`} />
-                    <Bar dataKey="revenue" fill="#97b0cb" name="Revenue" />
-                </BarChart>
-
-                <h4 className="section-header">Events by Quarter</h4>
-                <BarChart width={600} height={300} data={revenueEventData}>
-                    <CartesianGrid />
-                    <XAxis dataKey="quarter" />
-                    <YAxis allowDecimals={false} />
-                    <Tooltip />
-                    <Bar dataKey="count" fill="#bedfff" name="Events" />
-                </BarChart>
-
-                <h4 className="section-header">Event Rating Distribution</h4>
-                <BarChart width={600} height={300} data={ratingDistributionData}>
-                    <CartesianGrid />
-                    <XAxis dataKey="rating" />
-                    <YAxis allowDecimals={false} />
-                    <Tooltip />
-                    <Bar dataKey="count" fill="#92c7fb" name="Count" />
-                </BarChart>
-
-                <h4 className="section-header">User Gender Distribution</h4>
-                <BarChart width={600} height={300} data={genderDistributionData}>
-                    <CartesianGrid />
-                    <XAxis dataKey="gender" />
-                    <YAxis allowDecimals={false} />
-                    <Tooltip />
-                    <Bar dataKey="count" fill="#78a6d5" name="Count" />
-                </BarChart>
+                <div className="charts-grid">
+                    <div className="chart-card">
+                        <h4 className="section-header">Revenue by Quarter</h4>
+                        <BarChart width={500} height={250} data={revenueEventData}>
+                            <CartesianGrid />
+                            <XAxis dataKey="quarter" />
+                            <YAxis />
+                            <Tooltip formatter={(value) => `$${value}`} />
+                            <Bar dataKey="revenue" fill="#97b0cb" name="Revenue" />
+                        </BarChart>
+                    </div>
+                    <div className="chart-card">
+                        <h4 className="section-header">Events by Quarter</h4>
+                        <BarChart width={500} height={250} data={revenueEventData}>
+                            <CartesianGrid />
+                            <XAxis dataKey="quarter" />
+                            <YAxis allowDecimals={false} />
+                            <Tooltip />
+                            <Bar dataKey="count" fill="#bedfff" name="Events" />
+                        </BarChart>
+                    </div>
+                    <div className="chart-card">
+                        <h4 className="section-header">Event Rating Distribution</h4>
+                        <BarChart width={500} height={250} data={ratingDistributionData}>
+                            <CartesianGrid />
+                            <XAxis dataKey="rating" />
+                            <YAxis allowDecimals={false} />
+                            <Tooltip />
+                            <Bar dataKey="count" fill="#92c7fb" name="Count" />
+                        </BarChart>
+                    </div>
+                    <div className="chart-card">
+                        <h4 className="section-header">User Gender Distribution</h4>
+                        <BarChart width={500} height={250} data={genderDistributionData}>
+                            <CartesianGrid />
+                            <XAxis dataKey="gender" />
+                            <YAxis allowDecimals={false} />
+                            <Tooltip />
+                            <Bar dataKey="count" fill="#78a6d5" name="Count" />
+                        </BarChart>
+                    </div>
+                </div>
             </div>
         </div>
     );
