@@ -36,10 +36,11 @@ function LoginCard({ onSuccess, onClose }) {
   return (
     <div className="auth-background">
       <div className="login-container">
+      
+        <form id="login" onSubmit={handleSubmit}>
         {onClose && (
           <XCircle className="login-card-close" onClick={onClose}/>
         )}
-        <form id="login" onSubmit={handleSubmit}>
           <h2 className="title">Welcome Back!</h2>
           <input className="textField"
             type="text"
@@ -56,8 +57,12 @@ function LoginCard({ onSuccess, onClose }) {
           <button id="login-btn" type="submit">Login</button>
           <Link to="/reset-password" id="forgotPassword">Forgot Password?</Link>
           <Link to="/register">Create Account</Link>
+          
+          {onClose ? (
+            <button type="button" className="guest-link" onClick={onClose}>Continue as Guest</button>
+          ) : (
           <Link to="/home">Continue as Guest</Link>
-
+          )}
           <p>{message}</p>
         </form>
 
