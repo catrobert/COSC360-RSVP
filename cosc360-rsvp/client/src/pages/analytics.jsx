@@ -77,61 +77,46 @@ function Analytics() {
 
 
     return (
-        <div className="homepage-layout">
-            <AdminSidebar />
-            <div className="main-content">
-                <TopNav />
-                <h1 className="page-title">Analytics Dashboard</h1>
-                <h3 className="section-header">Overview</h3>
-                <div className="analytics-container">
-                    <div className="analytics-main-cards">{overviewInsights.map((item,index) => (
-                        <AnalyticsCard 
-                        key={index} 
-                        label={item.label} 
-                        statistic={item.statistic} 
-                        icon={item.icon} />
-                    ))}
-                    </div>
+    <div className="homepage-layout">
+        <AdminSidebar />
+        <div className="main-content">
+            <TopNav />
+            <h1 className="page-title">Analytics Dashboard</h1>
 
-                </div>
-                <h3 className="section-header">Events Insights</h3>
-                <div className="analytics-main-cards">{eventInsights.map((item,index) => (
-                        <AnalyticsCard 
-                        key={index} 
-                        label={item.label} 
-                        statistic={item.statistic} 
-                        icon={item.icon}
-                        isCurrency={item.isCurrency} />
-                    ))}
-                    </div>
-                <h3 className="section-header">Revenue Insights</h3>
-                <div className="analytics-main-cards">{revenueInsights.map((item,index) => (
-                        <AnalyticsCard 
-                        key={index} 
-                        label={item.label} 
-                        statistic={item.statistic} 
-                        icon={item.icon}
-                        isCurrency={item.isCurrency} />
+            <div className="analytics-section">
+                <h3 className="section-header">Overview</h3>
+                <div className="analytics-main-cards">
+                    {overviewInsights.map((item, index) => (
+                        <AnalyticsCard key={index} label={item.label} statistic={item.statistic} icon={item.icon} />
                     ))}
                 </div>
-                <h3 className="section-header">Ratings Insights</h3>
-                <div className="analytics-main-cards">{ratingsInsights.map((item,index) => (
-                        <AnalyticsCard 
-                        key={index} 
-                        label={item.label} 
-                        statistic={item.statistic} 
-                        icon={item.icon} />
+            </div>
+
+            <div className="analytics-section">
+                <h3 className="section-header">Event Insights</h3>
+                <div className="analytics-main-cards">
+                    {eventInsights.map((item, index) => (
+                        <AnalyticsCard key={index} label={item.label} statistic={item.statistic} icon={item.icon} isCurrency={item.isCurrency} />
                     ))}
                 </div>
-                <h3 className="section-header">Users Insights</h3>
-                <div className="analytics-main-cards">{userInsights.map((item,index) => (
-                        <AnalyticsCard 
-                        key={index} 
-                        label={item.label} 
-                        statistic={item.statistic} 
-                        icon={item.icon} />
+            </div>
+
+            <div className="analytics-section">
+                <h3 className="section-header">Revenue, Ratings & Users</h3>
+                <div className="analytics-main-cards">
+                    {revenueInsights.map((item, index) => (
+                        <AnalyticsCard key={index} label={item.label} statistic={item.statistic} icon={item.icon} isCurrency={item.isCurrency} />
+                    ))}
+                    {ratingsInsights.map((item, index) => (
+                        <AnalyticsCard key={index} label={item.label} statistic={item.statistic} icon={item.icon} />
+                    ))}
+                    {userInsights.map((item, index) => (
+                        <AnalyticsCard key={index} label={item.label} statistic={item.statistic} icon={item.icon} />
                     ))}
                 </div>
+            </div>
+
+            <div className="analytics-section">
                 <h3 className="section-header">Visualizations</h3>
                 <div className="charts-grid">
                     <div className="chart-card">
@@ -177,7 +162,8 @@ function Analytics() {
                 </div>
             </div>
         </div>
-    );
+    </div>
+);
 }
 
 export default Analytics;
