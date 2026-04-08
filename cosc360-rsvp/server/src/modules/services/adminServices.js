@@ -203,6 +203,62 @@ async function getRatingsInsights() {
     return {...ratingObj, ratingDistribution: ratingDistribution};
 }
 
+async function getUserInsights() {
+    const users = await adminRepository.getAllUsers();
+
+    const totalUsers = users.length;
+    let totalAge = 0;
+
+    let maleCount = 0;
+    let femaleCount = 0;
+    let preferNotCount = 0;
+    let otherCount = 0;
+
+    for (let user of users) {
+        let bday = user.description.birthday;
+        let userAge = getAge(bday);
+
+        totalAge += userAge;
+
+        let gender = user.description.gender;
+
+        switch(gender) {
+            case "Male":
+                maleCount += 1;
+            case "Female":
+                femaleCount += 1;
+            case "Other":
+                otherCount += 1;
+            case "Prefer Not To Say":
+                preferNotCount +=1;
+        }
+    }
+
+    const genderDistribution = [
+        {gender: "Male", count: maleCount},
+        {gender: "Female", count: maleCount},
+        {gender: "Other", count: maleCount},
+        {gender: "Prefer Not To Say", count: maleCount},
+    ];
+
+    const avgAge = totalAge / totalUsers;
+
+    return {averageAge: avgAge, genderDistribution: genderDistribution};
+}
+
+function getAge(bday) {
+    const now = new Date();
+    let age = now.getFullYear() - bday.getFullYear();
+
+    const hadBdayThisYear = now.getMonth() > birthday.getMonth() || (now.getMonth() === birthday.getMonth() && now.getDate() >= birthday.getDate());
+
+    if (!hadBdayThisYear) {
+        age -= 1;
+    }
+
+    return age;
+}
+
 function withinLastYear(eventDate) {
     const oneYearAgo = new Date();
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
