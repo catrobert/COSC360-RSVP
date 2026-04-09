@@ -29,7 +29,7 @@ export async function updateUserById (id, updates) {
     return await UserSchema.findByIdAndUpdate(
         id,
         updates,
-        { returnDocument: "after"}
+        { new: true}
     ).select("-password");
 }
 

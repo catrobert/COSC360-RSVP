@@ -114,11 +114,14 @@ export const updateUserRole = async (req, res) => {
         const { id } = req.params;
         const { role } = req.body;
 
+        console.log("Updating role for user: ", id, "to: ", role);
+
         if(!role){
             return res.status(400).json({ error: "Missing role"});
         }
 
         const user = await updateUserById(id, {role});
+        console.log("Updated user:", user);
 
         if(!user){
             return res.status(404).json({ error: "User not found"});
