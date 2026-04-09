@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
 import CreateEventForm from "../features/event/createEvent/CreateEventForm.jsx";
+import AdminSidebar from "../components/AdminSidebar.jsx";
 
 function EventPage() {
     const { id } = useParams();
@@ -17,7 +18,7 @@ function EventPage() {
     const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { activeUser, activeUserId } = useAuth();
-    const { user } = useAuth();
+    
     
     const userCreated = function () {
         if (!activeUser || !activeUserId || !event) return false;
@@ -205,7 +206,7 @@ function EventPage() {
 
     return (
         <div className="homepage-layout">
-            <Sidebar />
+            {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />
                 <div id="event-header">
