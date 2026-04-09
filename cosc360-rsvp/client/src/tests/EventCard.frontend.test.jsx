@@ -1,21 +1,16 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { vi, describe, test, beforeEach, afterEach, expect } from "vitest";
 import EventCard from "../features/event/homepageEvents/EventCard.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
-vi.mock("../context/AuthContext.jsx", () => ({
-    useAuth: vi.fn(),
+jest.mock("../context/AuthContext.jsx", () => ({
+    useAuth: jest.fn(),
 }));
 
 describe("EventCard frontend tests", () => {
     beforeEach(() => {
-        vi.clearAllMocks();
-        global.fetch = vi.fn();
-        global.alert = vi.fn();
-    });
-
-    afterEach(() => {
-        vi.restoreAllMocks();
+        jest.clearAllMocks();
+        global.fetch = jest.fn();
+        global.alert = jest.fn();
     });
 
     // tests happy path render, core event details should show up on the card
@@ -60,7 +55,7 @@ describe("EventCard frontend tests", () => {
             status: 200,
             json: async () => ({ message: "updated" }),
         });
-        const onWishlistChanged = vi.fn();
+        const onWishlistChanged = jest.fn();
 
         const { container } = render(
             <EventCard

@@ -1,20 +1,15 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { vi, describe, test, beforeEach, afterEach, expect } from "vitest";
 import EventContainer from "../features/event/homepageEvents/EventContainer.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
-vi.mock("../context/AuthContext.jsx", () => ({
-    useAuth: vi.fn(),
+jest.mock("../context/AuthContext.jsx", () => ({
+    useAuth: jest.fn(),
 }));
 
 describe("EventContainer frontend tests", () => {
     beforeEach(() => {
-        vi.clearAllMocks();
-        global.fetch = vi.fn();
-    });
-
-    afterEach(() => {
-        vi.restoreAllMocks();
+        jest.clearAllMocks();
+        global.fetch = jest.fn();
     });
 
     // tests saved-state hydration, saved RSVP rows should pre-highlight bookmarks
@@ -64,7 +59,7 @@ describe("EventContainer frontend tests", () => {
     });
 
     // tests ratings display, average should be shown and empty reviews should be N/A
-    test("shows average rating and N/A fallback correctly", () => {
+    test("shows average rating and N/A fallback correctly", async () => {
         useAuth.mockReturnValue({ activeUserId: "user_1" });
         global.fetch.mockResolvedValue({
             ok: true,
@@ -93,19 +88,22 @@ describe("EventContainer frontend tests", () => {
         ];
 
         render(<EventContainer events={events} />);
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled();
+        });
 
         expect(screen.getByText("4.0")).toBeInTheDocument();
         expect(screen.getByText("N/A")).toBeInTheDocument();
     });
 
     // tests event click wiring, clicking a card should call parent handler with id
-    test("calls onEventClick with event id when card is clicked", () => {
+    test("calls onEventClick with event id when card is clicked", async () => {
         useAuth.mockReturnValue({ activeUserId: "user_1" });
         global.fetch.mockResolvedValue({
             ok: true,
             json: async () => ({ events: [] }),
         });
-        const onEventClick = vi.fn();
+        const onEventClick = jest.fn();
 
         render(
             <EventContainer
@@ -123,6 +121,10 @@ describe("EventContainer frontend tests", () => {
                 onEventClick={onEventClick}
             />
         );
+
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled();
+        });
 
         fireEvent.click(screen.getByText("Clickable Event"));
         expect(onEventClick).toHaveBeenCalledWith("event_1");
