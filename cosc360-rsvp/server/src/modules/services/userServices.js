@@ -36,3 +36,7 @@ export async function updateUserById (id, updates) {
 export async function getAllUsers() {
     return await UserSchema.find().select("-password");
 }
+
+export async function deleteUserById(id){
+    return await UserSchema.findByIdAndDelete(id);
+}
