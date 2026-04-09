@@ -31,14 +31,16 @@
 
 .details-statistic {
     font-family: 'Inter', sans-serif;
-    font-size: 5vh;
+    font-size: 4vh;
     text-align: center;
+    word-break: break-word;
 }
 
 .details-statistic-word {
     font-family: 'Inter', sans-serif;
     font-size: 3.5vh;
     text-align: center;
+    word-break: break-word;
 }
 
 .details-name {

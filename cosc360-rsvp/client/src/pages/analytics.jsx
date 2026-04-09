@@ -53,7 +53,7 @@ function Analytics() {
                 {label: "Most Popular Event by Attendance", statistic: result.eventInsights.mostPopularByAttendance, icon: Trophy},
                 {label: "Most Popular Event by Rating", statistic: result.eventInsights.mostPopularByReviews, icon: Star},
                 {label: "Average Ticket Price", statistic: result.eventInsights.averagePrice, icon: Ticket, isCurrency: true},
-                {label: "Average Attendance per Event", statistic: result.eventInsights.averageAttendance, icon: Users},
+                {label: "Average Attendance per Event", statistic: result.eventInsights.averageAttendance, icon: Users, isWholeNum: true},
                 {label: "Users Who Attended More Than One Event", statistic: result.eventInsights.attendedMoreThanOne, icon: Repeat},
             ]);
 
@@ -100,7 +100,7 @@ function Analytics() {
                 <h3 className="section-header">Event Insights</h3>
                 <div className="analytics-main-cards">
                     {eventInsights.map((item, index) => (
-                        <AnalyticsCard key={index} label={item.label} statistic={item.statistic} icon={item.icon} isCurrency={item.isCurrency} />
+                        <AnalyticsCard key={index} label={item.label} statistic={item.statistic} icon={item.icon} isCurrency={item.isCurrency} isWholeNum={item.isWholeNum} />
                     ))}
                 </div>
             </div>
@@ -173,12 +173,13 @@ function Analytics() {
 export default Analytics;
 
 
-function AnalyticsCard( {label, statistic, icon: Icon, isCurrency } ) {
+function AnalyticsCard( {label, statistic, icon: Icon, isCurrency, isWholeNum } ) {
     return (
         <div className="main-cards-details">
             <Icon className="details-icon" />
             {typeof statistic === 'string' ? (<h1 className="details-statistic-word">{statistic}</h1>) 
-            : isCurrency ? (<h1 className="details-statistic">${statistic}</h1>) : (<h1 className="details-statistic">{statistic}</h1>)}
+            : (isCurrency || !Number.isInteger(statistic)) ? (<h1 className="details-statistic">{isCurrency ? '$' : ""}{isWholeNum ? statistic.toFixed(0) : statistic.toFixed(2)}</h1>) 
+            : (<h1 className="details-statistic">{statistic}</h1>)}
             <p className="details-name">{label}</p>
         </div>
     )
