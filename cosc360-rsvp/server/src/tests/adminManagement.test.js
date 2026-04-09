@@ -62,3 +62,45 @@ describe("Integration for GET /api/users", () => {
         expect(res.body.error).toBe("Forbidden");    
     });
 });
+
+//Integration Test for DELETE users
+
+describe("Integration for DELETE /api/users/:id", () => {
+    test("admin can delete a user", async() =>{
+        const admin = await createAdmin();
+        const user = await createUser();
+
+        const res = await request(app)
+            .delete(`/api/users/${user._id}`)
+            .set("x-user-id", admin._id.toString());
+        
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe("User deleted successfully");
+        
+        const deleted = await UserSchema.findById(user._id);
+        expect(deleted).toBeNull();
+    });
+
+    test("returns 403 if non-admin tries to delete", async () => {
+        const user = await createUser();
+        const testUser = await createUser();
+
+        const res = await request(app)
+            .delete(`/api/users/${testUser._id}`)
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(403);
+        expect(res.body.message).toBe("Forbidden");
+    });
+
+    test("returns 404 if user does not exist", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .delete(`/api/users/000001`)
+            .set("x-user-id", admin._id.toString());
+
+        expect(res.statusCode).toBe(404);
+        expect(res.body.message).toBe("User not found");
+    });
+});
