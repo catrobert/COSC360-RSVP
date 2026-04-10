@@ -4,9 +4,9 @@ import { uploadImage, authMiddleware } from "../middleware.js";
 
 const router = express.Router();
 
-app.post("/register", createUser);
-app.post("/reset-password", updatePassword);
-app.post("/login", loginUser);
+router.post("/register", createUser);
+router.post("/reset-password", updatePassword);
+router.post("/login", loginUser);
 router.get("/", authMiddleware, listUsers);
 router.get("/profile", getProfile);
 router.put("/profile", updateProfile);
