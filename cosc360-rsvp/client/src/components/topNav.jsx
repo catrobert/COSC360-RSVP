@@ -6,20 +6,20 @@ import CreateEventForm from '../features/event/createEvent/CreateEventForm';
 import { useAuth } from "../context/AuthContext.jsx";
 import LoginOverlay from "./LoginOverlay.jsx";
 
-function Searchbar( { value, onClick, onChange }) {
-     return (
+function Searchbar({ value, onClick, onChange }) {
+    return (
         <div className='search-container'>
             <input type='text' id='top-searchbar' placeholder='Search for an event ...' value={value} onChange={onChange} />
-            <Search size={18} color='gray' className='search-icon' onClick={onClick}/>
+            <Search size={18} color='gray' className='search-icon' onClick={onClick} />
         </div>
     );
 }
 
-function AddEventButton ({ onClick }) {
+function AddEventButton({ onClick }) {
     return (
         <div className='add-event-btn' onClick={onClick}>
             <div className='add-event-icon'>
-                <Plus size= {18} />
+                <Plus size={18} />
                 <p>Create Event</p>
             </div>
         </div>
@@ -28,7 +28,7 @@ function AddEventButton ({ onClick }) {
 
 
 
-function TopNav () {
+function TopNav() {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
@@ -73,9 +73,24 @@ function TopNav () {
         updateSearch(searchQuery);
     }
 
+    function handleCreateEventClose(createdEvent) {
+        setShowCreateForm(false);
+
+        // Refresh the current view after successful creation so new events appear immediately.
+        if (!createdEvent) return;
+
+        const createdEventId = createdEvent?._id || createdEvent?.id;
+        if (location.pathname.startsWith("/event/") && createdEventId) {
+            navigate(`/event/${createdEventId}`);
+            return;
+        }
+
+        navigate(0);
+    }
+
     return (
         <>
-            {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
+            {showLogin && <LoginOverlay onClose={() => setShowLogin(false)} />}
             <div className='top-nav'>
                 <Searchbar
                     onClick={handleSearch}
@@ -87,15 +102,15 @@ function TopNav () {
                     }}
                 />
                 <AddEventButton onClick={() => {
-                    if(!activeUser){
+                    if (!activeUser) {
                         setShowLogin(true);
-                    }else{
-                    setShowCreateForm(true);
+                    } else {
+                        setShowCreateForm(true);
                     }
-                    }} />
+                }} />
             </div>
             {showCreateForm && (
-                <CreateEventForm onClose={() => setShowCreateForm(false)} />
+                <CreateEventForm onClose={handleCreateEventClose} />
             )}
         </>
     );
