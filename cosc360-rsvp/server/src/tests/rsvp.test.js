@@ -244,3 +244,71 @@ describe("Integration for PATCH /api/rsvp/:eventId (declineRSVP)", () => {
         expect(res.body.error).toBe("You have not RSVP'd 'yes' to this event, so there is no RSVP to cancel");
     });
 });
+
+// Integration tests for saved RSVP flows
+describe("Integration for saved RSVP routes", () => {
+    test("returns only saved events for the user", async () => {
+        const user = await createUser();
+        const eventSaved = await createEvent(user._id, { name: "Saved Only Event" });
+        const eventYes = await createEvent(user._id, { name: "Yes RSVP Event" });
+
+        await createRSVP(user._id, eventSaved._id, "saved");
+        await createRSVP(user._id, eventYes._id, "yes");
+
+        const res = await request(app)
+            .get("/api/rsvp/events?status=saved")
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body.events)).toBe(true);
+        expect(res.body.events).toHaveLength(1);
+        expect(res.body.events[0].status).toBe("saved");
+        expect(res.body.events[0].eventId.name).toBe("Saved Only Event");
+    });
+
+    test("filters saved events by search query", async () => {
+        const user = await createUser();
+        const eventMusic = await createEvent(user._id, { name: "Saved Music Night" });
+        const eventCode = await createEvent(user._id, { name: "Saved Coding Meetup" });
+
+        await createRSVP(user._id, eventMusic._id, "saved");
+        await createRSVP(user._id, eventCode._id, "saved");
+
+        const res = await request(app)
+            .get("/api/rsvp/events?status=saved&q=music")
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.events).toHaveLength(1);
+        expect(res.body.events[0].eventId.name).toBe("Saved Music Night");
+    });
+
+    test("updates RSVP from yes to saved", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id, { name: "Switch To Saved Event" });
+        await createRSVP(user._id, event._id, "yes");
+
+        const res = await request(app)
+            .put(`/api/rsvp/${event._id}`)
+            .set("x-user-id", user._id.toString())
+            .send({ status: "saved" });
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe("RSVP updated successfully!");
+        expect(res.body.event.status).toBe("saved");
+    });
+
+    test("blocks creating saved RSVP when user already RSVP'd yes", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id, { name: "Already Yes Event" });
+        await createRSVP(user._id, event._id, "yes");
+
+        const res = await request(app)
+            .post("/api/rsvp")
+            .set("x-user-id", user._id.toString())
+            .send({ eventId: event._id.toString(), status: "saved" });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toBe("You have already RSVP'd to this event!");
+    });
+});
