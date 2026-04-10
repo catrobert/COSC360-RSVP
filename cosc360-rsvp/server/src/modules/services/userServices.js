@@ -29,10 +29,14 @@ export async function updateUserById (id, updates) {
     return await UserSchema.findByIdAndUpdate(
         id,
         updates,
-        { returnDocument: "after"}
+        { new: true}
     ).select("-password");
 }
 
 export async function getAllUsers() {
     return await UserSchema.find().select("-password");
+}
+
+export async function deleteUserById(id){
+    return await UserSchema.findByIdAndDelete(id);
 }

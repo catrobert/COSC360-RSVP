@@ -216,7 +216,7 @@ async function getUserInsights() {
     let otherCount = 0;
 
     for (let user of users) {    
-        let bday = user.description[0].birthday;
+        let bday = user.description?.[0]?.birthday;
 
         if (bday) {
             let userAge = getAge(bday);

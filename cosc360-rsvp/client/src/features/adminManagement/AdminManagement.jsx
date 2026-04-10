@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pencil, Search } from 'lucide-react';
+import { Pencil, Search, Trash2, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import CreateEventForm from '../event/createEvent/CreateEventForm.jsx';
 
@@ -9,7 +9,7 @@ const AdminManagement = () => {
     const [userSearch, setUserSearch] = useState('');
     const [eventSearch, setEventSearch] = useState('');
     const [editingEvent, setEditingEvent] = useState(null);
-    const { activeUserId } = useAuth();
+    const { activeUserId, logout } = useAuth();
 
     useEffect(() => {
         if (!activeUserId) {
@@ -35,6 +35,49 @@ const AdminManagement = () => {
         }
         fetchData();
     }, [activeUserId]);
+
+    async function handleDeleteUser(userId){
+        if(!confirm("Are you sure you want to delete this user?")) return;
+        try{
+            const response = await fetch(`/api/users/${userId}`, {
+                method: 'DELETE',
+                headers: {'x-user-id': activeUserId},
+            });
+            if(!response.ok){
+                const result = await response.json();
+                alert(`Error: ${result.error}`);
+                return;
+            }
+            setUsers(prev => prev.filter(u => u._id !== userId));
+        }catch (err){
+            console.log('Error deleting user:', err);
+        }
+    }
+
+    async function handlePromoteUser(userId, currentRole){
+        const newRole = currentRole === 'admin' ? 'user' : 'admin';
+        const message = newRole === 'admin' ? "Promote this user to admin?" : "Demote this user to regular user?";
+        if(!confirm(message)) return;
+        try{
+            const response = await fetch(`/api/users/${userId}/role`,{
+                method: 'PUT',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'x-user-id': activeUserId,  
+                },
+                body: JSON.stringify({ role: newRole}),
+            });
+            if(!response.ok){
+                const result = await response.json();
+                alert(`Error: ${result.error}`);
+                return;
+            }
+            setUsers(prev => prev.map(u => u._id === userId ? { ...u, role: newRole} : u ));
+
+        }catch (err){
+            console.log('Error promoting user:', err);
+        }
+    }
 
     const filteredUsers = users.filter(u =>
         `${u.firstName} ${u.lastName} ${u.username}`.toLowerCase().includes(userSearch.toLowerCase())
@@ -67,6 +110,17 @@ const AdminManagement = () => {
                     {filteredUsers.map((u) => (
                         <div className="list-item" key={u._id}>
                             <span>{u.firstName} {u.lastName} | {u.username} | {u.role}</span>
+                            <div className = "event-actions">
+                                
+                                    <button className="settings-btn" onClick={() => handlePromoteUser(u._id, u.role)} 
+                                    title={u.role === 'admin' ? "Demote to user" : "Promote to admin"}>
+                                        <ShieldCheck size={18} color={u.role === 'admin' ? "green" : "navy"}/>
+                                    </button>
+                                
+                                <button className="settings-btn" onClick={() => handleDeleteUser(u._id)} title="Delete user">
+                                    <Trash2 size={18} color="red"/>
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
