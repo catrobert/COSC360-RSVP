@@ -5,9 +5,9 @@ import { uploadImage, authMiddleware } from "../middleware.js";
 const router = express.Router();
 
 router.get("/", authMiddleware, listUsers);
-router.get("/profile", getProfile);
-router.put("/profile", updateProfile);
-router.post("/profile/photo", uploadImage.single("profilePhoto"), uploadPhoto);
+router.get("/profile", authMiddleware, getProfile);
+router.put("/profile", authMiddleware, updateProfile);
+router.post("/profile/photo", authMiddleware, uploadImage.single("profilePhoto"), uploadPhoto);
 router.delete("/:id", authMiddleware, deleteUser);
 router.put("/:id/role", authMiddleware, updateUserRole);
 
