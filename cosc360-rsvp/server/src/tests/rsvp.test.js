@@ -97,7 +97,7 @@ describe("Intergation for POST /api/rsvp (createRSVP)", () => {
             .send({eventId: event._id.toString(), status:"yes"});
         
         expect(res.statusCode).toBe(400);
-        expect(res.body.message).toBe("You have already RSVP'd to this event!");
+        expect(res.body.error).toBe("You have already RSVP'd to this event!");
     });
 
     test("returns 500 if status is invalid", async() => {
@@ -123,7 +123,7 @@ describe("Integration for PUT /api/rsvp/:eventId (updateRSVP)", () => {
         await createRSVP(user._id, event._id, "yes");
 
         const res = await request(app)
-            .put(`/api/rsvp/${event_id}`)
+            .put(`/api/rsvp/${event._id}`)
             .set("x-user-id", user._id.toString())
             .send({ status: "no"});
 
@@ -137,7 +137,7 @@ describe("Integration for PUT /api/rsvp/:eventId (updateRSVP)", () => {
         const event = await createEvent(user._id);
 
         const res = await request(app)
-            .put(`/api/rsvp/${event_id}`)
+            .put(`/api/rsvp/${event._id}`)
             .set("x-user-id", user._id.toString())
             .send({ status: "no"});
 
@@ -152,7 +152,7 @@ describe("Integration for PUT /api/rsvp/:eventId (updateRSVP)", () => {
         await createRSVP(user._id, event._id, "yes");
 
         const res = await request(app)
-            .put(`/api/rsvp/${event_id}`)
+            .put(`/api/rsvp/${event._id}`)
             .set("x-user-id", user._id.toString())
             .send({ status: "maybe"});
 
@@ -172,3 +172,75 @@ describe("Integration for PUT /api/rsvp/:eventId (updateRSVP)", () => {
     });
 });
 
+//Integration test for GET /api/rsvp/events
+
+describe("Integration for GET /api/rsvp/events (getRSVPsByStatus", () => {
+    test("returns RSVP status for a user and event", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id);
+        await createRSVP(user._id, event._id, "yes");
+
+        const res = await request(app)
+            .get(`/api/rsvp/events/${event._id}`)
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
+        expect(res.body[0].status).toBe("yes");
+    });
+
+    test("returns empty array if no RSVP exists", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id);
+
+        const res = await request(app)
+            .get(`/api/rsvp/events/${event._id}`)
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual([]);
+    });
+});
+
+//Integration Test for PATCH /api/rsvp/:eventId (decline RSVP)
+
+describe("Integration for PATCH /api/rsvp/:eventId (declineRSVP)", () => {
+    test("successfully declines a yes RSVP", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id);
+        await createRSVP(user._id, event._id, "yes");
+
+        const res = await request(app)
+            .patch(`/api/rsvp/${event._id}`)
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.message).toBe("RSVP was successfully cancelled!");
+        expect(res.body.event.status).toBe("no");
+    });
+
+    test("returns 404 if no RSVP exists to decline", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id);
+
+        const res = await request(app)
+            .patch(`/api/rsvp/${event._id}`)
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(404);
+        expect(res.body.error).toBe("You have not RSVP'd to this event, so there is no RSVP to cancel");
+    });
+
+    test("returns 403 if RSVP status is not yes", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id);
+        await createRSVP(user._id, event._id, "saved");
+
+        const res = await request(app)
+            .patch(`/api/rsvp/${event._id}`)
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(403);
+        expect(res.body.error).toBe("You have not RSVP'd 'yes' to this event, so there is no RSVP to cancel");
+    });
+});
