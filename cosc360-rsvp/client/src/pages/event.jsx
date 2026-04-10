@@ -4,7 +4,7 @@ import TopNav from "../components/topNav";
 import Sidebar from "../components/sidebar";
 import "../css/Home.css";
 import "../css/Event.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
@@ -14,6 +14,7 @@ import AdminSidebar from "../components/AdminSidebar.jsx";
 
 function EventPage() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [event, setEvent] = useState(null);
     const [reviewingEvent, setReviewingEvent] = useState(null);
     const [editingEvent, setEditingEvent] = useState(null);
@@ -59,7 +60,8 @@ function EventPage() {
                 return;
             }
 
-            alert("Deleted event successfully.")
+            alert("Deleted event successfully.");
+            navigate("/home");
         } catch (error) {
             console.log("Error deleting event: ", error);
         }

@@ -1,10 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import EventPage from "../pages/event.jsx";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 jest.mock("react-router-dom", () => ({
     useParams: jest.fn(),
+    useNavigate: jest.fn(),
 }));
 
 jest.mock("../context/AuthContext.jsx", () => ({
@@ -27,11 +28,14 @@ jest.mock("../features/event/reviews/ReviewCard", () => () => <div>ReviewCard</d
 jest.mock("../features/event/createEvent/CreateEventForm.jsx", () => () => <div>CreateEventForm</div>);
 
 describe("EventPage frontend tests", () => {
+    const mockNavigate = jest.fn();
+
     beforeEach(() => {
         jest.clearAllMocks();
         global.fetch = jest.fn();
         global.alert = jest.fn();
         useParams.mockReturnValue({ id: "event_1" });
+        useNavigate.mockReturnValue(mockNavigate);
     });
 
     // tests loading path first, then event details render after fetch resolves
@@ -218,5 +222,6 @@ describe("EventPage frontend tests", () => {
         await waitFor(() => {
             expect(global.alert).toHaveBeenCalledWith("Deleted event successfully.");
         });
+        expect(mockNavigate).toHaveBeenCalledWith("/home");
     });
 });
