@@ -5,7 +5,6 @@ import { fileURLToPath } from "url";
 import { connectDB } from "./db/connection.js";
 import { seedIfEmpty } from "./seed.js";
 import eventRoutes from "./modules/routes/eventRoutes.js";
-import loginRouter from "./modules/routes/loginRouter.js";
 import rsvpRoutes from "./modules/routes/rsvpRoutes.js"
 import userRoutes from "./modules/routes/userRoutes.js";
 import adminRoutes from "./modules/routes/adminRoutes.js";
