@@ -20,8 +20,8 @@ function EventPage() {
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { activeUser, activeUserId } = useAuth();
     const [showLogin, setShowLogin] = useState(false);
-    
-    
+
+
     const userCreated = function () {
         if (!activeUser || !activeUserId || !event) return false;
         const creatorId = event.createdBy?._id?.toString() || event.createdBy?.toString();
@@ -31,12 +31,25 @@ function EventPage() {
     const eventIsUpcoming = event ? isUpcoming(event.date, event.endTime) : false;
     const canReview = (event !== null && rsvpStatus === 'yes' && !eventIsUpcoming && !hasReviewed());
     const canRsvp = (event !== null && rsvpStatus !== 'yes' && eventIsUpcoming)
-  
+
 
     async function handleDeleteEventClick() {
+        if (!activeUser || !activeUserId) {
+            alert("Please log in to delete this event.");
+            return;
+        }
+
+        if (!userCreated()) {
+            alert("You are not allowed to delete this event.");
+            return;
+        }
+
         try {
             const response = await fetch(`/api/events/${id}`, {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    "x-user-id": activeUserId,
+                },
             });
 
             const result = await response.json();
@@ -63,7 +76,7 @@ function EventPage() {
         }
         return false;
     }
-    
+
 
     function isUpcoming(eventDate, endTime) {
         const [hours, minutes] = endTime.split(':');
@@ -115,12 +128,12 @@ function EventPage() {
     }
 
     async function handleRsvpClick() {
-        
-        if(!activeUser){
+
+        if (!activeUser) {
             setShowLogin(true);
             return;
         }
-        
+
         if (!eventIsUpcoming) {
             alert("The event has passed. You can no longer RSVP.");
             return;
@@ -203,8 +216,8 @@ function EventPage() {
     if (!event) {
         return (
             <div className="homepage-layout">
-                {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
-                <Sidebar />
+                {showLogin && <LoginOverlay onClose={() => setShowLogin(false)} />}
+                {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
                 <div className="main-content">
                     <TopNav />
                     <div className="main-content-area">
@@ -217,8 +230,7 @@ function EventPage() {
 
     return (
         <div className="homepage-layout">
-            {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
-            <Sidebar />
+            {showLogin && <LoginOverlay onClose={() => setShowLogin(false)} />}
             {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />

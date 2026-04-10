@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import EventPage from "../pages/event.jsx";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -173,5 +173,50 @@ describe("EventPage frontend tests", () => {
         const editButton = await screen.findByText("Edit Event");
         fireEvent.click(editButton);
         expect(screen.getByText("CreateEventForm")).toBeInTheDocument();
+    });
+
+    // tests delete action, owner delete should include authenticated user header
+    test("sends authenticated delete request when owner clicks delete", async () => {
+        useAuth.mockReturnValue({
+            activeUser: { role: "user" },
+            activeUserId: "owner_1",
+            user: { id: "owner_1" },
+        });
+
+        global.fetch
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => [{ status: "yes" }],
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    _id: "event_1",
+                    name: "Owner Delete Event",
+                    createdBy: { _id: "owner_1" },
+                    date: "2030-06-15T00:00:00.000Z",
+                    endTime: "20:00",
+                    price: 10,
+                    description: "Event description",
+                    reviews: [],
+                }),
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ message: "Event deleted successfully!" }),
+            });
+
+        render(<EventPage />);
+
+        const deleteButton = await screen.findByText("Delete Event");
+        fireEvent.click(deleteButton);
+
+        expect(global.fetch).toHaveBeenCalledWith("/api/events/event_1", {
+            method: "DELETE",
+            headers: { "x-user-id": "owner_1" },
+        });
+        await waitFor(() => {
+            expect(global.alert).toHaveBeenCalledWith("Deleted event successfully.");
+        });
     });
 });
