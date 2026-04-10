@@ -18,7 +18,6 @@ function EventPage() {
     const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { activeUser, activeUserId } = useAuth();
-    const { user } = useAuth();
     const [showLogin, setShowLogin] = useState(false);
     
     const userCreated = function () {
@@ -101,6 +100,9 @@ function EventPage() {
     async function handleReviewClick() {
         if (canReview) {
             setReviewingEvent(event);
+        } else if (!activeUser) {
+            setShowLogin(true);
+            return;
         } else if (hasReviewed()) {
             alert("You have already reviewed this event!")
         } else if (rsvpStatus === 'no' || rsvpStatus === 'saved') {
@@ -123,7 +125,6 @@ function EventPage() {
         }
 
         // Use logged in user id when available and keep demo fallback for local testing.
-        const userId = localStorage.getItem("userId") || "000000000000000000000001";
         if (!activeUserId) {
             alert("Please log in to RSVP.");
             return;
@@ -161,7 +162,7 @@ function EventPage() {
             const result = await response.json();
 
             if (!response.ok) {
-                alert(`Something went wrong: ${result.error}`);
+                alert(result.error);
                 return;
             }
 
