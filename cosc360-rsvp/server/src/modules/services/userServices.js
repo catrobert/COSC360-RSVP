@@ -1,4 +1,5 @@
 import * as userRepository from "../repository/userRepository.js";
+import bcrypt from "bcryptjs";
 
 export const findUsername = async (username) => {
     return await userRepository.findUsername(username);

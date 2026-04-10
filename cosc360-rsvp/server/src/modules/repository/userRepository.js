@@ -1,7 +1,7 @@
 import { UserSchema } from "../model/user.model.js";
 
 export async function findUsername(username) {
-    return UserSchema.findOne(username);
+    return UserSchema.findOne({username});
 }
 
 export async function findUser(id) {

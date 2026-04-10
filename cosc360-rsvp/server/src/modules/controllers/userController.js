@@ -1,4 +1,5 @@
 import * as userServices from "../services/userServices.js";
+import bcrypt from "bcryptjs";
 
 export const createUser = async (req, res) => {
     const { firstName, lastName, username, password } = req.body;
@@ -17,6 +18,7 @@ export const createUser = async (req, res) => {
 
     } catch (err) {
         res.status(500).json({ error: "Something went wrong"});
+        console.log(err);
     }
 
 }
@@ -48,6 +50,7 @@ export const loginUser = async (req, res) => {
          });
     } catch (err) {
         res.status(500).json({ error: "Something went wrong" });
+        console.log(err);
     }
 };
 
