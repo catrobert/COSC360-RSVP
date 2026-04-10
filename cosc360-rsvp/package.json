@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "seed": "node --env-file=server/.env server/src/seed.js",
     "start": "concurrently \"npm run server\" \"npm run dev\"",
-    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --verbose",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --verbose server/src/tests",
     "test:frontend": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.frontend.config.cjs --verbose"
   },
   "dependencies": {

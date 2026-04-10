@@ -13,6 +13,8 @@ jest.mock("../context/AuthContext.jsx", () => ({
 
 jest.mock("../components/topNav", () => () => <div>TopNav</div>);
 jest.mock("../components/sidebar", () => () => <div>Sidebar</div>);
+jest.mock("../components/AdminSidebar.jsx", () => () => <div>AdminSidebar</div>);
+jest.mock("../components/LoginOverlay.jsx", () => () => <div>LoginOverlay</div>);
 jest.mock("../features/event/reviews/ReviewModal.jsx", () => () => <div>ReviewModal</div>);
 jest.mock("../features/event/singleEvent/SingleEventContainer", () => ({ event, ableToRsvp }) => (
     <div>
