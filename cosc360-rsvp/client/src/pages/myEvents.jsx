@@ -8,8 +8,8 @@ import TopNav from "../components/topNav";
 import "../css/Home.css";
 import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
+import CreateEventForm from "../features/event/createEvent/CreateEventForm.jsx";
 
-// todo: if previously attended event, swap out review stars for "Leave a Review" button
 
 function MyEvents() {
     const [upcomingHostedEvents, setUpcomingHostedEvents] = useState([]);
@@ -17,6 +17,7 @@ function MyEvents() {
     const [previousHostedEvents, setPreviousHostedEvents] = useState([]);
     const [previousAttendedEvents, setPreviousAttendedEvents] = useState([]);
     const [reviewingEvent, setReviewingEvent] = useState(null);
+    const [editingEvent, setEditingEvent] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function MyEvents() {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
-                "x-user-id": user._id || user.id,
+                "x-user-id": activeUser._id || activeUser.id,
             },
         });
 
@@ -147,6 +148,7 @@ function MyEvents() {
             </div>
 
             {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}
+            {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); }} />}
         </div>
     );
 }

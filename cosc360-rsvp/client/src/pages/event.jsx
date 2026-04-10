@@ -10,6 +10,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
 import CreateEventForm from "../features/event/createEvent/CreateEventForm.jsx";
 import LoginOverlay from "../components/LoginOverlay.jsx";
+import AdminSidebar from "../components/AdminSidebar.jsx";
 
 function EventPage() {
     const { id } = useParams();
@@ -19,6 +20,7 @@ function EventPage() {
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { activeUser, activeUserId } = useAuth();
     const [showLogin, setShowLogin] = useState(false);
+    
     
     const userCreated = function () {
         if (!activeUser || !activeUserId || !event) return false;
@@ -217,6 +219,7 @@ function EventPage() {
         <div className="homepage-layout">
             {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
             <Sidebar />
+            {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />
                 <div id="event-header">
