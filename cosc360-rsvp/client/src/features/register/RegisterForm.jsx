@@ -100,6 +100,8 @@ function RegisterForm(){
                 <div>
                     <p>Already Have an Account?</p>
                     <Link to="/login">Login</Link>
+                    <br></br>
+                    <Link to="/home">Continue as Guest</Link>
                 </div>    
             </form>
 

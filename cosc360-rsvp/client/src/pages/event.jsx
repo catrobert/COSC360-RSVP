@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import ReviewModal from "../features/event/reviews/ReviewModal.jsx";
 import CreateEventForm from "../features/event/createEvent/CreateEventForm.jsx";
+import LoginOverlay from "../components/LoginOverlay.jsx";
 import AdminSidebar from "../components/AdminSidebar.jsx";
 
 function EventPage() {
@@ -18,6 +19,7 @@ function EventPage() {
     const [editingEvent, setEditingEvent] = useState(null);
     const [rsvpStatus, setRsvpStatus] = useState("");
     const { activeUser, activeUserId } = useAuth();
+    const [showLogin, setShowLogin] = useState(false);
     
     
     const userCreated = function () {
@@ -100,6 +102,9 @@ function EventPage() {
     async function handleReviewClick() {
         if (canReview) {
             setReviewingEvent(event);
+        } else if (!activeUser) {
+            setShowLogin(true);
+            return;
         } else if (hasReviewed()) {
             alert("You have already reviewed this event!")
         } else if (rsvpStatus === 'no' || rsvpStatus === 'saved') {
@@ -110,13 +115,18 @@ function EventPage() {
     }
 
     async function handleRsvpClick() {
+        
+        if(!activeUser){
+            setShowLogin(true);
+            return;
+        }
+        
         if (!eventIsUpcoming) {
             alert("The event has passed. You can no longer RSVP.");
             return;
         }
 
         // Use logged in user id when available and keep demo fallback for local testing.
-        const userId = localStorage.getItem("userId") || "000000000000000000000001";
         if (!activeUserId) {
             alert("Please log in to RSVP.");
             return;
@@ -154,7 +164,7 @@ function EventPage() {
             const result = await response.json();
 
             if (!response.ok) {
-                alert(`Something went wrong: ${result.error}`);
+                alert(result.error);
                 return;
             }
 
@@ -193,6 +203,7 @@ function EventPage() {
     if (!event) {
         return (
             <div className="homepage-layout">
+                {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
                 <Sidebar />
                 <div className="main-content">
                     <TopNav />
@@ -206,6 +217,8 @@ function EventPage() {
 
     return (
         <div className="homepage-layout">
+            {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
+            <Sidebar />
             {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
             <div className="main-content">
                 <TopNav />

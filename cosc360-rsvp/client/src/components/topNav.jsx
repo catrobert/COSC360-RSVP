@@ -3,6 +3,8 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import '../css/topNav.css'
 import { Plus, Search } from 'lucide-react';
 import CreateEventForm from '../features/event/createEvent/CreateEventForm';
+import { useAuth } from "../context/AuthContext.jsx";
+import LoginOverlay from "./LoginOverlay.jsx";
 
 function Searchbar( { value, onClick, onChange }) {
      return (
@@ -32,6 +34,8 @@ function TopNav () {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
+    const { activeUser } = useAuth();
+    const [showLogin, setShowLogin] = useState(false);
 
     useEffect(() => {
         setSearchQuery(searchParams.get("q") || "");
@@ -71,6 +75,7 @@ function TopNav () {
 
     return (
         <>
+            {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
             <div className='top-nav'>
                 <Searchbar
                     onClick={handleSearch}
@@ -81,7 +86,13 @@ function TopNav () {
                         updateSearch(nextValue);
                     }}
                 />
-                <AddEventButton onClick={() => setShowCreateForm(true)} />
+                <AddEventButton onClick={() => {
+                    if(!activeUser){
+                        setShowLogin(true);
+                    }else{
+                    setShowCreateForm(true);
+                    }
+                    }} />
             </div>
             {showCreateForm && (
                 <CreateEventForm onClose={() => setShowCreateForm(false)} />

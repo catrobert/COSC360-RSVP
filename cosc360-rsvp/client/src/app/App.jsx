@@ -28,15 +28,15 @@ function App() {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<Login />}/>
         <Route path="/reset-password" element={<ResetPassword/>} />
+        <Route path="/home" element={<Homepage />} />
+        <Route path="/event/:id" element={<SingleEventPage />} />
 
 
         {/* Protected Routes - Require Auth to Access*/}
         <Route path="/myevents" element={<ProtectedRoute><MyEvents /></ProtectedRoute>} />
         <Route path="/savedevents" element={<ProtectedRoute><SavedEvents /></ProtectedRoute>} />
-        <Route path="/home" element={<ProtectedRoute><Homepage /></ProtectedRoute>} />
         <Route path="/adminManage" element={<ProtectedRoute><AdminUserManage/></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-        <Route path="/event/:id" element={<ProtectedRoute><SingleEventPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
 
       </Routes> 

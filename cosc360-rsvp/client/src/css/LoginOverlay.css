@@ -1,0 +1,17 @@
+.login-overlay-bg{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.login-overlay-bg .auth-background{
+    background:none;
+    background-image:none;
+    padding:0;
+    min-height: unset;
+    min-width:unset;
+}

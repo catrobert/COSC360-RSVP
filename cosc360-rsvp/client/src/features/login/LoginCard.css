@@ -10,6 +10,7 @@
         justify-content: center;
         flex-direction: column;
         height: 40vh;
+        position: relative;
 }
 
 .title{
@@ -31,6 +32,7 @@
     border: 0.5px solid #ccc;
     border-radius:12px;
     box-shadow: 0 4px 20px(0,0,0,0.1);
+    position: relative;
 }
 
 .textField{
@@ -88,6 +90,7 @@
 #forgotPassword{
     font-size: 0.5rem;
     align-self:center;
+    color:#60A5FA;
 }
 
 #forgotPassword:hover{
@@ -98,6 +101,7 @@
 #createAccount{
     font-size: 0.5rem;
     align-self:center;
+    color:#60A5FA;
 }
 
 #createAccount:hover{
@@ -108,4 +112,29 @@
 a{
     font-size:16px;
     text-align:center;
+}
+
+.login-card-close{
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    color:#60A5FA;
+}
+
+.guest-link{
+    background: none;
+    border: none;
+    color: #60A5FA;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    padding:0;
+}
+
+.guest-link:hover{
+    background: none;
+    border:none;
 }

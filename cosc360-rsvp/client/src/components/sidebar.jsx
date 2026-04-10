@@ -1,8 +1,9 @@
-import { Calendar, LogOutIcon, Save, FileBadge } from 'lucide-react';
+import { Calendar, LogOutIcon, Save, FileBadge, LogInIcon } from 'lucide-react';
 import "../css/sidebar.css";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext.jsx";
 import { useState, useEffect } from 'react';
+import LoginOverlay from "./LoginOverlay.jsx";
 
 const menuItems = [
     { icon: Calendar, label: "Browse Events" },
@@ -23,6 +24,7 @@ const MenuItem = ({ icon: Icon, label, clickItem }) => {
 function Sidebar({ profilePicture }) {
     const navigate = useNavigate();
     const { activeUser, activeUserId, logout } = useAuth();
+    const [showLogin, setShowLogin] = useState(false);
     const fullName = activeUser ? `${activeUser.firstName} ${activeUser.lastName}` : '';
 
     const [photo, setPhoto] = useState(null);
@@ -51,6 +53,8 @@ function Sidebar({ profilePicture }) {
     function handleSidebarClick(index) {
         if (index === 0) {
             navigate(`/home`);
+        }else if(!activeUser) {
+            setShowLogin(true); 
         } else if (index === 1) {
             navigate(`/savedevents`);
         } else if (index === 2) {
@@ -60,6 +64,8 @@ function Sidebar({ profilePicture }) {
 
 
     return (
+        <>
+        {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
         <div className="sidebar">
             <div className="menu-container">
                 <div className='profile-section'>
@@ -75,8 +81,14 @@ function Sidebar({ profilePicture }) {
                         )}
                     </div>
                     <div className="sidebar-header">
+                       {activeUser ? ( 
+                        <>
                         <h4>{fullName}</h4>
                         <p className="view-profile" onClick={() => navigate('/profile')}>View Profile</p>
+                        </>
+                        ) : (
+                            <h4>Guest</h4>    
+                     )}
                     </div>
                 </div>
             </div>
@@ -90,13 +102,14 @@ function Sidebar({ profilePicture }) {
                 ))}
             </div>
             <div className="logout">
-                <MenuItem
-                    icon={LogOutIcon}
-                    label="Logout"
-                    clickItem={handleLogout} />
+                {activeUser ?(
+                    <MenuItem icon={LogOutIcon} label="Logout" clickItem={handleLogout} />
+                ) :(
+                    <MenuItem icon = {LogInIcon} label="Login" clickItem={() => setShowLogin(true)}/>
+                )}
             </div>
         </div>
-
+        </>
     )
 };
 
