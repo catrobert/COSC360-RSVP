@@ -34,6 +34,7 @@ describe("EventPage frontend tests", () => {
         jest.clearAllMocks();
         global.fetch = jest.fn();
         global.alert = jest.fn();
+        global.confirm = jest.fn().mockReturnValue(true);
         useParams.mockReturnValue({ id: "event_1" });
         useNavigate.mockReturnValue(mockNavigate);
     });
@@ -215,6 +216,8 @@ describe("EventPage frontend tests", () => {
         const deleteButton = await screen.findByText("Delete Event");
         fireEvent.click(deleteButton);
 
+        expect(global.confirm).toHaveBeenCalledWith("Are you sure you want to delete this event?");
+
         expect(global.fetch).toHaveBeenCalledWith("/api/events/event_1", {
             method: "DELETE",
             headers: { "x-user-id": "owner_1" },
@@ -223,5 +226,45 @@ describe("EventPage frontend tests", () => {
             expect(global.alert).toHaveBeenCalledWith("Deleted event successfully.");
         });
         expect(mockNavigate).toHaveBeenCalledWith("/home");
+    });
+
+    test("does not delete when user cancels confirmation", async () => {
+        useAuth.mockReturnValue({
+            activeUser: { role: "user" },
+            activeUserId: "owner_1",
+            user: { id: "owner_1" },
+        });
+
+        global.confirm.mockReturnValue(false);
+
+        global.fetch
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => [{ status: "yes" }],
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    _id: "event_1",
+                    name: "Owner Delete Event",
+                    createdBy: { _id: "owner_1" },
+                    date: "2030-06-15T00:00:00.000Z",
+                    endTime: "20:00",
+                    price: 10,
+                    description: "Event description",
+                    reviews: [],
+                }),
+            });
+
+        render(<EventPage />);
+
+        const deleteButton = await screen.findByText("Delete Event");
+        fireEvent.click(deleteButton);
+
+        expect(global.confirm).toHaveBeenCalledWith("Are you sure you want to delete this event?");
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+        expect(global.fetch).not.toHaveBeenCalledWith("/api/events/event_1", expect.anything());
+        expect(global.alert).not.toHaveBeenCalledWith("Deleted event successfully.");
+        expect(mockNavigate).not.toHaveBeenCalled();
     });
 });

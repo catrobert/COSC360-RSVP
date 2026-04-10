@@ -45,6 +45,10 @@ function EventPage() {
             return;
         }
 
+        if (!confirm("Are you sure you want to delete this event?")) {
+            return;
+        }
+
         try {
             const response = await fetch(`/api/events/${id}`, {
                 method: "DELETE",
