@@ -21,6 +21,19 @@ function RegisterForm(){
 
     //validation
 
+    const usernameRegex = /^[a-z]\w{4,15}$/i; // start with a letter, 5-16 chars long, case insensitive
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])\S{8,16}$/; // at least 8-16 chars long, at least one number and one letter, no spaces
+
+    if (!usernameRegex.test(username)) {
+        setError("Username must start with a letter and be 5-16 characters long")
+        return;
+    }
+
+    if (!passwordRegex.test(password) || !passwordRegex.test(passConfirmation)) {
+        setError("Password must contain at least one number and one letter, and be 8-16 characters long");
+        return;
+    }
+
     if(password !== passConfirmation){
         setError("Passwords don't match");
         return;
@@ -29,6 +42,8 @@ function RegisterForm(){
     try{
         await registerApi(firstName, lastName, username, password);
         navigate("/login"); //if successful, navigate to login
+        alert('Account creation successful!');
+
 
     }catch(err){
         setError(err.message);
@@ -92,6 +107,7 @@ function RegisterForm(){
                     required />
                 </div>   
 
+                <p style={{color: 'red', fontSize: '12px', paddingTop: '10px'}}>{error}</p>
             
                 <div className="form-button">
                     <button type="submit" id="create-accountBtn">Create Account</button>
