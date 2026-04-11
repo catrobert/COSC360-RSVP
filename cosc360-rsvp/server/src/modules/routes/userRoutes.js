@@ -9,6 +9,6 @@ router.post("/reset-password", userController.updatePassword);
 router.post("/login", userController.loginUser);
 router.get("/profile", authMiddleware, userController.getProfile);
 router.put("/profile", authMiddleware, userController.updateProfile);
-router.post("/profile/photo", authMiddleware, uploadImage.single("profilePhoto"), userController.uploadPhoto);
+router.post("/profile/photo", authMiddleware, userController.uploadPhoto);
 
 export default router;
