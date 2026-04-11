@@ -165,7 +165,7 @@ const AdminManagement = () => {
             <div className="admin-panel">
                 <h2 className="admin-panel-title">Events</h2>
                 <div className="admin-search-container">
-                    <input type="text" placeholder="Search posts/events by title, location, or description..." value={eventSearch} onChange={e => setEventSearch(e.target.value)} />
+                    <input type="text" placeholder="Search events by title, location, or description..." value={eventSearch} onChange={e => setEventSearch(e.target.value)} />
                     <Search size={18} color="gray" className="search-icon" />
                 </div>
                 <div className="list">

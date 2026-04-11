@@ -75,7 +75,7 @@ describe("AdminManagement search tests", () => {
             expect(screen.getByText(/Art Expo/i)).toBeInTheDocument();
         });
 
-        fireEvent.change(screen.getByPlaceholderText("Search posts/events by title, location, or description..."), {
+        fireEvent.change(screen.getByPlaceholderText("Search events by title, location, or description..."), {
             target: { value: "painting" },
         });
 
