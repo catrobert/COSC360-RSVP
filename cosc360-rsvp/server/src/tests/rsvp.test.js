@@ -21,10 +21,10 @@ async function createUser(overrides = {}) {
     });
 }
 
-async function createEvent(userId, overrides = {}){
+async function createEvent(userId, overrides = {}) {
     return await EventModel.create({
         name: "Test Event",
-        date: new Date(Date.now()+ 7 * 24 * 60 * 60 * 1000),
+        date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         location: "Test Location",
         startTime: "10:00",
         endTime: "12:00",
@@ -37,8 +37,8 @@ async function createEvent(userId, overrides = {}){
     });
 }
 
-async function createRSVP(userId, eventId, status = "yes"){
-    return await RSVPModel.create({ userId, eventId, status});
+async function createRSVP(userId, eventId, status = "yes") {
+    return await RSVPModel.create({ userId, eventId, status });
 }
 
 //Unit Test: validateStatus
@@ -66,27 +66,27 @@ describe("Unit for RSVP status validation", () => {
         expect(VALID_STATUSES.has("")).toBe(false);
     });
 
-    
+
 });
 
 //Integration Test for POST /api/rsvp
 
 describe("Intergation for POST /api/rsvp (createRSVP)", () => {
-    test("creates a new RSVP successfully", async() => {
+    test("creates a new RSVP successfully", async () => {
         const user = await createUser();
         const event = await createEvent(user._id);
 
         const res = await request(app)
             .post("/api/rsvp")
             .set("x-user-id", user._id.toString())
-            .send({eventId: event._id.toString(), status:"yes"});
+            .send({ eventId: event._id.toString(), status: "yes" });
 
         expect(res.statusCode).toBe(201);
         expect(res.body.message).toBe("RSVP created successfully!");
 
     });
 
-    test("returns 400 if user already rsvp'd yes", async() => {
+    test("returns 400 if user already rsvp'd yes", async () => {
         const user = await createUser();
         const event = await createEvent(user._id);
         await createRSVP(user._id, event._id, "yes");
@@ -94,13 +94,13 @@ describe("Intergation for POST /api/rsvp (createRSVP)", () => {
         const res = await request(app)
             .post("/api/rsvp")
             .set("x-user-id", user._id.toString())
-            .send({eventId: event._id.toString(), status:"yes"});
-        
+            .send({ eventId: event._id.toString(), status: "yes" });
+
         expect(res.statusCode).toBe(400);
         expect(res.body.error).toBe("You have already RSVP'd to this event!");
     });
 
-    test("returns 500 if status is invalid", async() => {
+    test("returns 500 if status is invalid", async () => {
         const user = await createUser();
         const event = await createEvent(user._id);
         await createRSVP(user._id, event._id, "yes");
@@ -108,8 +108,8 @@ describe("Intergation for POST /api/rsvp (createRSVP)", () => {
         const res = await request(app)
             .post("/api/rsvp")
             .set("x-user-id", user._id.toString())
-            .send({eventId: event._id.toString(), status:"maybe"});
-        
+            .send({ eventId: event._id.toString(), status: "maybe" });
+
         expect(res.statusCode).toBe(500);
     });
 });
@@ -125,21 +125,21 @@ describe("Integration for PUT /api/rsvp/:eventId (updateRSVP)", () => {
         const res = await request(app)
             .put(`/api/rsvp/${event._id}`)
             .set("x-user-id", user._id.toString())
-            .send({ status: "no"});
+            .send({ status: "no" });
 
         expect(res.statusCode).toBe(200);
         expect(res.body.message).toBe("RSVP updated successfully!");
         expect(res.body.event.status).toBe("no");
     });
 
-    test("returns 404 if RSVP does not exist", async() => {
+    test("returns 404 if RSVP does not exist", async () => {
         const user = await createUser();
         const event = await createEvent(user._id);
 
         const res = await request(app)
             .put(`/api/rsvp/${event._id}`)
             .set("x-user-id", user._id.toString())
-            .send({ status: "no"});
+            .send({ status: "no" });
 
         expect(res.statusCode).toBe(404);
         expect(res.body.error).toBe("RSVP not found");
@@ -154,7 +154,7 @@ describe("Integration for PUT /api/rsvp/:eventId (updateRSVP)", () => {
         const res = await request(app)
             .put(`/api/rsvp/${event._id}`)
             .set("x-user-id", user._id.toString())
-            .send({ status: "maybe"});
+            .send({ status: "maybe" });
 
         expect(res.statusCode).toBe(400);
         expect(res.body.error).toBe("Invalid RSVP status");
@@ -166,9 +166,22 @@ describe("Integration for PUT /api/rsvp/:eventId (updateRSVP)", () => {
 
         const res = await request(app)
             .put(`/api/rsvp/${event._id}`)
-            .send({ status: "no"});
+            .send({ status: "no" });
 
         expect(res.statusCode).toBe(401);
+    });
+
+    test("returns 401 if user id does not map to an active user", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id);
+
+        const res = await request(app)
+            .put(`/api/rsvp/${event._id}`)
+            .set("x-user-id", "507f1f77bcf86cd799439011")
+            .send({ status: "no" });
+
+        expect(res.statusCode).toBe(401);
+        expect(res.body.error).toBe("User not authenticated");
     });
 });
 
@@ -199,6 +212,18 @@ describe("Integration for GET /api/rsvp/events (getRSVPsByStatus", () => {
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual([]);
+    });
+
+    test("returns 401 if user id does not map to an active user", async () => {
+        const user = await createUser();
+        const event = await createEvent(user._id);
+
+        const res = await request(app)
+            .get(`/api/rsvp/events/${event._id}`)
+            .set("x-user-id", "507f1f77bcf86cd799439011");
+
+        expect(res.statusCode).toBe(401);
+        expect(res.body.error).toBe("User not authenticated");
     });
 });
 
