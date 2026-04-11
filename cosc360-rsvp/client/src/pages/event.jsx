@@ -251,7 +251,8 @@ function EventPage() {
                     <SingleEventContainer event={event} ableToRsvp={canRsvp} onRsvpClick={handleRsvpClick} />
                     <ReviewCard reviews={event.reviews} onReviewClick={handleReviewClick} ableToReview={canReview} />
                 </div>
-                {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}
+                {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={(newReview) => {setReviewingEvent(null);
+                    if (newReview) setEvent(prev => ({ ...prev, reviews: [...prev.reviews, newReview] })); }} />}
                 {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); if (updated) setEvent(updated); }} />}
             </div>
         </div>

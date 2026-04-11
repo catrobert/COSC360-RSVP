@@ -2,7 +2,7 @@ import "../../../css/reviewModal.css";
 import { useAuth } from "../../../context/AuthContext.jsx";
 
 function ReviewModal({ event, onClose }) {
-    const { activeUserId } = useAuth();
+    const { activeUserId, activeUser  } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -65,7 +65,14 @@ function ReviewModal({ event, onClose }) {
                 }
                 
                 alert("Review posted successfully!"); 
-                onClose();  
+
+                const newReview = {
+                    rating: Number(form.rating.value),
+                    comment: form.comment.value,
+                    userId: { _id: activeUserId, username: activeUser.username },
+                };
+
+                onClose(newReview);
             } catch (error) {
                 console.log("Error posting review: ", error);
             }
