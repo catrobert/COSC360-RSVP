@@ -52,8 +52,8 @@ function MyEvents() {
 
     function isUpcoming(eventDate, endTime) {
         const [hours, minutes] = endTime.split(':');
-        const eventDateTime = new Date(eventDate);
-        eventDateTime.setHours(hours, minutes);
+        const d = new Date(eventDate);
+        const eventDateTime = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), hours, minutes);
 
         return eventDateTime > new Date();
     }
