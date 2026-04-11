@@ -62,3 +62,63 @@ describe("Access control for GET /api/admin/analytics", () => {
         expect(res.body).toBeDefined();
     });
 });
+
+
+// testing for the shape of the response
+describe("Response shape for GET /api/admin/analytics", () => {
+    test("returns all top-level analytics keys", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty("overview");
+        expect(res.body).toHaveProperty("eventInsights");
+        expect(res.body).toHaveProperty("revenueInsights");
+        expect(res.body).toHaveProperty("ratingsInsights");
+        expect(res.body).toHaveProperty("userInsights");
+    });
+
+    test("overview contains expected fields", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { overview } = res.body;
+        expect(overview).toHaveProperty("totalEvents");
+        expect(overview).toHaveProperty("totalAttendance");
+        expect(overview).toHaveProperty("totalUpcoming");
+        expect(overview).toHaveProperty("totalPast");
+        expect(overview).toHaveProperty("totalUsers");
+    });
+
+    test("revenueInsights contains histogram with 4 quarters", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { histogram } = res.body.revenueInsights;
+        expect(Array.isArray(histogram)).toBe(true);
+        expect(histogram).toHaveLength(4);
+        expect(histogram.map(h => h.quarter)).toEqual(["Q1", "Q2", "Q3", "Q4"]);
+    });
+
+    test("ratingsInsights contains ratingDistribution with 5 entries", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { ratingDistribution } = res.body.ratingsInsights;
+        expect(Array.isArray(ratingDistribution)).toBe(true);
+        expect(ratingDistribution).toHaveLength(5);
+        expect(ratingDistribution.map(r => r.rating)).toEqual([1, 2, 3, 4, 5]);
+    });
+});

@@ -56,15 +56,13 @@ async function getEventsInsights() {
     const avgAttendance = totalAttendance / totalEvents; 
     const avgPrice = totalPrice / totalEvents;
 
-    const bestAttendance = events.reduce((prev, current) => {
-        return (prev.attendance > current.attendance) ? prev : current;
-    });
+    const bestAttendance = events.length > 0 ? events.reduce((prev, current) =>
+        prev.attendance > current.attendance ? prev : current): "N/A";
 
     const bestByAttendance = bestAttendance.name;
 
-    const bestReviews = events.reduce((prev, current) => {
-        return (prev.reviews.rating > current.reviews.rating) ? prev : current;
-    });
+    const bestReviews = events.length > 0 ? events.reduce((prev, current) =>
+        prev.reviews.rating > current.reviews.rating ? prev : current): "N/A";
 
     const bestByReviews = bestReviews.name;
 
