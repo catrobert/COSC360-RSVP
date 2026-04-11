@@ -18,6 +18,47 @@ function resolveProfileUserId(req, res) {
     return authenticatedUserId;
 }
 
+function sanitizeProfileUpdates(payload = {}) {
+    const safeUpdates = {};
+
+    if (Object.prototype.hasOwnProperty.call(payload, "firstName")) {
+        safeUpdates.firstName = payload.firstName;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(payload, "lastName")) {
+        safeUpdates.lastName = payload.lastName;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(payload, "username")) {
+        safeUpdates.username = payload.username;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(payload, "description")) {
+        if (Array.isArray(payload.description) && payload.description.length > 0 && payload.description[0] && typeof payload.description[0] === "object") {
+            const rawDescription = payload.description[0];
+            const safeDescription = {};
+
+            if (Object.prototype.hasOwnProperty.call(rawDescription, "birthday")) {
+                safeDescription.birthday = rawDescription.birthday;
+            }
+
+            if (Object.prototype.hasOwnProperty.call(rawDescription, "gender")) {
+                safeDescription.gender = rawDescription.gender;
+            }
+
+            if (Object.prototype.hasOwnProperty.call(rawDescription, "location")) {
+                safeDescription.location = rawDescription.location;
+            }
+
+            safeUpdates.description = [safeDescription];
+        } else if (Array.isArray(payload.description) && payload.description.length === 0) {
+            safeUpdates.description = [];
+        }
+    }
+
+    return safeUpdates;
+}
+
 export const getProfile = async (req, res) => {
     try {
         const userId = resolveProfileUserId(req, res);
@@ -41,14 +82,16 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const userId = resolveProfileUserId(req, res);
-        const updates = req.body;
+        const updates = sanitizeProfileUpdates(req.body);
         console.log("Updating user: ", userId, updates);
 
         if (!userId) {
             return;
         }
 
-        delete updates.password;
+        if (Object.keys(updates).length === 0) {
+            return res.status(400).json({ error: "No valid profile fields provided" });
+        }
 
         const user = await updateUserById(userId, updates);
 

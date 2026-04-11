@@ -87,6 +87,49 @@ describe("Profile endpoints", () => {
             expect(stillOwner.firstName).toBe("Owner");
             expect(stillOther.firstName).not.toBe("Hacked");
         });
+
+        test("ignores sensitive fields when valid profile fields are provided", async () => {
+            const user = await createUser({ firstName: "Before", role: "user" });
+
+            const res = await request(app)
+                .put("/api/users/profile")
+                .set("x-user-id", user._id.toString())
+                .send({
+                    firstName: "After",
+                    role: "admin",
+                    adminCreatedDate: "2026-01-01T00:00:00.000Z",
+                    profilePhoto: "/uploads/evil.png",
+                });
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body.user.firstName).toBe("After");
+            expect(res.body.user.role).toBe("user");
+
+            const updated = await UserSchema.findById(user._id);
+            expect(updated.firstName).toBe("After");
+            expect(updated.role).toBe("user");
+            expect(updated.adminCreatedDate).toBeUndefined();
+            expect(updated.profilePhoto).toBeUndefined();
+        });
+
+        test("returns 400 when payload has no valid profile fields", async () => {
+            const user = await createUser({ role: "user" });
+
+            const res = await request(app)
+                .put("/api/users/profile")
+                .set("x-user-id", user._id.toString())
+                .send({
+                    role: "admin",
+                    adminCreatedDate: "2026-01-01T00:00:00.000Z",
+                });
+
+            expect(res.statusCode).toBe(400);
+            expect(res.body.error).toBe("No valid profile fields provided");
+
+            const unchanged = await UserSchema.findById(user._id);
+            expect(unchanged.role).toBe("user");
+            expect(unchanged.adminCreatedDate).toBeUndefined();
+        });
     });
 
     describe("POST /api/users/profile/photo", () => {
