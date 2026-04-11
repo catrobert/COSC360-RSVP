@@ -338,6 +338,15 @@ describe("Filter by startDate query param", () => {
     test("excludes events before the startDate", async () => {
         const admin = await createAdmin();
 
+        const startDate = new Date();
+        startDate.setFullYear(startDate.getFullYear() - 1);
+
+        const baselineRes = await request(app)
+            .get(`/api/admin/analytics?startDate=${startDate.toISOString()}`)
+            .set("x-user-id", admin._id.toString());
+    
+        const baselineRevenue = baselineRes.body.revenueInsights.totalRevenue;
+
         const oldDate = new Date();
         oldDate.setFullYear(oldDate.getFullYear() - 2);
 
@@ -347,15 +356,12 @@ describe("Filter by startDate query param", () => {
         await createEvent({ createdBy: admin._id, date: oldDate, endTime: "08:00", attendance: 99, price: 99 });
         await createEvent({ createdBy: admin._id, date: recentDate, endTime: "08:00", attendance: 1, price: 1 });
 
-        const startDate = new Date();
-        startDate.setFullYear(startDate.getFullYear() - 1);
-
         const res = await request(app)
             .get(`/api/admin/analytics?startDate=${startDate.toISOString()}`)
             .set("x-user-id", admin._id.toString());
 
         expect(res.statusCode).toBe(200);
-        expect(res.body.revenueInsights.totalRevenue).toBeLessThan(99 * 99);
+        expect(res.body.revenueInsights.totalRevenue).toBe(baselineRevenue + 1);
     });
 
     test("includes all events when no startDate is provided", async () => {

@@ -13,7 +13,7 @@ export const getAnalytics = async (req, res) => {
             return res.status(403).json({ error: "You are not permitted to view this page" });
         }
 
-        const analytics = await adminService.getAnalytics();
+        const analytics = await adminService.getAnalytics(startDate);
 
         res.status(200).json(analytics);
 
