@@ -21,6 +21,17 @@ function SavedEvents() {
         navigate(`/event/${eventId}`);
     }
 
+    function handleSavedStateChange(eventId, isWishlisted) {
+        if (isWishlisted) return;
+
+        setSavedEvents((prev) =>
+            prev.filter((event) => {
+                const id = event?._id?.toString?.() || event?.id?.toString?.();
+                return id !== eventId;
+            })
+        );
+    }
+
     useEffect(() => {
         async function fetchSavedEvents() {
             if (!activeUserId) {
@@ -79,7 +90,11 @@ function SavedEvents() {
                 ) : savedEvents.length === 0 ? (
                     <p style={{ marginLeft: "24px", color: 'grey' }}>No saved events yet.</p>
                 ) : (
-                    <EventContainer events={savedEvents} onEventClick={handleEventClick} />
+                    <EventContainer
+                        events={savedEvents}
+                        onEventClick={handleEventClick}
+                        onSavedStateChange={handleSavedStateChange}
+                    />
                 )}
             </div>
         </div>
