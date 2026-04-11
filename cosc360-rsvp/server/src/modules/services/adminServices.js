@@ -315,13 +315,17 @@ function getQuarter(eventDate) {
 
 function eventIsUpcoming(eventDate, endTime) {
     const d = new Date(eventDate);
-    const eventDateTime = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+
+    let hours = 0;
+    let minutes = 0;
 
     if (typeof endTime === "string" && endTime.includes(":")) {
-        const [hours, minutes] = endTime.split(":").map(Number);
-        if (!Number.isNaN(hours) && !Number.isNaN(minutes)) {
-            eventDateTime.setHours(hours, minutes, 0, 0);
+        const parts = endTime.split(":").map(Number);
+        if (!Number.isNaN(parts[0]) && !Number.isNaN(parts[1])) {
+            hours = parts[0];
+            minutes = parts[1];
         }
     }
+    const eventDateTime = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), hours, minutes);
     return eventDateTime > new Date();
 }
