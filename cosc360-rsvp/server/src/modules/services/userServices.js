@@ -5,7 +5,11 @@ export const findUsername = async (username) => {
     return await userRepository.findUsername(username);
 }
 
-export const createUser = async (firstName, lastName, username, password) => {
+export const findEmail = async (email) => {
+    return await userRepository.findEmail(email);
+}
+
+export const createUser = async (firstName, lastName, username, email, password, profilePhoto) => {
     //hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -14,9 +18,11 @@ export const createUser = async (firstName, lastName, username, password) => {
         firstName: firstName,
         lastName: lastName,
         username: username,
+        email: email,
         password: hashedPassword,
         createdDate: new Date(),
-        role: "user"
+        role: "user",
+        profilePhoto: profilePhoto,
     };
 
     return await userRepository.createUser(newUser);

@@ -4,7 +4,7 @@ import { uploadImage, authMiddleware } from "../middleware.js";
 
 const router = express.Router();
 
-router.post("/register", userController.createUser);
+router.post("/register", uploadImage.single("profilePhoto"), userController.createUser);
 router.post("/reset-password", userController.updatePassword);
 router.post("/login", userController.loginUser);
 router.get("/profile", authMiddleware, userController.getProfile);

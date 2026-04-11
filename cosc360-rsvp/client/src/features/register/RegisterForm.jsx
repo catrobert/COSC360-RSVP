@@ -9,8 +9,10 @@ function RegisterForm(){
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passConfirmation, setPassConfirmation] = useState("");
+    const [profilePhoto, setProfilePhoto] = useState(null);
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
@@ -22,6 +24,7 @@ function RegisterForm(){
     //validation
 
     const usernameRegex = /^[a-z]\w{4,15}$/i; // start with a letter, 5-16 chars long, case insensitive
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])\S{8,16}$/; // at least 8-16 chars long, at least one number and one letter, no spaces
 
     if (!usernameRegex.test(username)) {
@@ -34,13 +37,23 @@ function RegisterForm(){
         return;
     }
 
+    if (!emailRegex.test(email)) {
+        setError("Please enter a valid email address");
+        return;
+    }
+
     if(password !== passConfirmation){
         setError("Passwords don't match");
         return;
     }
 
+    if (!profilePhoto) {
+        setError("Please upload a profile image");
+        return;
+    }
+
     try{
-        await registerApi(firstName, lastName, username, password);
+        await registerApi(firstName, lastName, username, email, password, profilePhoto);
         navigate("/login"); //if successful, navigate to login
         alert('Account creation successful!');
 
@@ -88,6 +101,16 @@ function RegisterForm(){
 
                 <div className = "form-Input">
                     <input
+                    type = "email"
+                    id = "email"
+                    placeholder = "Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required />
+                </div>
+
+                <div className = "form-Input">
+                    <input
                     type = "password"
                     id = "password"
                     placeholder = "Enter a password"
@@ -105,7 +128,16 @@ function RegisterForm(){
                     value={passConfirmation}
                     onChange={(e) => setPassConfirmation(e.target.value)}
                     required />
-                </div>   
+                </div>
+
+                <div className = "form-Input">
+                    <input
+                    type = "file"
+                    id = "profilePhoto"
+                    accept="image/*"
+                    onChange={(e) => setProfilePhoto(e.target.files?.[0] || null)}
+                    required />
+                </div>
 
                 <p style={{color: 'red', fontSize: '12px', paddingTop: '10px'}}>{error}</p>
             

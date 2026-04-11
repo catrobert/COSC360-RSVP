@@ -6,12 +6,14 @@ import bcrypt from "bcryptjs";
 describe("Auth/Register", () => {
 
     test("register a new user successfully", async () => {
-        const res = await request(app).post("/api/users/register").send({
-            firstName: "Test",
-            lastName: "User",
-            username: "testuser_unique",
-            password: "password123",
-        });
+        const res = await request(app)
+            .post("/api/users/register")
+            .field("firstName", "Test")
+            .field("lastName", "User")
+            .field("username", "testuser_unique")
+            .field("email", "testuser_unique@mail.com")
+            .field("password", "password123")
+            .attach("profilePhoto", Buffer.from("fake image data"), "profile.jpg");
 
         expect(res.statusCode).toBe(201);
         expect(res.body.success).toBe(true);
@@ -32,23 +34,53 @@ describe("Auth/Register", () => {
         })
 
         //try to register with same username
-        const res = await request(app).post("/api/users/register").send({
-            firstName: "Existing",
-            lastName: "User",
-            username: "takenuser",
-            password: "password123"
-        });
+        const res = await request(app)
+            .post("/api/users/register")
+            .field("firstName", "Existing")
+            .field("lastName", "User")
+            .field("username", "takenuser")
+            .field("email", "takenuser2@mail.com")
+            .field("password", "password123")
+            .attach("profilePhoto", Buffer.from("fake image data"), "profile.jpg");
 
         expect(res.statusCode).toBe(400);
         expect(res.body.error).toBe("Username is already taken");
     });
 
-    test("returns 500 if required fields are missing", async () => {
-        const res = await request(app).post("/api/users/register").send({
-            username: "nopassword",
-        });
+    test("returns 400 if required fields are missing", async () => {
+        const res = await request(app)
+            .post("/api/users/register")
+            .field("username", "nopassword");
 
-        expect(res.statusCode).toBe(500);
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toBe("All fields are required");
+    });
+
+    test("returns 400 when profile photo is missing", async () => {
+        const res = await request(app)
+            .post("/api/users/register")
+            .field("firstName", "No")
+            .field("lastName", "Photo")
+            .field("username", "nophoto_user")
+            .field("email", "nophoto@mail.com")
+            .field("password", "password123");
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toBe("Profile image is required");
+    });
+
+    test("returns 400 when email format is invalid", async () => {
+        const res = await request(app)
+            .post("/api/users/register")
+            .field("firstName", "Invalid")
+            .field("lastName", "Email")
+            .field("username", "invalid_email_user")
+            .field("email", "not-an-email")
+            .field("password", "password123")
+            .attach("profilePhoto", Buffer.from("fake image data"), "profile.jpg");
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toBe("Invalid email format");
     });
 });
 
