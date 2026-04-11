@@ -64,7 +64,7 @@ function sanitizeProfileUpdates(payload = {}) {
 }
 
 export const createUser = async (req, res) => {
-    const { firstName, lastName, username, email, password } = req.body;
+    const { firstName, lastName, username, email, password } = req.body || {};
     const profilePhoto = req.file ? `/uploads/${req.file.filename}` : null;
 
     if (!firstName || !lastName || !username || !email || !password) {

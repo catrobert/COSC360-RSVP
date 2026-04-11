@@ -56,6 +56,16 @@ describe("Auth/Register", () => {
         expect(res.body.error).toBe("All fields are required");
     });
 
+    test("returns 400 (not 500) when register body is missing with non-multipart payload", async () => {
+        const res = await request(app)
+            .post("/api/users/register")
+            .set("Content-Type", "application/json")
+            .send({});
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toBe("All fields are required");
+    });
+
     test("returns 400 when profile photo is missing", async () => {
         const res = await request(app)
             .post("/api/users/register")
