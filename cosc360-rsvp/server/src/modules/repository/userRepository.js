@@ -4,6 +4,10 @@ export async function findUsername(username) {
     return UserSchema.findOne({username});
 }
 
+export async function findEmail(email) {
+    return UserSchema.findOne({ email });
+}
+
 export async function findUser(id) {
     return await UserSchema.findOne({ _id : id }); 
 }

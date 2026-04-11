@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { uploadImage } from "../middleware.js";
 
 const VALID_USER_ROLES = new Set(["user", "admin"]);
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function resolveProfileUserId(req, res) {
     const authenticatedUserId = req.userId?.toString();
@@ -64,7 +65,20 @@ function sanitizeProfileUpdates(payload = {}) {
 }
 
 export const createUser = async (req, res) => {
-    const { firstName, lastName, username, password } = req.body;
+    const { firstName, lastName, username, email, password } = req.body || {};
+    const profilePhoto = req.file ? `/uploads/${req.file.filename}` : null;
+
+    if (!firstName || !lastName || !username || !email || !password) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+        return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    if (!profilePhoto) {
+        return res.status(400).json({ error: "Profile image is required" });
+    }
 
     try {
         //checks if username is unique
@@ -74,7 +88,13 @@ export const createUser = async (req, res) => {
             return res.status(400).json({ error: "Username is already taken" });
         }
 
-        await userServices.createUser(firstName, lastName, username, password);
+        const existingEmail = await userServices.findEmail(email);
+
+        if (existingEmail) {
+            return res.status(400).json({ error: "Email is already in use" });
+        }
+
+        await userServices.createUser(firstName, lastName, username, email, password, profilePhoto);
 
         res.status(201).json({ success: true, message: "User registered successfully" });
 
