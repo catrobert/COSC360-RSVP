@@ -37,3 +37,28 @@ async function createEvent({ createdBy, date, endTime = "18:00", reviews = [] })
         reviews,
     });
 }
+
+// tests for accessing the admin endpoint
+describe("Access control for GET /api/admin/analytics", () => {
+    test("returns 403 for non-admin user", async () => {
+        const user = await createUser();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", user._id.toString());
+
+        expect(res.statusCode).toBe(403);
+        expect(res.body.error).toBe("You are not permitted to view this page");
+    });
+
+    test("returns 200 and analytics object for admin", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toBeDefined();
+    });
+});
