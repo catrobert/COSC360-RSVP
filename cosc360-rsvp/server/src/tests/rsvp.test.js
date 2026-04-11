@@ -66,7 +66,7 @@ describe("Unit for RSVP status validation", () => {
         expect(VALID_STATUSES.has("")).toBe(false);
     });
 
-
+    
 });
 
 //Integration Test for POST /api/rsvp
