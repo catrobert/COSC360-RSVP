@@ -130,6 +130,33 @@ describe("Profile endpoints", () => {
             expect(unchanged.role).toBe("user");
             expect(unchanged.adminCreatedDate).toBeUndefined();
         });
+
+        test("returns 500 when profile update violates schema validators", async () => {
+            const user = await createUser({
+                description: [{
+                    birthday: new Date("2000-01-01"),
+                    gender: "Male",
+                    location: "Kelowna",
+                }],
+            });
+
+            const res = await request(app)
+                .put("/api/users/profile")
+                .set("x-user-id", user._id.toString())
+                .send({
+                    description: [{
+                        birthday: "2000-01-01",
+                        gender: "NotAValidGender",
+                        location: "Kelowna",
+                    }],
+                });
+
+            expect(res.statusCode).toBe(500);
+            expect(res.body.error).toBe("Something went wrong");
+
+            const unchanged = await UserSchema.findById(user._id);
+            expect(unchanged.description[0].gender).toBe("Male");
+        });
     });
 
     describe("POST /api/users/profile/photo", () => {

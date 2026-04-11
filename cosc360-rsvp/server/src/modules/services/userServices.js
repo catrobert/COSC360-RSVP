@@ -1,6 +1,6 @@
 import { UserSchema } from "../model/user.model.js";
 
-export const saveUser = async ({ firstName, lastName, username, hashedPassword}) => {
+export const saveUser = async ({ firstName, lastName, username, hashedPassword }) => {
     const newUser = new UserSchema({
         firstName,
         lastName,
@@ -16,8 +16,8 @@ export const saveUser = async ({ firstName, lastName, username, hashedPassword})
 export const resetPassword = async (username, newHashedPassword) => {
     return await UserSchema.findOneAndUpdate(
         { username },
-        { password: newHashedPassword},
-        { new: true }
+        { password: newHashedPassword },
+        { new: true, runValidators: true }
     );
 }
 
@@ -25,11 +25,11 @@ export async function getUserById(id) {
     return await UserSchema.findById(id).select("-password");
 }
 
-export async function updateUserById (id, updates) {
+export async function updateUserById(id, updates) {
     return await UserSchema.findByIdAndUpdate(
         id,
         updates,
-        { new: true}
+        { new: true, runValidators: true }
     ).select("-password");
 }
 
@@ -37,6 +37,6 @@ export async function getAllUsers() {
     return await UserSchema.find().select("-password");
 }
 
-export async function deleteUserById(id){
+export async function deleteUserById(id) {
     return await UserSchema.findByIdAndDelete(id);
 }
