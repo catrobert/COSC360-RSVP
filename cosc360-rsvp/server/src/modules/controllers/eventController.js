@@ -52,7 +52,7 @@ export const createReview = async (req, res) => {
     try {
         const eventId = req.params.id;
         const userId = req.userId;
-        const data = {...req.body};
+        const data = { ...req.body };
 
         const newReview = await eventService.createReview(data, eventId, userId);
 
@@ -70,7 +70,7 @@ export const createReview = async (req, res) => {
         }
 
         if (error.message === "You have already reviewed this event!") {
-            return res.status(400).json( {error: error.message})
+            return res.status(400).json({ error: error.message })
         }
 
         console.log("Error creating review:", error);
@@ -100,7 +100,7 @@ export const updateEvent = async (req, res) => {
 
 export const deleteEvent = async (req, res) => {
     try {
-        const deletedEvent = await eventService.deleteEvent(req.params.id);
+        const deletedEvent = await eventService.deleteEvent(req.params.id, req.userId, req.userRole);
 
         if (!deletedEvent) {
             return res.status(404).json({ error: "Event not found" });
@@ -108,6 +108,9 @@ export const deleteEvent = async (req, res) => {
 
         res.json({ message: "Event deleted successfully!", event: deletedEvent });
     } catch (error) {
+        if (error.message === "Forbidden") {
+            return res.status(403).json({ error: "You are not allowed to delete this event" });
+        }
         console.log("Error deleting event: ", error);
         res.status(500).json({ error: "Could not delete event" });
 

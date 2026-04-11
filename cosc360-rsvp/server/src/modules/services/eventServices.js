@@ -26,7 +26,17 @@ export async function getEventById(id) {
     return await eventRepository.findEvent(id);
 }
 
-export async function deleteEvent(id) {
+export async function deleteEvent(id, userId, userRole) {
+    const event = await eventRepository.findEvent(id);
+    if (!event) return null;
+
+    const creatorId = event.createdBy?._id?.toString() || event.createdBy?.toString();
+    const isAdmin = userRole === "admin";
+
+    if (!isAdmin && creatorId !== userId?.toString()) {
+        throw new Error("Forbidden");
+    }
+
     return await eventRepository.deleteEvent(id);
 }
 

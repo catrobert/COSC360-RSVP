@@ -274,13 +274,26 @@ describe("Events", () => {
     });
 
     describe("DELETE /api/events/:id", () => {
-        // tests delete happy path, event is removed and no longer retrievable
-        test("deletes an event successfully", async () => {
-            const user = await createUser({ username: "event_delete_host" });
+        // tests delete auth guard, should reject requests without user header
+        test("returns 401 when deleting without auth header", async () => {
+            const user = await createUser({ username: "event_delete_noauth_host" });
+            const createRes = await createEventThroughApi(user._id, { name: "Needs Delete Auth" });
+
+            const res = await request(app).delete(`/api/events/${createRes.body.event._id}`);
+
+            expect(res.statusCode).toBe(401);
+            expect(res.body.error).toBe("Missing user ID header");
+        });
+
+        // tests owner delete happy path, event is removed and no longer retrievable
+        test("deletes an event successfully for owner", async () => {
+            const user = await createUser({ username: "event_delete_owner" });
             const createRes = await createEventThroughApi(user._id, { name: "Delete Me" });
             const eventId = createRes.body.event._id;
 
-            const deleteRes = await request(app).delete(`/api/events/${eventId}`);
+            const deleteRes = await request(app)
+                .delete(`/api/events/${eventId}`)
+                .set("x-user-id", user._id.toString());
 
             expect(deleteRes.statusCode).toBe(200);
             expect(deleteRes.body.message).toBe("Event deleted successfully!");
@@ -290,11 +303,42 @@ describe("Events", () => {
             expect(fetchRes.statusCode).toBe(404);
         });
 
+        // tests admin override path, admin can delete events created by other users
+        test("allows admin to delete another user's event", async () => {
+            const host = await createUser({ username: "event_delete_admin_host" });
+            const admin = await createUser({ username: "event_delete_admin", role: "admin" });
+            const createRes = await createEventThroughApi(host._id, { name: "Delete By Admin" });
+
+            const res = await request(app)
+                .delete(`/api/events/${createRes.body.event._id}`)
+                .set("x-user-id", admin._id.toString());
+
+            expect(res.statusCode).toBe(200);
+            expect(res.body.message).toBe("Event deleted successfully!");
+        });
+
+        // tests permission guard, non-owner non-admin cannot delete events
+        test("returns 403 when non-owner non-admin tries to delete", async () => {
+            const host = await createUser({ username: "event_delete_host_forbidden" });
+            const stranger = await createUser({ username: "event_delete_stranger" });
+            const createRes = await createEventThroughApi(host._id, { name: "Cannot Delete" });
+
+            const res = await request(app)
+                .delete(`/api/events/${createRes.body.event._id}`)
+                .set("x-user-id", stranger._id.toString());
+
+            expect(res.statusCode).toBe(403);
+            expect(res.body.error).toBe("You are not allowed to delete this event");
+        });
+
         // delete should return 404 when the event does not exist
         test("returns 404 when deleting a missing event", async () => {
+            const user = await createUser({ username: "event_delete_missing" });
             const missingId = "507f1f77bcf86cd799439011";
 
-            const res = await request(app).delete(`/api/events/${missingId}`);
+            const res = await request(app)
+                .delete(`/api/events/${missingId}`)
+                .set("x-user-id", user._id.toString());
 
             expect(res.statusCode).toBe(404);
             expect(res.body.error).toBe("Event not found");

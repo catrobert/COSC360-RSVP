@@ -9,7 +9,7 @@ const AdminManagement = () => {
     const [userSearch, setUserSearch] = useState('');
     const [eventSearch, setEventSearch] = useState('');
     const [editingEvent, setEditingEvent] = useState(null);
-    const { activeUserId, logout } = useAuth();
+    const { activeUser, activeUserId } = useAuth();
 
     useEffect(() => {
         if (!activeUserId) {
@@ -41,41 +41,68 @@ const AdminManagement = () => {
         try{
             const response = await fetch(`/api/admin/${userId}`, {
                 method: 'DELETE',
-                headers: {'x-user-id': activeUserId},
+                headers: { 'x-user-id': activeUserId },
             });
-            if(!response.ok){
+            if (!response.ok) {
                 const result = await response.json();
                 alert(`Error: ${result.error}`);
                 return;
             }
             setUsers(prev => prev.filter(u => u._id !== userId));
-        }catch (err){
+        } catch (err) {
             console.log('Error deleting user:', err);
         }
     }
 
-    async function handlePromoteUser(userId, currentRole){
+    async function handlePromoteUser(userId, currentRole) {
         const newRole = currentRole === 'admin' ? 'user' : 'admin';
         const message = newRole === 'admin' ? "Promote this user to admin?" : "Demote this user to regular user?";
         if(!confirm(message)) return;
         try{
             const response = await fetch(`/api/admin/${userId}/role`,{
                 method: 'PUT',
-                headers:{
+                headers: {
                     'Content-Type': 'application/json',
-                    'x-user-id': activeUserId,  
+                    'x-user-id': activeUserId,
                 },
-                body: JSON.stringify({ role: newRole}),
+                body: JSON.stringify({ role: newRole }),
             });
-            if(!response.ok){
+            if (!response.ok) {
                 const result = await response.json();
                 alert(`Error: ${result.error}`);
                 return;
             }
-            setUsers(prev => prev.map(u => u._id === userId ? { ...u, role: newRole} : u ));
+            setUsers(prev => prev.map(u => u._id === userId ? { ...u, role: newRole } : u));
 
-        }catch (err){
+        } catch (err) {
             console.log('Error promoting user:', err);
+        }
+    }
+
+    async function handleDeleteEvent(eventId) {
+        if (!activeUserId || activeUser?.role !== 'admin') {
+            alert("Only admins can delete events.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete this event?")) return;
+
+        try {
+            const response = await fetch(`/api/events/${eventId}`, {
+                method: 'DELETE',
+                headers: { 'x-user-id': activeUserId },
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(`Error: ${result.error}`);
+                return;
+            }
+
+            setEvents(prev => prev.filter(e => e._id !== eventId));
+        } catch (err) {
+            console.log('Error deleting event:', err);
         }
     }
 
@@ -110,15 +137,15 @@ const AdminManagement = () => {
                     {filteredUsers.map((u) => (
                         <div className="list-item" key={u._id}>
                             <span>{u.firstName} {u.lastName} | {u.username} | {u.role}</span>
-                            <div className = "event-actions">
-                                
-                                    <button className="settings-btn" onClick={() => handlePromoteUser(u._id, u.role)} 
+                            <div className="event-actions">
+
+                                <button className="settings-btn" onClick={() => handlePromoteUser(u._id, u.role)}
                                     title={u.role === 'admin' ? "Demote to user" : "Promote to admin"}>
-                                        <ShieldCheck size={18} color={u.role === 'admin' ? "green" : "navy"}/>
-                                    </button>
-                                
+                                    <ShieldCheck size={18} color={u.role === 'admin' ? "green" : "navy"} />
+                                </button>
+
                                 <button className="settings-btn" onClick={() => handleDeleteUser(u._id)} title="Delete user">
-                                    <Trash2 size={18} color="red"/>
+                                    <Trash2 size={18} color="red" />
                                 </button>
                             </div>
                         </div>
@@ -141,6 +168,9 @@ const AdminManagement = () => {
                             <div className="event-actions">
                                 <button className="settings-btn" onClick={() => setEditingEvent(event)}>
                                     <Pencil size={18} color="navy" />
+                                </button>
+                                <button className="settings-btn" onClick={() => handleDeleteEvent(event._id)} title="Delete event">
+                                    <Trash2 size={18} color="red" />
                                 </button>
                             </div>
                         </div>
