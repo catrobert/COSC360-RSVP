@@ -314,7 +314,8 @@ function getQuarter(eventDate) {
 }
 
 function eventIsUpcoming(eventDate, endTime) {
-    const eventDateTime = new Date(eventDate);
+    const d = new Date(eventDate);
+    const eventDateTime = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), hours, minutes);
 
     if (typeof endTime === "string" && endTime.includes(":")) {
         const [hours, minutes] = endTime.split(":").map(Number);
