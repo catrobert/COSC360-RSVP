@@ -3,7 +3,7 @@ import { Bookmark, Star, MapPin, Calendar, DollarSign } from 'lucide-react';
 import './EventCard.css';
 import { useAuth } from '../../../context/AuthContext.jsx';
 
-const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick, showReviewButton, onReviewClick, onEditClick, showDeleteRsvpButton, onDeleteRsvpClick }) => {
+const EventCard = ({ eventId, initialWishlisted = false, onWishlistChanged, name, location, date, rating, price, image, onClick, showReviewButton, onReviewClick, onEditClick, showDeleteRsvpButton, onDeleteRsvpClick, alreadyReviewed }) => {
 const [wishlisted, setWishlisted] = useState(initialWishlisted);
 const [isHovering, setIsHovering] = useState(false);
 const { activeUserId } = useAuth();
@@ -94,7 +94,8 @@ const { activeUserId } = useAuth();
                     <Bookmark size={22} fill={wishlisted ? 'gold' : 'none'} color={wishlisted ? 'gold' : '#888'} />
                 </button>
 
-                {showReviewButton && <button className="review-btn" onClick={(e) => { e.stopPropagation(); onReviewClick(); }}>Leave a Review</button>}
+                {showReviewButton && <button className={alreadyReviewed ? "greyed-out-review-btn" : "review-btn"} 
+                onClick={(e) => { e.stopPropagation(); onReviewClick(); }}>Leave a Review</button>}
                 {onEditClick && <button className="edit-btn" onClick={(e) => { e.stopPropagation(); onEditClick(); }}>Edit</button>}
                 
                 {showDeleteRsvpButton && <button className='delete-rsvp-btn' 

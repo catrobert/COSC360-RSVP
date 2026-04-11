@@ -46,7 +46,21 @@ function MyEvents() {
         }
     }
 
+    function hasReviewed(event) {
+        if (!activeUserId || !event?.reviews) return false;
+        for (const review of event.reviews) {
+            const reviewUserId = review.userId?._id?.toString?.() || review.userId?.toString?.();
+            if (reviewUserId === activeUserId.toString()) return true;
+        }
+        return false;
+    }
+
     const handleReviewClick = function(event) {
+        if (hasReviewed(event)) {
+            alert("You have already reviewed this event!");
+            return;
+        }
+
         setReviewingEvent(event);  
     }
 
@@ -152,7 +166,7 @@ function MyEvents() {
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Attended Events</h1>
                 {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> 
                 : previousAttendedEvents.length === 0? <p style={{ marginLeft: "24px", color: 'grey' }}>None to show.</p> 
-                : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick}/>}
+                : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick} hasReviewed={hasReviewed}/>}
             </div>
 
             {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}

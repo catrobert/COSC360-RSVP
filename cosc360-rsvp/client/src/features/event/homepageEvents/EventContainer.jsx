@@ -14,7 +14,7 @@ function averageRating(reviews) {
   return (sum / reviews.length);
 }
 
-const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick, onEditClick, showDeleteRsvpButton, onDeleteRsvpClick, onSavedStateChange }) => {
+const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick, onEditClick, showDeleteRsvpButton, onDeleteRsvpClick, onSavedStateChange, hasReviewed }) => {
   const [savedEventIds, setSavedEventIds] = useState(new Set());
   const { activeUserId } = useAuth();
 
@@ -106,6 +106,7 @@ const EventContainer = ({ events, onEventClick, showReviewButton, onReviewClick,
             onEditClick={onEditClick ? () => onEditClick(event) : undefined}
             onDeleteRsvpClick={onDeleteRsvpClick}
             showDeleteRsvpButton={showDeleteRsvpButton}
+            alreadyReviewed={hasReviewed ? hasReviewed(event) : false}
           />
         );
       })}
