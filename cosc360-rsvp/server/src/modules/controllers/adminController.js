@@ -4,12 +4,15 @@ const VALID_USER_ROLES = new Set(["user", "admin"]);
 export const getAnalytics = async (req, res) => {
     try {
         const role = req.userRole;
+        const startDate = req.params.startDate;
 
+        if (startDate) new Date(startDate);
+     
         if (role !== 'admin') {
             return res.status(403).json( { error: "You are not permitted to view this page" });
         }
 
-        const analytics = await adminService.getAnalytics();
+        const analytics = await adminService.getAnalytics(startDate);
         
         res.status(200).json(analytics);
 
