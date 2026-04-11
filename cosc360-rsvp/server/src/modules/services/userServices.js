@@ -36,3 +36,8 @@ export async function getUserById(id) {
 export async function deleteUserById(id){
     return await userRepository.findByIdAndDelete(id);
 }
+
+
+export async function updateUserById (id, updates) {
+    return await userRepository.updateUserById(id, updates);
+}
