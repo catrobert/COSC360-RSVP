@@ -62,7 +62,7 @@ async function getEventsInsights() {
     const bestByAttendance = bestAttendance.name;
 
     const bestReviews = events.length > 0 ? events.reduce((prev, current) =>
-        prev.reviews.rating > current.reviews.rating ? prev : current): "N/A";
+        prev.reviews.length > current.reviews.length ? prev : current): "N/A";
 
     const bestByReviews = bestReviews.name;
 
