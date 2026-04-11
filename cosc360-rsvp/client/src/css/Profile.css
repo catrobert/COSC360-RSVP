@@ -167,3 +167,11 @@
     font-size: 0.875rem;
     color: green;
 }
+
+.photo-error-msg{
+    color: red;
+    font-size: 0.75rem;
+    margin-top: 6px;
+    text-align: center;
+    white-space: nowrap;
+}
