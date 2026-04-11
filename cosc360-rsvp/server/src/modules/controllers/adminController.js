@@ -1,5 +1,6 @@
 import * as adminService from "../services/adminServices.js";
 const VALID_USER_ROLES = new Set(["user", "admin"]);
+const VALID_ACTIVATION_STATES = new Set([true, false]);
 
 export const getAnalytics = async (req, res) => {
     try {
@@ -9,11 +10,11 @@ export const getAnalytics = async (req, res) => {
         if (startDate) startDate = new Date(startDate);
      
         if (role !== 'admin') {
-            return res.status(403).json( { error: "You are not permitted to view this page" });
+            return res.status(403).json({ error: "You are not permitted to view this page" });
         }
 
-        const analytics = await adminService.getAnalytics(startDate);
-        
+        const analytics = await adminService.getAnalytics();
+
         res.status(200).json(analytics);
 
     } catch (error) {
@@ -36,30 +37,30 @@ export const listUsers = async (req, res) => {
 };
 
 export const deleteUser = async (req, res) => {
-    try{
-        if(req.userRole !== "admin"){
-            return res.status(403).json({ error: "Forbidden"});
+    try {
+        if (req.userRole !== "admin") {
+            return res.status(403).json({ error: "Forbidden" });
         }
 
         const { id } = req.params;
         const user = await adminService.getUserById(id);
 
-        if(!user){
-            return res.status(404).json({ error: "User not found"});
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
         }
 
         await adminService.deleteUserById(id);
-        res.json({ message: "User deleted successfully"});
-    }catch (err){
+        res.json({ message: "User deleted successfully" });
+    } catch (err) {
         console.error("Error deleting user:", err);
-        res.status(500).json({ error: "Something went wrong"});
+        res.status(500).json({ error: "Something went wrong" });
     }
 };
 
 export const updateUserRole = async (req, res) => {
-    try{
-        if(req.userRole !== "admin"){
-            return res.status(403).json({ error: "Forbidden"});
+    try {
+        if (req.userRole !== "admin") {
+            return res.status(403).json({ error: "Forbidden" });
         }
 
         const { id } = req.params;
@@ -67,24 +68,58 @@ export const updateUserRole = async (req, res) => {
 
         console.log("Updating role for user: ", id, "to: ", role);
 
-        if(!role){
-            return res.status(400).json({ error: "Missing role"});
+        if (!role) {
+            return res.status(400).json({ error: "Missing role" });
         }
 
         if (typeof role !== "string" || !VALID_USER_ROLES.has(role)) {
             return res.status(400).json({ error: "Invalid role" });
         }
 
-        const user = await adminService.updateUserById(id, {role});
+        const user = await adminService.updateUserById(id, { role });
         console.log("Updated user:", user);
 
-        if(!user){
-            return res.status(404).json({ error: "User not found"});
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
         }
 
         res.json({ user });
-    }catch (err){
+    } catch (err) {
         console.error("Error updating user role: ", err);
-        res.status(500).json({ error: "Something went wrong"});
+        res.status(500).json({ error: "Something went wrong" });
+    }
+};
+
+export const updateUserActivation = async (req, res) => {
+    try {
+        if (req.userRole !== "admin") {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        const { id } = req.params;
+        const { isActivated } = req.body;
+
+        if (typeof isActivated === "undefined") {
+            return res.status(400).json({ error: "Missing activation value" });
+        }
+
+        if (!VALID_ACTIVATION_STATES.has(isActivated)) {
+            return res.status(400).json({ error: "Invalid activation value" });
+        }
+
+        if (id.toString() === req.userId?.toString() && isActivated === false) {
+            return res.status(400).json({ error: "Admin cannot deactivate their own account" });
+        }
+
+        const user = await adminService.updateUserById(id, { isActivated });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json({ user });
+    } catch (err) {
+        console.error("Error updating user activation: ", err);
+        res.status(500).json({ error: "Something went wrong" });
     }
 };

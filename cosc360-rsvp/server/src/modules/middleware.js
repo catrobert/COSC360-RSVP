@@ -15,19 +15,29 @@ const storage = multer.diskStorage({
     },
 });
 
+const fileFilter = (req, file, cb) => {
+    const allowedMimeTypes = ["image/jpeg", "image/png"];
+    if(allowedMimeTypes.includes(file.mimetype)){
+        cb(null,true);
+    }else{
+        cb(new Error("Invalid file type. Only JPEG and PNG are allowed."), false);
+    }
+};
+
 
 export const uploadImage = multer({
     storage,
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    fileFilter,
 });
 
 
 export const requireUser = (req, res, next) => {
-	const userId = req.header("x-user-id");
+    const userId = req.header("x-user-id");
 
-	if (!userId) {
-		return res.status(401).json({ error: "User not authenticated" });
-	}
+    if (!userId) {
+        return res.status(401).json({ error: "User not authenticated" });
+    }
 
     req.userId = userId;
     next();
@@ -38,13 +48,17 @@ export async function authMiddleware(req, res, next) {
     const userId = req.headers['x-user-id'];
 
     if (!userId) {
-        return res.status(401).json({error: "Missing user ID header" });
+        return res.status(401).json({ error: "Missing user ID header" });
     }
 
     const user = await userRepository.findUser(userId);
 
     if (!user) {
         return res.status(401).json({ error: "User not authenticated" });
+    }
+
+    if (user.isActivated === false) {
+        return res.status(403).json({ error: "Account is deactivated" });
     }
 
     req.userId = userId;

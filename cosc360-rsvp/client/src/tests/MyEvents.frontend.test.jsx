@@ -32,6 +32,12 @@ jest.mock("../features/event/homepageEvents/EventContainer", () => ({ events, on
 ));
 jest.mock("../css/Home.css", () => ({}));
 
+async function waitForMyEventsLoadingToFinish() {
+    await waitFor(() => {
+        expect(screen.queryByText("Loading...")).not.toBeInTheDocument();
+    });
+}
+
 describe("MyEvents frontend tests", () => {
     const mockNavigate = jest.fn();
 
@@ -65,6 +71,8 @@ describe("MyEvents frontend tests", () => {
         expect(screen.getByText("Upcoming Attending Events")).toBeInTheDocument();
         expect(screen.getByText("Previously Hosted Events")).toBeInTheDocument();
         expect(screen.getByText("Previously Attended Events")).toBeInTheDocument();
+
+        await waitForMyEventsLoadingToFinish();
     });
 
     // tests loading state, page should show loading text before data arrives
@@ -107,6 +115,8 @@ describe("MyEvents frontend tests", () => {
                 headers: { "x-user-id": "user_1" },
             });
         });
+
+        await waitForMyEventsLoadingToFinish();
     });
 
     // tests logged-out guard, no fetches should happen without an active user
@@ -160,6 +170,7 @@ describe("MyEvents frontend tests", () => {
         fireEvent.click(viewButton);
 
         expect(mockNavigate).toHaveBeenCalledWith("/event/event_1");
+        await waitForMyEventsLoadingToFinish();
     });
 
     // tests RSVP cancellation, should send PATCH with correct user header
@@ -208,6 +219,8 @@ describe("MyEvents frontend tests", () => {
                 },
             });
         });
+
+        await waitForMyEventsLoadingToFinish();
     });
 
     // tests review modal, clicking review on a past event should open the modal
@@ -246,5 +259,7 @@ describe("MyEvents frontend tests", () => {
         await waitFor(() => {
             expect(screen.getByText("ReviewModal")).toBeInTheDocument();
         });
+
+        await waitForMyEventsLoadingToFinish();
     });
 });
