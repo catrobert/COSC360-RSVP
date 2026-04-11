@@ -138,13 +138,20 @@ const AdminManagement = () => {
         }
     }
 
-    const filteredUsers = users.filter(u =>
-        `${u.firstName} ${u.lastName} ${u.username}`.toLowerCase().includes(userSearch.toLowerCase())
-    );
+    const normalizedUserSearch = userSearch.trim().toLowerCase();
+    const normalizedEventSearch = eventSearch.trim().toLowerCase();
 
-    const filteredEvents = events.filter(e =>
-        e.name?.toLowerCase().includes(eventSearch.toLowerCase())
-    );
+    const filteredUsers = users.filter((u) => {
+        if (!normalizedUserSearch) return true;
+        const searchableUserText = `${u.firstName || ""} ${u.lastName || ""} ${u.username || ""} ${u.email || ""}`.toLowerCase();
+        return searchableUserText.includes(normalizedUserSearch);
+    });
+
+    const filteredEvents = events.filter((e) => {
+        if (!normalizedEventSearch) return true;
+        const searchableEventText = `${e.name || ""} ${e.location || ""} ${e.description || ""}`.toLowerCase();
+        return searchableEventText.includes(normalizedEventSearch);
+    });
 
     function formatDate(dateStr) {
         return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -162,7 +169,7 @@ const AdminManagement = () => {
             <div className="admin-panel">
                 <h2 className="admin-panel-title">Users</h2>
                 <div className="admin-search-container">
-                    <input type="text" placeholder="Search users..." value={userSearch} onChange={e => setUserSearch(e.target.value)} />
+                    <input type="text" placeholder="Search users by name, username, or email..." value={userSearch} onChange={e => setUserSearch(e.target.value)} />
                     <Search size={18} color="gray" className="search-icon" />
                 </div>
                 <div className="list">
@@ -173,7 +180,7 @@ const AdminManagement = () => {
                         return (
                             <div className="list-item" key={u._id}>
                                 <span>
-                                    {u.firstName} {u.lastName} | {u.username} | {u.role} | {isActivated ? 'active' : 'deactivated'}
+                                    {u.firstName} {u.lastName} | {u.username} | {u.email || "No email"} | {u.role} | {isActivated ? 'active' : 'deactivated'}
                                 </span>
                                 <div className="event-actions">
 
@@ -210,13 +217,13 @@ const AdminManagement = () => {
             <div className="admin-panel">
                 <h2 className="admin-panel-title">Events</h2>
                 <div className="admin-search-container">
-                    <input type="text" placeholder="Search events..." value={eventSearch} onChange={e => setEventSearch(e.target.value)} />
+                    <input type="text" placeholder="Search events by title, location, or description..." value={eventSearch} onChange={e => setEventSearch(e.target.value)} />
                     <Search size={18} color="gray" className="search-icon" />
                 </div>
                 <div className="list">
                     {filteredEvents.map((event) => (
                         <div className="list-item" key={event._id}>
-                            <span>{event.name} | {formatDate(event.date)}</span>
+                            <span>{event.name} | {event.location || "No location"} | {formatDate(event.date)}</span>
                             <div className="event-actions">
                                 <button className="settings-btn" onClick={() => setEditingEvent(event)}>
                                     <Pencil size={18} color="navy" />
