@@ -1,4 +1,5 @@
 import * as userServices from "../services/userServices.js";
+import bcrypt from "bcryptjs";
 
 const VALID_USER_ROLES = new Set(["user", "admin"]);
 
