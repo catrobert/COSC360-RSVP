@@ -16,7 +16,8 @@ export const createUser = async (firstName, lastName, username, password) => {
         username: username,
         password: hashedPassword,
         createdDate: new Date(),
-        role: "user"
+        role: "user",
+        isActivated: true
     };
 
     return await userRepository.createUser(newUser);
@@ -33,11 +34,11 @@ export async function getUserById(id) {
     return await userRepository.getUserById(id);
 }
 
-export async function deleteUserById(id){
+export async function deleteUserById(id) {
     return await userRepository.findByIdAndDelete(id);
 }
 
 
-export async function updateUserById (id, updates) {
+export async function updateUserById(id, updates) {
     return await userRepository.updateUserById(id, updates);
 }

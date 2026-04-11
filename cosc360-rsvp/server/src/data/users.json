@@ -3,47 +3,49 @@
         {
             "firstName": "Annie",
             "lastName": "Smith",
-            "username" : "annie",
-            "password" : "password123",
-            "createdDate" : "2026-03-28",
-            "role" : "user",
-            "description": [
-               {
-                "birthday" : "1999-04-03",
-                "gender" : "Female",
-                "location" : "Vancouver, BC"
-               } 
-            ]
-            },
-        {
-            "firstName" : "Bob",
-            "lastName" : "Jones",
-            "username" : "bobjones",
-            "password" : "password123",
-            "createdDate" : "2024-01-02",
-            "role" : "user",
+            "username": "annie",
+            "password": "password123",
+            "createdDate": "2026-03-28",
+            "role": "user",
+            "isActivated": true,
             "description": [
                 {
-                  "birthday" : "2001-08-11",
-                  "gender" : "Male",
-                  "location" : "Kelowna, BC"      
+                    "birthday": "1999-04-03",
+                    "gender": "Female",
+                    "location": "Vancouver, BC"
                 }
             ]
         },
-        
+        {
+            "firstName": "Bob",
+            "lastName": "Jones",
+            "username": "bobjones",
+            "password": "password123",
+            "createdDate": "2024-01-02",
+            "role": "user",
+            "isActivated": true,
+            "description": [
+                {
+                    "birthday": "2001-08-11",
+                    "gender": "Male",
+                    "location": "Kelowna, BC"
+                }
+            ]
+        },
         {
             "firstName": "Admin",
-            "lastName" : "User",
-            "username" : "admin",
-            "password" : "admin123",
-            "createdDate" : "2023-04-03",
-            "role" : "admin",
+            "lastName": "User",
+            "username": "admin",
+            "password": "admin123",
+            "createdDate": "2023-04-03",
+            "role": "admin",
+            "isActivated": true,
             "adminCreatedDate": "2024-01-01",
             "description": [
                 {
                     "birthday": "1990-03-30",
-                    "gender" : "Prefer Not To Say",
-                    "location" : "Kamloops, BC"
+                    "gender": "Prefer Not To Say",
+                    "location": "Kamloops, BC"
                 }
             ]
         }
