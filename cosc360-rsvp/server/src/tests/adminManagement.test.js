@@ -35,14 +35,14 @@ describe("Unit: role toggle logic", () => {
 });
 
 //Integration Tests for GET users
-describe("Integration for GET /api/users", () => {
+describe("Integration for GET /api/admin", () => {
     test("returns all users for admin", async () => {
         const admin = await createAdmin();
         await createUser();
         await createUser();
 
         const res = await request(app)
-            .get("/api/users")
+            .get("/api/admin")
             .set("x-user-id", admin._id.toString());
 
         expect(res.statusCode).toBe(200);
@@ -55,7 +55,7 @@ describe("Integration for GET /api/users", () => {
         const user = await createUser();
 
         const res = await request(app)
-            .get("/api/users")
+            .get("/api/admin")
             .set("x-user-id", user._id.toString());
 
         expect(res.statusCode).toBe(403);
@@ -71,7 +71,7 @@ describe("Integration for DELETE /api/users/:id", () => {
         const user = await createUser();
 
         const res = await request(app)
-            .delete(`/api/users/${user._id}`)
+            .delete(`/api/admin/${user._id}`)
             .set("x-user-id", admin._id.toString());
 
         expect(res.statusCode).toBe(200);
@@ -86,7 +86,7 @@ describe("Integration for DELETE /api/users/:id", () => {
         const testUser = await createUser();
 
         const res = await request(app)
-            .delete(`/api/users/${testUser._id}`)
+            .delete(`/api/admin/${testUser._id}`)
             .set("x-user-id", user._id.toString());
 
         expect(res.statusCode).toBe(403);
@@ -97,7 +97,7 @@ describe("Integration for DELETE /api/users/:id", () => {
         const admin = await createAdmin();
 
         const res = await request(app)
-            .delete(`/api/users/000000000000000000000001`)
+            .delete(`/api/admin/000000000000000000000001`)
             .set("x-user-id", admin._id.toString());
 
         expect(res.statusCode).toBe(404);
@@ -107,13 +107,13 @@ describe("Integration for DELETE /api/users/:id", () => {
 
 //Integration Test for PUT /api/users/:id/role
 
-describe("Integration for PUT /api/users/:id/role", () => {
+describe("Integration for PUT /api/admin/:id/role", () => {
     test("admin can promote a user to admin", async () => {
         const admin = await createAdmin();
         const user = await createUser();
 
         const res = await request(app)
-            .put(`/api/users/${user._id}/role`)
+            .put(`/api/admin/${user._id}/role`)
             .set("x-user-id", admin._id.toString())
             .send({ role: "admin" });
 
@@ -129,7 +129,7 @@ describe("Integration for PUT /api/users/:id/role", () => {
         const testAdmin = await createAdmin();
 
         const res = await request(app)
-            .put(`/api/users/${testAdmin._id}/role`)
+            .put(`/api/admin/${testAdmin._id}/role`)
             .set("x-user-id", admin._id.toString())
             .send({ role: "user" });
 
@@ -145,7 +145,7 @@ describe("Integration for PUT /api/users/:id/role", () => {
         const testUser = await createUser();
 
         const res = await request(app)
-            .put(`/api/users/${testUser._id}/role`)
+            .put(`/api/admin/${testUser._id}/role`)
             .set("x-user-id", user._id.toString())
             .send({ role: "admin" });
 
@@ -158,7 +158,7 @@ describe("Integration for PUT /api/users/:id/role", () => {
         const user = await createUser();
 
         const res = await request(app)
-            .put(`/api/users/${user._id}/role`)
+            .put(`/api/admin/${user._id}/role`)
             .set("x-user-id", admin._id.toString())
             .send({});
 
@@ -186,7 +186,7 @@ describe("Integration for PUT /api/users/:id/role", () => {
         const admin = await createAdmin();
 
         const res = await request(app)
-            .put(`/api/users/000000000000000000000001/role`)
+            .put(`/api/admin/000000000000000000000001/role`)
             .set("x-user-id", admin._id.toString())
             .send({ role: "admin" });
 

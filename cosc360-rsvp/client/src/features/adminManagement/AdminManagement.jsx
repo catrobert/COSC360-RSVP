@@ -21,7 +21,7 @@ const AdminManagement = () => {
         async function fetchData() {
             try {
                 const [usersRes, eventsRes] = await Promise.all([
-                    fetch('/api/users', { headers: { 'x-user-id': activeUserId } }),
+                    fetch('/api/admin', { headers: { 'x-user-id': activeUserId } }),
                     fetch('/api/events'),
                 ]);
                 const usersData = await usersRes.json();
@@ -36,10 +36,10 @@ const AdminManagement = () => {
         fetchData();
     }, [activeUserId]);
 
-    async function handleDeleteUser(userId) {
-        if (!confirm("Are you sure you want to delete this user?")) return;
-        try {
-            const response = await fetch(`/api/users/${userId}`, {
+    async function handleDeleteUser(userId){
+        if(!confirm("Are you sure you want to delete this user?")) return;
+        try{
+            const response = await fetch(`/api/admin/${userId}`, {
                 method: 'DELETE',
                 headers: { 'x-user-id': activeUserId },
             });
@@ -57,9 +57,9 @@ const AdminManagement = () => {
     async function handlePromoteUser(userId, currentRole) {
         const newRole = currentRole === 'admin' ? 'user' : 'admin';
         const message = newRole === 'admin' ? "Promote this user to admin?" : "Demote this user to regular user?";
-        if (!confirm(message)) return;
-        try {
-            const response = await fetch(`/api/users/${userId}/role`, {
+        if(!confirm(message)) return;
+        try{
+            const response = await fetch(`/api/admin/${userId}/role`,{
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

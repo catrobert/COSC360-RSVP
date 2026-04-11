@@ -69,7 +69,7 @@ export const getProfile = async (req, res) => {
             return;
         }
 
-        const user = await getUserById(userId);
+        const user = await userServices.getUserById(userId);
 
         if (!user) {
             return res.status(404).json({ error: "User not found" });
@@ -95,7 +95,7 @@ export const updateProfile = async (req, res) => {
             return res.status(400).json({ error: "No valid profile fields provided" });
         }
 
-        const user = await updateUserById(userId, updates);
+        const user = await userServices.updateUserById(userId, updates);
 
         if (!user) {
             return res.status(404).json({ error: "User not found" });

@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 describe("Auth/Register", () => {
 
     test("register a new user successfully", async () => {
-        const res = await request(app).post("/api/register").send({
+        const res = await request(app).post("/api/users/register").send({
             firstName: "Test",
             lastName: "User",
             username: "testuser_unique",
@@ -32,7 +32,7 @@ describe("Auth/Register", () => {
         })
 
         //try to register with same username
-        const res = await request(app).post("/api/register").send({
+        const res = await request(app).post("/api/users/register").send({
             firstName: "Existing",
             lastName: "User",
             username: "takenuser",
@@ -44,7 +44,7 @@ describe("Auth/Register", () => {
     });
 
     test("returns 500 if required fields are missing", async () => {
-        const res = await request(app).post("/api/register").send({
+        const res = await request(app).post("/api/users/register").send({
             username: "nopassword",
         });
 

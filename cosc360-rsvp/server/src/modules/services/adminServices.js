@@ -1,6 +1,23 @@
 import * as eventRepository from "../repository/eventRepository.js";
 import * as rsvpRepository from "../repository/rsvpRepository.js";
-import * as adminRepository from "../repository/adminRepository.js";
+import * as userRepository from "../repository/userRepository.js";
+
+export async function updateUserById (id, updates) {
+    return await userRepository.updateUserById(id, updates);
+}
+
+export async function getAllUsers() {
+    return await userRepository.getAllUsers();
+}
+
+export async function deleteUserById(id){
+    return await userRepository.deleteUserById(id);
+}
+
+export async function getUserById(id) {
+    return await userRepository.getUserById(id);
+}
+
 
 export async function getAnalytics() {
     const analytics = {
@@ -31,7 +48,7 @@ async function getOverview() {
         }
     }
 
-    const users = await adminRepository.getAllUsers();
+    const users = await userRepository.getAllUsers();
     const totalUsers = users.length;
 
     const overviewObj = {totalEvents: totalEvents, 
@@ -68,7 +85,7 @@ async function getEventsInsights() {
 
     const bestByReviews = bestReviews.name;
 
-    const users = await adminRepository.getAllUsers();
+    const users = await userRepository.getAllUsers();
     let attendedMoreThanOne = 0;
 
     for (let user of users) {
@@ -205,7 +222,7 @@ async function getRatingsInsights() {
 }
 
 async function getUserInsights() {
-    const users = await adminRepository.getAllUsers();
+    const users = await userRepository.getAllUsers();
 
     const totalUsers = users.length;
     let totalAge = 0;
