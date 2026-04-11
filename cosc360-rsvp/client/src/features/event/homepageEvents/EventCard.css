@@ -106,12 +106,14 @@
     width: fit-content;
 }
 
-.review-btn {
+.greyed-out-review-btn {
     display: block;
     font-size: 0.85rem;
     margin: 1rem auto;
     width: fit-content;
     background-color: grey;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .delete-rsvp-btn {

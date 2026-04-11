@@ -169,7 +169,16 @@ function MyEvents() {
                 : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick} hasReviewed={hasReviewed}/>}
             </div>
 
-            {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}
+            {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={(newReview) => {
+                setReviewingEvent(null);
+                if (newReview) {
+                    setPreviousAttendedEvents(prev => prev.map(e =>
+                        e._id === reviewingEvent._id
+                            ? { ...e, reviews: [...(e.reviews || []), newReview] }
+                            : e
+                    ));
+                }
+            }} />}
             {editingEvent && <CreateEventForm initialData={editingEvent} eventId={editingEvent._id} onClose={(updated) => { setEditingEvent(null); }} />}
         </div>
     );

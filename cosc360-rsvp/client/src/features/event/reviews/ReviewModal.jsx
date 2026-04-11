@@ -69,7 +69,7 @@ function ReviewModal({ event, onClose }) {
                 const newReview = {
                     rating: Number(form.rating.value),
                     comment: form.comment.value,
-                    userId: { _id: activeUserId, username: activeUser.username },
+                    userId: { _id: activeUserId, username: activeUser?.username || "" },
                 };
 
                 onClose(newReview);
