@@ -90,6 +90,42 @@ describe("eventServices unit tests", () => {
         expect(mockEventRepository.updateEvent).not.toHaveBeenCalled();
     });
 
+    // tests delete missing path, service returns null when event is absent
+    test("deleteEvent returns null when event does not exist", async () => {
+        mockEventRepository.findEvent.mockResolvedValue(null);
+
+        const result = await eventServices.deleteEvent("missing_id", "user_1", "user");
+
+        expect(result).toBeNull();
+        expect(mockEventRepository.deleteEvent).not.toHaveBeenCalled();
+    });
+
+    // tests delete permission path, non-admin non-owner should get forbidden error
+    test("deleteEvent throws Forbidden for non-owner non-admin", async () => {
+        mockEventRepository.findEvent.mockResolvedValue({
+            createdBy: { _id: { toString: () => "owner_1" } },
+        });
+
+        await expect(
+            eventServices.deleteEvent("event_1", "different_user", "user")
+        ).rejects.toThrow("Forbidden");
+
+        expect(mockEventRepository.deleteEvent).not.toHaveBeenCalled();
+    });
+
+    // tests delete admin override path, admin can delete someone else's event
+    test("deleteEvent allows admin to delete another user's event", async () => {
+        mockEventRepository.findEvent.mockResolvedValue({
+            createdBy: { _id: { toString: () => "owner_1" } },
+        });
+        mockEventRepository.deleteEvent.mockResolvedValue({ _id: "event_1" });
+
+        const result = await eventServices.deleteEvent("event_1", "admin_1", "admin");
+
+        expect(mockEventRepository.deleteEvent).toHaveBeenCalledWith("event_1");
+        expect(result).toEqual({ _id: "event_1" });
+    });
+
     // tests permission path, non-admin non-owner should get forbidden error
     test("updateEvent throws Forbidden for non-owner non-admin", async () => {
         mockEventRepository.findEvent.mockResolvedValue({
