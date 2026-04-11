@@ -14,17 +14,15 @@ function ResetPassword() {
         e.preventDefault();
 
         if (!username.trim() || !newPassword || !confirmPassword) {
-            setMessage("Username, newPassword, and confirmPassword are required");
+            setMessage("All fields are required");
             return;
         }
 
-        if (newPassword.length < 8) {
-            setMessage("Password must be at least 8 characters");
-            return;
-        }
 
-        if (newPassword.length > 72) {
-            setMessage("Password must be 72 characters or fewer");
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])\S{8,16}$/; // at least 8-16 chars long, at least one number and one letter, no spaces
+
+        if (!passwordRegex.test(newPassword) || !passwordRegex.test(confirmPassword)) {
+            setMessage("Password must contain at least one number and one letter, and be 8-16 characters long");
             return;
         }
 
@@ -56,7 +54,7 @@ function ResetPassword() {
                     <input className="textField" type="password" placeholder="Confirm Password" onChange={e => setConfirmPassword(e.target.value)} />
                     <button id="reset-btn">Reset Password</button>
 
-                    <p>{message}</p>
+                    <p style={{color: 'red', textAlign:'center'}}>{message}</p>
                 </form>
             </div>
         </div>
