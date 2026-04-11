@@ -1,5 +1,6 @@
 import * as userServices from "../services/userServices.js";
 import bcrypt from "bcryptjs";
+import { uploadImage } from "../middleware.js";
 
 const VALID_USER_ROLES = new Set(["user", "admin"]);
 
@@ -191,6 +192,11 @@ export const updateProfile = async (req, res) => {
 }
 
 export const uploadPhoto = async (req, res) => {
+    uploadImage.single("profilePhoto")(req, res, async (err) => {
+        if(err){
+            return res.status(400).json({ error: err.message});
+        }
+    
     try {
         const userId = resolveProfileUserId(req, res);
 
@@ -214,7 +220,8 @@ export const uploadPhoto = async (req, res) => {
         console.error("Error uploading photo: ", err);
         res.status(500).json({ error: "Something went wrong" });
     }
-}
+});
+};
 
 export const listUsers = async (req, res) => {
     try {

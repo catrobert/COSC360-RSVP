@@ -23,6 +23,7 @@ function ProfilePage() {
         }]
     });
     const [saveStatus, setSaveStatus] = useState("");
+    const [photoError, setPhotoError] = useState("");
 
     useEffect(() => {
         async function fetchProfile() {
@@ -81,6 +82,7 @@ function ProfilePage() {
     async function handlePhotoUpload(e) {
         const file = e.target.files[0];
         if (!file) return;
+        setPhotoError("");
 
         const formData = new FormData();
         formData.append("profilePhoto", file);
@@ -93,6 +95,7 @@ function ProfilePage() {
             setProfile(data.user);
         } catch (err) {
             console.error("Photo upload failed: ", err.message);
+            setPhotoError(err.message || "Photo upload failed. Please try again.");
         }
     }
 
@@ -126,6 +129,7 @@ function ProfilePage() {
                                 style={{ display: "none" }}
                                 onChange={handlePhotoUpload}
                             />
+                            {photoError && <p className="photo-error-msg">{photoError}</p>}
                         </div>
                         <div className="profile-name">
                             <h2>{profile.firstName} {profile.lastName}</h2>
