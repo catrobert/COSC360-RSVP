@@ -23,16 +23,16 @@ async function createAdmin(overrides = {}){
     return await createUser({role: "admin", username:`admin_${Date.now()}`, ...overrides});
 }
 
-async function createEvent({ createdBy, date, endTime = "18:00", reviews = [] }) {
+async function createEvent({ createdBy, date, endTime = "18:00", price = 0, attendance = 0, reviews = [] }) {
     return await EventModel.create({
         name: "Review Test Event",
         date,
         location: "Kelowna",
         startTime: "16:00",
         endTime,
-        attendance: 0,
+        attendance,
         createdBy,
-        price: 0,
+        price,
         description: "Review flow test",
         reviews,
     });
