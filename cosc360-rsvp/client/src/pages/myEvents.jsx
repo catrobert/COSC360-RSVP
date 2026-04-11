@@ -138,13 +138,21 @@ function MyEvents() {
             <div className="main-content">
                 <TopNav />
                 <h1 style= {{ margin: "12px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Hosting Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> 
+                : upcomingHostedEvents.length === 0? <p style={{ marginLeft: "24px", color: 'grey' }}>None to show.</p> 
+                : <EventContainer events={upcomingHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Upcoming Attending Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} showDeleteRsvpButton={true} onDeleteRsvpClick={(eventId) => {handleDeleteRsvpClick(eventId)}}/>}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> 
+                : upcomingAttendingEvents.length === 0? <p style={{ marginLeft: "24px", color: 'grey' }}>None to show.</p> 
+                : <EventContainer events={upcomingAttendingEvents} onEventClick={handleEventClick} showDeleteRsvpButton={true} onDeleteRsvpClick={(eventId) => {handleDeleteRsvpClick(eventId)}}/>}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Hosted Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> 
+                : previousHostedEvents.length === 0? <p style={{ marginLeft: "24px", color: 'grey' }}>None to show.</p> 
+                : <EventContainer events={previousHostedEvents} onEventClick={handleEventClick} onEditClick={(event) => setEditingEvent(event)} />}
                 <h1 style= {{ margin: "36px 0 16px 24px", fontFamily: "inherit" }}>Previously Attended Events</h1>
-                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick}/>}
+                {loading ? <p style={{ marginLeft: "24px" }}>Loading...</p> 
+                : previousAttendedEvents.length === 0? <p style={{ marginLeft: "24px", color: 'grey' }}>None to show.</p> 
+                : <EventContainer events={previousAttendedEvents} onEventClick={handleEventClick} showReviewButton={true} onReviewClick={handleReviewClick}/>}
             </div>
 
             {reviewingEvent && <ReviewModal event={reviewingEvent} onClose={() => setReviewingEvent(null)} />}

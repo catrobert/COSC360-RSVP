@@ -77,7 +77,7 @@ function SavedEvents() {
                 {loading ? (
                     <p style={{ marginLeft: "24px" }}>Loading...</p>
                 ) : savedEvents.length === 0 ? (
-                    <p style={{ marginLeft: "24px" }}>No saved events yet.</p>
+                    <p style={{ marginLeft: "24px", color: 'grey' }}>No saved events yet.</p>
                 ) : (
                     <EventContainer events={savedEvents} onEventClick={handleEventClick} />
                 )}
