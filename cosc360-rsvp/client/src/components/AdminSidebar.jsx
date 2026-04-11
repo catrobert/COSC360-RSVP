@@ -3,6 +3,7 @@ import "../css/sidebar.css";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../context/AuthContext.jsx";
 import { useState, useEffect } from 'react';
+import { apiClient } from "../lib/api-client.js";
 
 
 const menuItems = [
@@ -12,7 +13,7 @@ const menuItems = [
 ];
 
 const adminItems = [
-    { icon: AlignEndHorizontal, label: "Analytics"},
+    { icon: AlignEndHorizontal, label: "Analytics" },
     { icon: Users, label: "Users & Events" }
 ];
 
@@ -35,10 +36,9 @@ function AdminSidebar({ profilePicture }) {
     useEffect(() => {
         async function fetchPhoto() {
             try {
-                const data = await fetch(`/api/users/profile?userId=${activeUserId}`);
-                const json = await data.json();
-                if (json.user?.profilePhoto) {
-                    setPhoto(json.user.profilePhoto);
+                const data = await apiClient(`/users/profile?userId=${activeUserId}`);
+                if (data.user?.profilePhoto) {
+                    setPhoto(data.user.profilePhoto);
                 }
             } catch (err) {
                 console.error("Error fetching photo: ", err);
@@ -53,7 +53,7 @@ function AdminSidebar({ profilePicture }) {
         navigate("/login");
     }
 
-    function handleSidebarClick(index){
+    function handleSidebarClick(index) {
         if (index === 0) {
             navigate(`/home`);
         } else if (index === 1) {
@@ -95,20 +95,20 @@ function AdminSidebar({ profilePicture }) {
             </div>
             <div className="menu-container">
                 {menuItems.map((item, index) => (
-                    <MenuItem 
-                        key={index} 
+                    <MenuItem
+                        key={index}
                         icon={item.icon}
-                        label={item.label} 
-                        clickItem={() => handleSidebarClick(index)}/>
+                        label={item.label}
+                        clickItem={() => handleSidebarClick(index)} />
                 ))}
                 <div><br></br>
                     <h4> Admin Controls </h4>
                 </div>
-                {adminItems.map ((item, index) => (
+                {adminItems.map((item, index) => (
                     <MenuItem
                         key={index}
                         icon={item.icon}
-                        label= {item.label}
+                        label={item.label}
                         clickItem={() => handleSidebarAdminClick(index)} />
                 ))}
             </div>
@@ -119,7 +119,7 @@ function AdminSidebar({ profilePicture }) {
                     clickItem={handleLogout} />
             </div>
         </div>
-    
+
     )
 };
 

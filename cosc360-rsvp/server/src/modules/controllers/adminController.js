@@ -1,4 +1,5 @@
 import * as adminService from "../services/adminServices.js";
+const VALID_USER_ROLES = new Set(["user", "admin"]);
 
 export const getAnalytics = async (req, res) => {
     try {
@@ -65,6 +66,10 @@ export const updateUserRole = async (req, res) => {
 
         if(!role){
             return res.status(400).json({ error: "Missing role"});
+        }
+
+        if (typeof role !== "string" || !VALID_USER_ROLES.has(role)) {
+            return res.status(400).json({ error: "Invalid role" });
         }
 
         const user = await adminService.updateUserById(id, {role});

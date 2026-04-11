@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 
 //Setup function to create test users
 
-async function createUser(overrides = {}){
+async function createUser(overrides = {}) {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash("password123", salt);
     return await UserSchema.create({
@@ -14,14 +14,14 @@ async function createUser(overrides = {}){
         lastName: "User",
         username: `testuser_${Date.now()}`,
         password: hashedPassword,
-        role:"user",
+        role: "user",
         createdDate: new Date(),
         ...overrides,
     });
 }
 
-async function createAdmin(overrides = {}){
-    return await createUser({role: "admin", username:`admin_${Date.now()}`, ...overrides});
+async function createAdmin(overrides = {}) {
+    return await createUser({ role: "admin", username: `admin_${Date.now()}`, ...overrides });
 }
 
 //Unit tests
@@ -29,14 +29,14 @@ async function createAdmin(overrides = {}){
 describe("Unit: role toggle logic", () => {
     test("toggles admin to user", () => {
         const currentRole = "admin";
-        const newRole = currentRole === "admin" ? "user" :"admin";
+        const newRole = currentRole === "admin" ? "user" : "admin";
         expect(newRole).toBe("user");
     });
 });
 
 //Integration Tests for GET users
 describe("Integration for GET /api/admin", () => {
-    test("returns all users for admin", async() =>{
+    test("returns all users for admin", async () => {
         const admin = await createAdmin();
         await createUser();
         await createUser();
@@ -48,35 +48,35 @@ describe("Integration for GET /api/admin", () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.users).toBeDefined();
         expect(Array.isArray(res.body.users)).toBe(true);
-        expect(res.body.users.length).toBeGreaterThanOrEqual(2);    
+        expect(res.body.users.length).toBeGreaterThanOrEqual(2);
     });
 
-    test("returns 403 for non-admin user", async() => {
+    test("returns 403 for non-admin user", async () => {
         const user = await createUser();
 
         const res = await request(app)
             .get("/api/admin")
             .set("x-user-id", user._id.toString());
-        
+
         expect(res.statusCode).toBe(403);
-        expect(res.body.error).toBe("Forbidden");    
+        expect(res.body.error).toBe("Forbidden");
     });
 });
 
 //Integration Test for DELETE users
 
 describe("Integration for DELETE /api/users/:id", () => {
-    test("admin can delete a user", async() =>{
+    test("admin can delete a user", async () => {
         const admin = await createAdmin();
         const user = await createUser();
 
         const res = await request(app)
             .delete(`/api/admin/${user._id}`)
             .set("x-user-id", admin._id.toString());
-        
+
         expect(res.statusCode).toBe(200);
         expect(res.body.message).toBe("User deleted successfully");
-        
+
         const deleted = await UserSchema.findById(user._id);
         expect(deleted).toBeNull();
     });
@@ -108,14 +108,14 @@ describe("Integration for DELETE /api/users/:id", () => {
 //Integration Test for PUT /api/users/:id/role
 
 describe("Integration for PUT /api/admin/:id/role", () => {
-    test("admin can promote a user to admin", async() => {
+    test("admin can promote a user to admin", async () => {
         const admin = await createAdmin();
         const user = await createUser();
 
         const res = await request(app)
             .put(`/api/admin/${user._id}/role`)
             .set("x-user-id", admin._id.toString())
-            .send({ role: "admin"});
+            .send({ role: "admin" });
 
         expect(res.statusCode).toBe(200);
         expect(res.body.user.role).toBe("admin");
@@ -131,7 +131,7 @@ describe("Integration for PUT /api/admin/:id/role", () => {
         const res = await request(app)
             .put(`/api/admin/${testAdmin._id}/role`)
             .set("x-user-id", admin._id.toString())
-            .send({ role : "user"});
+            .send({ role: "user" });
 
         expect(res.statusCode).toBe(200);
         expect(res.body.user.role).toBe("user");
@@ -147,7 +147,7 @@ describe("Integration for PUT /api/admin/:id/role", () => {
         const res = await request(app)
             .put(`/api/admin/${testUser._id}/role`)
             .set("x-user-id", user._id.toString())
-            .send({ role : "admin" });
+            .send({ role: "admin" });
 
         expect(res.statusCode).toBe(403);
         expect(res.body.error).toBe("Forbidden");
@@ -166,16 +166,32 @@ describe("Integration for PUT /api/admin/:id/role", () => {
         expect(res.body.error).toBe("Missing role");
     });
 
+    test("returns 400 if role value is invalid", async () => {
+        const admin = await createAdmin();
+        const user = await createUser();
+
+        const res = await request(app)
+            .put(`/api/admin/${user._id}/role`)
+            .set("x-user-id", admin._id.toString())
+            .send({ role: "superadmin" });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toBe("Invalid role");
+
+        const unchanged = await UserSchema.findById(user._id);
+        expect(unchanged.role).toBe("user");
+    });
+
     test("returns 404 if user does not exist", async () => {
         const admin = await createAdmin();
 
         const res = await request(app)
             .put(`/api/admin/000000000000000000000001/role`)
             .set("x-user-id", admin._id.toString())
-            .send({ role: "admin"});
+            .send({ role: "admin" });
 
         expect(res.statusCode).toBe(404);
         expect(res.body.error).toBe("User not found");
     });
-    
+
 });

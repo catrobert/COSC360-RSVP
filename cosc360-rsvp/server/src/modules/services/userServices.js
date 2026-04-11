@@ -25,10 +25,19 @@ export const createUser = async (firstName, lastName, username, password) => {
 export const updatePassword = async (username, newPassword) => {
     const salt = await bcrypt.genSalt(10);
     const newHashedPassword = await bcrypt.hash(newPassword, salt);
-    
+
     return await userRepository.updatePassword(username, newHashedPassword);
 }
 
 export async function getUserById(id) {
     return await userRepository.getUserById(id);
+}
+
+export async function deleteUserById(id){
+    return await userRepository.findByIdAndDelete(id);
+}
+
+
+export async function updateUserById (id, updates) {
+    return await userRepository.updateUserById(id, updates);
 }
