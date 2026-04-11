@@ -1,5 +1,6 @@
 import * as userServices from "../services/userServices.js";
 import bcrypt from "bcryptjs";
+import { uploadImage } from "../middleware.js";
 
 const VALID_USER_ROLES = new Set(["user", "admin"]);
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -79,12 +80,12 @@ export const createUser = async (req, res) => {
         return res.status(400).json({ error: "Profile image is required" });
     }
 
-    try{ 
+    try {
         //checks if username is unique
         const existingUser = await userServices.findUsername(username);
-        
-        if(existingUser){
-            return res.status(400).json({ error: "Username is already taken"});
+
+        if (existingUser) {
+            return res.status(400).json({ error: "Username is already taken" });
         }
 
         const existingEmail = await userServices.findEmail(email);
@@ -95,10 +96,10 @@ export const createUser = async (req, res) => {
 
         await userServices.createUser(firstName, lastName, username, email, password, profilePhoto);
 
-        res.status(201).json({ success: true, message: "User registered successfully"});
+        res.status(201).json({ success: true, message: "User registered successfully" });
 
     } catch (err) {
-        res.status(500).json({ error: "Something went wrong"});
+        res.status(500).json({ error: "Something went wrong" });
         console.log(err);
     }
 
@@ -115,21 +116,27 @@ export const loginUser = async (req, res) => {
             return res.status(401).json({ error: "Invalid username" });
         }
 
+        if (user.isActivated === false) {
+            return res.status(403).json({ error: "Account is deactivated" });
+        }
+
         const match = await bcrypt.compare(password, user.password);
 
         if (!match) {
             return res.status(401).json({ error: "Invalid password" });
         }
 
-        res.json({ success: true, message: "Login Successful",
+        res.json({
+            success: true, message: "Login Successful",
             user: {
                 id: user._id,
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                role: user.role
+                role: user.role,
+                isActivated: user.isActivated !== false
             }
-         });
+        });
     } catch (err) {
         res.status(500).json({ error: "Something went wrong" });
         console.log(err);
@@ -139,22 +146,22 @@ export const loginUser = async (req, res) => {
 export const updatePassword = async (req, res) => {
     const { username, newPassword, confirmPassword } = req.body;
 
-    if(newPassword !== confirmPassword){
-        return res.status(400).json({ error: "Passwords don't match"});
+    if (newPassword !== confirmPassword) {
+        return res.status(400).json({ error: "Passwords don't match" });
     }
 
-    try{
+    try {
         const existingUser = await userServices.findUsername(username);
-        
-        if(!existingUser){
-            return res.status(404).json({ error: "Username not found"});
+
+        if (!existingUser) {
+            return res.status(404).json({ error: "Username not found" });
         }
 
         await userServices.updatePassword(username, newPassword);
 
-        res.status(200).json({ success: true, message: "Password reset successfully"});       
-    }catch(err){
-        res.status(500).json({ error: "Something went wrong"});
+        res.status(200).json({ success: true, message: "Password reset successfully" });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
     }
 }
 
@@ -205,6 +212,11 @@ export const updateProfile = async (req, res) => {
 }
 
 export const uploadPhoto = async (req, res) => {
+    uploadImage.single("profilePhoto")(req, res, async (err) => {
+        if(err){
+            return res.status(400).json({ error: err.message});
+        }
+    
     try {
         const userId = resolveProfileUserId(req, res);
 
@@ -228,7 +240,8 @@ export const uploadPhoto = async (req, res) => {
         console.error("Error uploading photo: ", err);
         res.status(500).json({ error: "Something went wrong" });
     }
-}
+});
+};
 
 export const listUsers = async (req, res) => {
     try {
