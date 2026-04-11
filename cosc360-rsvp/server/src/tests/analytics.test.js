@@ -11,7 +11,7 @@ async function createUser(overrides = {}){
     return await UserSchema.create({
         firstName: "Test",
         lastName: "User",
-        username: `testuser_${Date.now()}`,
+        username: `testuser_${Date.now()}_${Math.random()}`,
         password: hashedPassword,
         role:"user",
         createdDate: new Date(),
@@ -20,7 +20,7 @@ async function createUser(overrides = {}){
 }
 
 async function createAdmin(overrides = {}){
-    return await createUser({role: "admin", username:`admin_${Date.now()}`, ...overrides});
+    return await createUser({role: "admin", username:`admin_${Date.now()}_${Math.random()}`, ...overrides});
 }
 
 async function createEvent({ createdBy, date, endTime = "18:00", price = 0, attendance = 0, reviews = [] }) {
