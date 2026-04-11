@@ -74,7 +74,7 @@ async function getEventsInsights() {
         let attendedEvents = 0;
 
         userRsvps.forEach(rsvp => {
-            if (eventIsUpcoming(rsvp.eventId.date, rsvp.eventId.endTime)) {
+            if (!eventIsUpcoming(rsvp.eventId.date, rsvp.eventId.endTime)) {
                 attendedEvents += 1;
             }
         })

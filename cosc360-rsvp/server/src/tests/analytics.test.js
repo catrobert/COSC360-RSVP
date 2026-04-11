@@ -235,7 +235,6 @@ describe("User insights", () => {
     test("averageAge reflects users with a birthday set", async () => {
         const admin = await createAdmin();
 
-        const birthday = new Date("1995-06-15");
         await createUser({
             description: [{ birthday: new Date("1995-06-15"), gender: "Male", location: "Kelowna" }],
         });
@@ -248,5 +247,88 @@ describe("User insights", () => {
         if (averageAge !== "N/A") {
             expect(averageAge).toBeGreaterThan(0);
         }
+    });
+});
+
+
+// event insights tests
+describe("Event insights", () => {
+    test("eventInsights contains expected fields", async () => {
+        const admin = await createAdmin();
+        const user = await createUser();
+        const pastDate = new Date();
+        pastDate.setDate(pastDate.getDate() - 7);
+
+        await createEvent({
+            createdBy: admin._id,
+            date: pastDate,
+            endTime: "08:00",
+            reviews: [{ rating: 4, comment: "Good!", userId: user._id }],
+        });
+
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { eventInsights } = res.body;
+        expect(eventInsights).toHaveProperty("averageAttendance");
+        expect(eventInsights).toHaveProperty("averagePrice");
+        expect(eventInsights).toHaveProperty("mostPopularByAttendance");
+        expect(eventInsights).toHaveProperty("mostPopularByReviews");
+        expect(eventInsights).toHaveProperty("attendedMoreThanOne");
+    });
+
+    test("averageAttendance and averagePrice reflect created events", async () => {
+        const admin = await createAdmin();
+        const pastDate = new Date();
+        pastDate.setDate(pastDate.getDate() - 7);
+
+        await createEvent({ createdBy: admin._id, date: pastDate, endTime: "08:00", attendance: 10, price: 20 });
+        await createEvent({ createdBy: admin._id, date: pastDate, endTime: "08:00", attendance: 30, price: 40 });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { averageAttendance, averagePrice } = res.body.eventInsights;
+        expect(typeof averageAttendance).toBe("number");
+        expect(averageAttendance).toBeGreaterThan(0);
+        expect(typeof averagePrice).toBe("number");
+        expect(averagePrice).toBeGreaterThan(0);
+    });
+
+    test("mostPopularByAttendance returns a string", async () => {
+        const admin = await createAdmin();
+        const pastDate = new Date();
+        pastDate.setDate(pastDate.getDate() - 7);
+
+        await createEvent({ createdBy: admin._id, date: pastDate, endTime: "08:00", attendance: 50 });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { mostPopularByAttendance } = res.body.eventInsights;
+        expect(typeof mostPopularByAttendance).toBe("string");
+    });
+
+    test("attendedMoreThanOne increments for users with multiple past RSVPs", async () => {
+        const admin = await createAdmin();
+        const user = await createUser();
+        const pastDate = new Date();
+        pastDate.setDate(pastDate.getDate() - 7);
+
+        const event1 = await createEvent({ createdBy: admin._id, date: pastDate, endTime: "08:00" });
+        const event2 = await createEvent({ createdBy: admin._id, date: pastDate, endTime: "08:00" });
+
+        await RSVPModel.create({ userId: user._id, eventId: event1._id, status: "yes" });
+        await RSVPModel.create({ userId: user._id, eventId: event2._id, status: "yes" });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        expect(res.body.eventInsights.attendedMoreThanOne).toBeGreaterThanOrEqual(1);
     });
 });
