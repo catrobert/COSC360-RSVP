@@ -1,10 +1,11 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import MyEvents from "../pages/myEvents.jsx";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
 
 jest.mock("react-router-dom", () => ({
     useNavigate: jest.fn(),
+    useSearchParams: jest.fn(() => [new URLSearchParams()]),
 }));
 
 jest.mock("../context/AuthContext.jsx", () => ({
@@ -16,11 +17,16 @@ jest.mock("../components/sidebar", () => () => <div>Sidebar</div>);
 jest.mock("../components/AdminSidebar.jsx", () => () => <div>AdminSidebar</div>);
 jest.mock("../features/event/reviews/ReviewModal.jsx", () => () => <div>ReviewModal</div>);
 jest.mock("../features/event/createEvent/CreateEventForm.jsx", () => () => <div>CreateEventForm</div>);
-jest.mock("../features/event/homepageEvents/EventContainer", () => ({ events }) => (
+jest.mock("../features/event/homepageEvents/EventContainer", () => ({ events, onEventClick, onDeleteRsvpClick, onReviewClick }) => (
     <div>
         <p>EventContainer</p>
         {events.map((e) => (
-            <p key={e._id}>{e.name}</p>
+            <div key={e._id}>
+                <p>{e.name}</p>
+                {onEventClick && <button onClick={() => onEventClick(e._id)}>view-{e.name}</button>}
+                {onDeleteRsvpClick && <button onClick={() => onDeleteRsvpClick(e._id)}>cancel-rsvp-{e.name}</button>}
+                {onReviewClick && <button onClick={() => onReviewClick(e)}>review-{e.name}</button>}
+            </div>
         ))}
     </div>
 ));
@@ -32,6 +38,7 @@ describe("MyEvents frontend tests", () => {
     beforeEach(() => {
         jest.clearAllMocks();
         global.fetch = jest.fn();
+        global.alert = jest.fn();
         useNavigate.mockReturnValue(mockNavigate);
     });
 
@@ -117,5 +124,126 @@ describe("MyEvents frontend tests", () => {
 
         const containers = screen.getAllByText("EventContainer");
         expect(containers.length).toBe(4);
+    });
+
+    // tests event navigation, clicking an event should navigate to its detail page
+    test("navigates to event page when event is clicked", async () => {
+        useAuth.mockReturnValue({
+            activeUser: { role: "user", _id: "user_1" },
+            activeUserId: "user_1",
+        });
+
+        global.fetch
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    events: [
+                        {
+                            _id: "event_1",
+                            name: "Hosted Event",
+                            createdBy: { _id: "user_1" },
+                            date: "2030-06-15T00:00:00.000Z",
+                            endTime: "20:00",
+                        },
+                    ],
+                }),
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ events: [] }),
+            });
+
+        render(<MyEvents />);
+
+        const viewButton = await screen.findByText("view-Hosted Event");
+        fireEvent.click(viewButton);
+
+        expect(mockNavigate).toHaveBeenCalledWith("/event/event_1");
+    });
+
+    // tests RSVP cancellation, should send PATCH with correct user header
+    test("sends delete rsvp request with user header", async () => {
+        useAuth.mockReturnValue({
+            activeUser: { role: "user", _id: "user_1" },
+            activeUserId: "user_1",
+        });
+
+        global.fetch
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ events: [] }),
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    events: [
+                        {
+                            eventId: {
+                                _id: "event_2",
+                                name: "Attending Event",
+                                date: "2030-06-15T00:00:00.000Z",
+                                endTime: "20:00",
+                            },
+                        },
+                    ],
+                }),
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ message: "RSVP removed" }),
+            });
+
+        render(<MyEvents />);
+
+        const cancelButton = await screen.findByText("cancel-rsvp-Attending Event");
+        fireEvent.click(cancelButton);
+
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalledWith("/api/rsvp/event_2", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-user-id": "user_1",
+                },
+            });
+        });
+    });
+
+    // tests review modal, clicking review on a past event should open the modal
+    test("opens review modal when review button is clicked", async () => {
+        useAuth.mockReturnValue({
+            activeUser: { role: "user", _id: "user_1" },
+            activeUserId: "user_1",
+        });
+
+        global.fetch
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ events: [] }),
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    events: [
+                        {
+                            eventId: {
+                                _id: "event_3",
+                                name: "Past Event",
+                                date: "2020-01-01T00:00:00.000Z",
+                                endTime: "18:00",
+                            },
+                        },
+                    ],
+                }),
+            });
+
+        render(<MyEvents />);
+
+        const reviewButton = await screen.findByText("review-Past Event");
+        fireEvent.click(reviewButton);
+
+        await waitFor(() => {
+            expect(screen.getByText("ReviewModal")).toBeInTheDocument();
+        });
     });
 });
