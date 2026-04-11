@@ -43,6 +43,7 @@ function MyEvents() {
 
         if (response.ok) {
             alert(result.message);
+            setUpcomingAttendingEvents(prev => prev.filter(e => e._id.toString() !== eventId.toString()));
         }
     }
 
