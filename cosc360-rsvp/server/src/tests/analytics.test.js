@@ -122,3 +122,38 @@ describe("Response shape for GET /api/admin/analytics", () => {
         expect(ratingDistribution.map(r => r.rating)).toEqual([1, 2, 3, 4, 5]);
     });
 });
+
+// revenue insights tests
+describe("Revenue insights", () => {
+    test("totalRevenue reflects attendance x price across events", async () => {
+        const admin = await createAdmin();
+        const pastDate = new Date();
+        pastDate.setDate(pastDate.getDate() - 7);
+
+        await createEvent({ createdBy: admin._id, date: pastDate, endTime: "08:00", attendance: 10, price: 20 });
+        await createEvent({ createdBy: admin._id, date: pastDate, endTime: "08:00", attendance: 5, price: 40 });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        expect(res.body.revenueInsights.totalRevenue).toBe(400);
+    });
+
+    test("histogram quarter counts increment for events within the last year", async () => {
+        const admin = await createAdmin();
+
+        const recentDate = new Date();
+        recentDate.setMonth(recentDate.getMonth() - 1);
+
+        await createEvent({ createdBy: admin._id, date: recentDate, endTime: "08:00", attendance: 5, price: 10 });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { histogram } = res.body.revenueInsights;
+        const totalQuarterCount = histogram.reduce((sum, q) => sum + q.count, 0);
+        expect(totalQuarterCount).toBeGreaterThanOrEqual(1);
+    });
+});
