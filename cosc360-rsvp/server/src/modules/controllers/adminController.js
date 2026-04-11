@@ -5,7 +5,10 @@ const VALID_ACTIVATION_STATES = new Set([true, false]);
 export const getAnalytics = async (req, res) => {
     try {
         const role = req.userRole;
+        let startDate = req.query.startDate;
 
+        if (startDate) startDate = new Date(startDate);
+     
         if (role !== 'admin') {
             return res.status(403).json({ error: "You are not permitted to view this page" });
         }

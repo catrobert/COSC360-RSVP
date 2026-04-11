@@ -7,8 +7,16 @@ import { CalendarPlus2, BadgeCheck, UserCheck, ClockAlert, CalendarSync, Trophy,
 import { useAuth } from "../context/AuthContext";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
+const filterOptions = [
+    { label: "All Time", getStartDate: () => null },
+    { label: "Last Year", getStartDate: () => { const d = new Date(); d.setFullYear(d.getFullYear() - 1); return d; }},
+    { label: "Last 6 Months", getStartDate: () => { const d = new Date(); d.setMonth(d.getMonth() - 6); return d; }},
+    { label: "Last 30 Days", getStartDate: () => { const d = new Date(); d.setDate(d.getDate() - 30); return d; }},
+];
+
 function Analytics() {
     const { activeUser, activeUserId } = useAuth();
+    const [selectedFilter, setSelectedFilter] = useState(0);
     const [overviewInsights, setOverviewInsights] = useState([]);
     const [eventInsights, setEventInsights] = useState([]);
     const [revenueInsights, setRevenueInsights] = useState([]);
@@ -28,7 +36,9 @@ function Analytics() {
             return;
         }
         async function fetchAdminAnalytics() {
-            const response = await fetch(`api/admin/analytics`, {
+            const startDate = filterOptions[selectedFilter].getStartDate();
+
+            const response = await fetch(`api/admin/analytics?startDate=${startDate ? startDate.toISOString() : ''}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'x-user-id': activeUserId,
@@ -77,7 +87,7 @@ function Analytics() {
             setGenderDistributionData(result.userInsights.genderDistribution);
         }
         fetchAdminAnalytics();
-    }, [])
+    }, [selectedFilter])
 
 
     return (
@@ -86,6 +96,18 @@ function Analytics() {
         <div className="main-content">
             <TopNav />
             <h1 className="page-title">Analytics Dashboard</h1>
+
+            <div className="filter-bar">
+                {filterOptions.map((option, index) => (
+                    <button
+                        key={index}
+                        className={`filter-btn ${selectedFilter === index ? "filter-btn-active" : ""}`}
+                        onClick={() => setSelectedFilter(index)}
+                    >
+                        {option.label}
+                    </button>
+                ))}
+            </div>
 
             <div className="analytics-section">
                 <h3 className="section-header">Overview</h3>
