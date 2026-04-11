@@ -84,12 +84,10 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const userId = resolveProfileUserId(req, res);
+        if (!userId) return;
+
         const updates = sanitizeProfileUpdates(req.body);
         console.log("Updating user: ", userId, updates);
-
-        if (!userId) {
-            return;
-        }
 
         if (Object.keys(updates).length === 0) {
             return res.status(400).json({ error: "No valid profile fields provided" });
