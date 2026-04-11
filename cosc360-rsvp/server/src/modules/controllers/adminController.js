@@ -4,9 +4,9 @@ const VALID_USER_ROLES = new Set(["user", "admin"]);
 export const getAnalytics = async (req, res) => {
     try {
         const role = req.userRole;
-        const startDate = req.params.startDate;
+        let startDate = req.query.startDate;
 
-        if (startDate) new Date(startDate);
+        if (startDate) startDate = new Date(startDate);
      
         if (role !== 'admin') {
             return res.status(403).json( { error: "You are not permitted to view this page" });

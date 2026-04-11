@@ -332,3 +332,45 @@ describe("Event insights", () => {
         expect(res.body.eventInsights.attendedMoreThanOne).toBeGreaterThanOrEqual(1);
     });
 });
+
+
+describe("Filter by startDate query param", () => {
+    test("excludes events before the startDate", async () => {
+        const admin = await createAdmin();
+
+        const oldDate = new Date();
+        oldDate.setFullYear(oldDate.getFullYear() - 2);
+
+        const recentDate = new Date();
+        recentDate.setDate(recentDate.getDate() - 7);
+
+        await createEvent({ createdBy: admin._id, date: oldDate, endTime: "08:00", attendance: 99, price: 99 });
+        await createEvent({ createdBy: admin._id, date: recentDate, endTime: "08:00", attendance: 1, price: 1 });
+
+        const startDate = new Date();
+        startDate.setFullYear(startDate.getFullYear() - 1);
+
+        const res = await request(app)
+            .get(`/api/admin/analytics?startDate=${startDate.toISOString()}`)
+            .set("x-user-id", admin._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.revenueInsights.totalRevenue).toBeLessThan(99 * 99);
+    });
+
+    test("includes all events when no startDate is provided", async () => {
+        const admin = await createAdmin();
+
+        const oldDate = new Date();
+        oldDate.setFullYear(oldDate.getFullYear() - 2);
+
+        await createEvent({ createdBy: admin._id, date: oldDate, endTime: "08:00", attendance: 10, price: 10 });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.revenueInsights.totalRevenue).toBeGreaterThanOrEqual(100);
+    });
+});
