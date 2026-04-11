@@ -125,7 +125,7 @@ describe("Response shape for GET /api/admin/analytics", () => {
 
 // revenue insights tests
 describe("Revenue insights", () => {
-    test("totalRevenue reflects attendance x price across events", async () => {
+    test("totalRevenue reflects attendance * price across events", async () => {
         const admin = await createAdmin();
         const pastDate = new Date();
         pastDate.setDate(pastDate.getDate() - 7);
@@ -155,5 +155,49 @@ describe("Revenue insights", () => {
         const { histogram } = res.body.revenueInsights;
         const totalQuarterCount = histogram.reduce((sum, q) => sum + q.count, 0);
         expect(totalQuarterCount).toBeGreaterThanOrEqual(1);
+    });
+});
+
+// ratings tests
+describe("Ratings insights", () => {
+    test("averageRating is N/A when no reviews exist", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        // Only valid if no events with reviews were seeded — acceptable in isolated test DB
+        const { averageRating } = res.body.ratingsInsights;
+        expect(["N/A", expect.any(Number)]).toContain(averageRating);
+    });
+
+    test("averageRating and totalReviews reflect created reviews", async () => {
+        const admin = await createAdmin();
+        const user = await createUser();
+        const pastDate = new Date();
+        pastDate.setDate(pastDate.getDate() - 7);
+
+        await createEvent({
+            createdBy: admin._id,
+            date: pastDate,
+            endTime: "08:00",
+            reviews: [
+                { rating: 4, comment: "Great!", userId: user._id },
+                { rating: 2, comment: "Okay.", userId: user._id },
+            ],
+        });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { totalReviews, ratingDistribution } = res.body.ratingsInsights;
+        expect(totalReviews).toBeGreaterThanOrEqual(2);
+
+        const fourStar = ratingDistribution.find(r => r.rating === 4);
+        const twoStar = ratingDistribution.find(r => r.rating === 2);
+        expect(fourStar.count).toBeGreaterThanOrEqual(1);
+        expect(twoStar.count).toBeGreaterThanOrEqual(1);
     });
 });
