@@ -122,8 +122,9 @@ describe("MyEvents frontend tests", () => {
             expect(global.fetch).not.toHaveBeenCalled();
         });
 
-        const containers = screen.getAllByText("EventContainer");
-        expect(containers.length).toBe(4);
+        const emptyStates = screen.getAllByText("None to show.");
+        expect(emptyStates.length).toBe(4);
+        expect(screen.queryByText("EventContainer")).not.toBeInTheDocument();
     });
 
     // tests event navigation, clicking an event should navigate to its detail page
