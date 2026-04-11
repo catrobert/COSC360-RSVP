@@ -18,3 +18,53 @@
     padding: 24px 16px 24px 32px;
     flex: 1;
 }
+
+.homepage-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px;
+    padding: 12px 16px 12px 32px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e4f0;
+}
+
+.homepage-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 170px;
+}
+
+.homepage-filter-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #334155;
+    letter-spacing: 0.01em;
+}
+
+.homepage-filter-group select,
+.homepage-filter-group input[type="date"] {
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+    background-color: #f8fafc;
+    color: #0f172a;
+}
+
+.homepage-filter-group select:focus,
+.homepage-filter-group input[type="date"]:focus {
+    outline: 2px solid rgba(0, 0, 128, 0.2);
+    border-color: navy;
+}
+
+@media (max-width: 768px) {
+    .homepage-filters {
+        padding: 12px 16px;
+    }
+
+    .homepage-filter-group {
+        min-width: 100%;
+    }
+}
