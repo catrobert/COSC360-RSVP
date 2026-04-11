@@ -59,3 +59,25 @@
     padding: 20px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
+
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 0 1.5rem;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    background-color: navy;
+    border: 1px solid navy;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filter-btn-active {
+    background-color: #97b0cb;
+    border: 1px solid #97b0cb;
+    color: white;
+}

@@ -19,20 +19,25 @@ export async function getUserById(id) {
 }
 
 
-export async function getAnalytics() {
+export async function getAnalytics(startDate) {
     const analytics = {
-        overview: await getOverview(),
-        eventInsights: await getEventsInsights(),
-        revenueInsights: await getRevenueInsights(),
-        ratingsInsights: await getRatingsInsights(),
+        overview: await getOverview(startDate),
+        eventInsights: await getEventsInsights(startDate),
+        revenueInsights: await getRevenueInsights(startDate),
+        ratingsInsights: await getRatingsInsights(startDate),
         userInsights: await getUserInsights(),
     };
     return analytics;
 }
 
+function withinRange(eventDate, startDate) {
+    if (startDate && eventDate < startDate) return false;
+    return true;
+}
 
-async function getOverview() {
-    const events = await eventRepository.findAll();
+async function getOverview(startDate) {
+    const allEvents = await eventRepository.findAll();
+    const events = allEvents.filter(e => withinRange(e.date, startDate));
     
     const totalEvents = events.length;
     let totalAttend = 0;
@@ -58,8 +63,9 @@ async function getOverview() {
     return overviewObj;
 }
 
-async function getEventsInsights() {
-    const events = await eventRepository.findAll();
+async function getEventsInsights(startDate) {
+    const allEvents = await eventRepository.findAll();
+    const events = allEvents.filter(e => withinRange(e.date, startDate));
 
     const totalEvents = events.length;
     let totalAttendance = 0;
@@ -91,7 +97,7 @@ async function getEventsInsights() {
         let attendedEvents = 0;
 
         userRsvps.forEach(rsvp => {
-            if (!eventIsUpcoming(rsvp.eventId.date, rsvp.eventId.endTime)) {
+            if (!eventIsUpcoming(rsvp.eventId.date, rsvp.eventId.endTime) && withinRange(rsvp.eventId.date, startDate)) {
                 attendedEvents += 1;
             }
         })
@@ -108,8 +114,9 @@ async function getEventsInsights() {
     return eventsObj;
 }
 
-async function getRevenueInsights() {
-    const events = await eventRepository.findAll();
+async function getRevenueInsights(startDate) {
+    const allEvents = await eventRepository.findAll();
+    const events = allEvents.filter(e => withinRange(e.date, startDate));
 
     let totalRevenue = 0;
     let quarter1Count = 0;
@@ -124,27 +131,25 @@ async function getRevenueInsights() {
     for (let event of events) {
         totalRevenue += (event.attendance * event.price);
 
-        if (withinLastYear(event.date)) {
-            const quarter = getQuarter(event.date);
+        const quarter = getQuarter(event.date);
 
-            switch(quarter) {
-                case 1:
-                    quarter1Count += 1;
-                    quarter1Revenue += (event.attendance * event.price);
-                    break;
-                case 2:
-                    quarter2Count += 1;
-                    quarter2Revenue += (event.attendance * event.price);
-                    break;
-                 case 3:
-                    quarter3Count += 1;
-                    quarter3Revenue += (event.attendance * event.price);
-                    break;
-                case 4:
-                    quarter4Count += 1;
-                    quarter4Revenue += (event.attendance * event.price);
-                    break;                                                           
-            }
+        switch(quarter) {
+            case 1:
+                quarter1Count += 1;
+                quarter1Revenue += (event.attendance * event.price);
+                break;
+            case 2:
+                quarter2Count += 1;
+                quarter2Revenue += (event.attendance * event.price);
+                break;
+             case 3:
+                quarter3Count += 1;
+                quarter3Revenue += (event.attendance * event.price);
+                break;
+            case 4:
+                quarter4Count += 1;
+                quarter4Revenue += (event.attendance * event.price);
+                break;                                                           
         }
     }
 
@@ -160,8 +165,9 @@ async function getRevenueInsights() {
     return { ...revenueObj, histogram: histogramVals};
 }
 
-async function getRatingsInsights() {
-    const events = await eventRepository.findAll();
+async function getRatingsInsights(startDate) {
+    const allEvents = await eventRepository.findAll();
+    const events = allEvents.filter(e => withinRange(e.date, startDate));
 
     let totalRating = 0;
     let totalReviews = 0;
