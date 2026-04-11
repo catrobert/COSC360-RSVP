@@ -189,7 +189,7 @@ describe("Profile endpoints", () => {
                 .set("x-user-id", user._id.toString());
 
             expect(res.statusCode).toBe(400);
-            expect(res.body.error).toBe("No file uplaoded");
+            expect(res.body.error).toBe("No file uploaded");
         });
     });
 });
@@ -327,7 +327,7 @@ describe("Integration for POST /api/users/profile/photo", () => {
             .post(`/api/users/profile/photo?userId=${user._id}`);
 
         expect(res.statusCode).toBe(400);
-        expect(res.body.error).toBe("No file uplaoded");
+        expect(res.body.error).toBe("No file uploaded");
     });
 
     test("uploads profile photo successfully", async () => {

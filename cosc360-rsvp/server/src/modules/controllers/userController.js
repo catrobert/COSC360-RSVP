@@ -117,7 +117,7 @@ export const uploadPhoto = async (req, res) => {
         }
 
         if (!req.file) {
-            return res.status(400).json({ error: "No file uplaoded" });
+            return res.status(400).json({ error: "No file uploaded" });
         }
 
         const photoPath = "/uploads/" + req.file.filename;
