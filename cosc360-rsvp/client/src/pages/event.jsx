@@ -204,7 +204,7 @@ function EventPage() {
         return (
             <div className="homepage-layout">
                 {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
-                <Sidebar />
+                {activeUser?.role === "admin" ? <AdminSidebar /> : <Sidebar />}
                 <div className="main-content">
                     <TopNav />
                     <div className="main-content-area">
@@ -218,8 +218,7 @@ function EventPage() {
     return (
         <div className="homepage-layout">
             {showLogin && <LoginOverlay onClose={() => setShowLogin(false)}/>}
-            <Sidebar />
-            {activeUser?.role === 'admin' ? (<AdminSidebar />) : (<Sidebar />)}
+            {activeUser?.role === "admin" ? <AdminSidebar /> : <Sidebar />}
             <div className="main-content">
                 <TopNav />
                 <div id="event-header">
