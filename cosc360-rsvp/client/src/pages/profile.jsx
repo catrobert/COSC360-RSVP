@@ -15,18 +15,18 @@ function ProfilePage() {
     const [form, setForm] = useState({
         firstName: "",
         lastName: "",
-        username:"",
+        username: "",
         description: [{
-            birthday:"",
-            gender:"",
-            location:"",
+            birthday: "",
+            gender: "",
+            location: "",
         }]
     });
     const [saveStatus, setSaveStatus] = useState("");
 
     useEffect(() => {
-        async function fetchProfile(){
-            try{
+        async function fetchProfile() {
+            try {
 
                 const data = await apiClient(`/users/profile?userId=${activeUserId}`);
                 setProfile(data.user);
@@ -35,29 +35,29 @@ function ProfilePage() {
                     lastName: data.user.lastName,
                     username: data.user.username,
                     description: [{
-                        birthday: data.user.description?.[0]?.birthday 
-                        ? new Date(data.user.description[0].birthday).toISOString().split("T")[0] : "",
+                        birthday: data.user.description?.[0]?.birthday
+                            ? new Date(data.user.description[0].birthday).toISOString().split("T")[0] : "",
                         gender: data.user.description?.[0]?.gender || "",
                         location: data.user.description?.[0]?.location || "",
                     }]
                 });
 
-            } catch (err){
+            } catch (err) {
                 console.error("Error fetching profile:", err);
             }
         }
         if (activeUserId) fetchProfile();
     }, [activeUserId]);
 
-    function handleChange(e){
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value}));
+    function handleChange(e) {
+        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     }
 
     function handleDescriptionChange(e) {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setForm((prev) => ({
             ...prev,
-            description: [{ ...prev.description[0], [name]: value}]
+            description: [{ ...prev.description[0], [name]: value }]
         }));
     }
 
@@ -72,30 +72,27 @@ function ProfilePage() {
             setEditing(false);
             setSaveStatus("Changes saved!");
             setTimeout(() => setSaveStatus(""), 3000);
-        }catch (err) {
+        } catch (err) {
             console.error("Error saving profile: ", err);
             setSaveStatus("Failed to save changes.");
         }
     }
 
-    async function handlePhotoUpload(e){
+    async function handlePhotoUpload(e) {
         const file = e.target.files[0];
-        if(!file) return;
+        if (!file) return;
 
         const formData = new FormData();
         formData.append("profilePhoto", file);
 
-        const response = await fetch(`/api/users/profile/photo?userId=${activeUserId}`, {
-            method: "POST",
-            body: formData,
-        });
-
-        const data = await response.json();
-
-        if(response.ok){
+        try {
+            const data = await apiClient(`/users/profile/photo?userId=${activeUserId}`, {
+                method: "POST",
+                body: formData,
+            });
             setProfile(data.user);
-        }else{
-            console.error("Photo upload failed: ", data.error);
+        } catch (err) {
+            console.error("Photo upload failed: ", err.message);
         }
     }
 
@@ -105,145 +102,145 @@ function ProfilePage() {
         <div className="homepage-layout">
             {activeUser?.role === "admin" ? <AdminSidebar /> : <Sidebar />}
             <div className="main-content">
-                <TopNav/>
+                <TopNav />
                 <div className="profile-container">
                     {/*Profile pic*/}
-                    <div className = "profile-picture-section">
-                      <div className="profile-picture-wrapper">
-                        {profile.profilePhoto ? (
-                            <img
-                                src={profile.profilePhoto}
-                                alt="Profile"
-                                className="profile-picture-img"
-                            />    
-                        ): ( 
-                            <div className="profile-picture"></div>
-                        )}  
-                        <label className="profile-photo-upload-btn" htmlFor="photo-upload">
-                            <CirclePlus/>
-                        </label> 
-                        <input 
-                            id="photo-upload"
-                            type="file"
-                            accept="image/*"
-                            style={{ display: "none"}}
-                            onChange={handlePhotoUpload}
-                        />  
-                     </div>   
+                    <div className="profile-picture-section">
+                        <div className="profile-picture-wrapper">
+                            {profile.profilePhoto ? (
+                                <img
+                                    src={profile.profilePhoto}
+                                    alt="Profile"
+                                    className="profile-picture-img"
+                                />
+                            ) : (
+                                <div className="profile-picture"></div>
+                            )}
+                            <label className="profile-photo-upload-btn" htmlFor="photo-upload">
+                                <CirclePlus />
+                            </label>
+                            <input
+                                id="photo-upload"
+                                type="file"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                                onChange={handlePhotoUpload}
+                            />
+                        </div>
                         <div className="profile-name">
                             <h2>{profile.firstName} {profile.lastName}</h2>
                             <p>@{profile.username}</p>
                         </div>
                     </div>
-                
+
 
                     {/*Personal Info*/}
                     <div className="profile-card">
-                            <h3>Personal Info</h3>
+                        <h3>Personal Info</h3>
                         <div className="profile-fields">
-                        <div className="profile-field-group">   
-                            <label>First Name</label>
-                            <input
-                                className="profile-input"
-                                name="firstName"
-                                value={form.firstName}
-                                onChange={handleChange}
-                                disabled={!editing}
-                                placeholder="First Name"
-                            />
-                         </div>
-                         <div className="profile-field-group">    
-                            <label>Last Name</label>
-                            <input
-                                className="profile-input"
-                                name="lastName"
-                                value={form.lastName}
-                                onChange={handleChange}
-                                disabled={!editing}
-                                placeholder="Last Name"
-                            />
-                        </div>
+                            <div className="profile-field-group">
+                                <label>First Name</label>
+                                <input
+                                    className="profile-input"
+                                    name="firstName"
+                                    value={form.firstName}
+                                    onChange={handleChange}
+                                    disabled={!editing}
+                                    placeholder="First Name"
+                                />
+                            </div>
+                            <div className="profile-field-group">
+                                <label>Last Name</label>
+                                <input
+                                    className="profile-input"
+                                    name="lastName"
+                                    value={form.lastName}
+                                    onChange={handleChange}
+                                    disabled={!editing}
+                                    placeholder="Last Name"
+                                />
+                            </div>
 
-                        <div className="profile-field-group">     
-                            <label>Username</label>
-                            <input
-                                className="profile-input"
-                                name="username"
-                                value={form.username}
-                                onChange={handleChange}
-                                disabled={!editing}
-                                placeholder="Username"
-                            />
-                            
-                        </div>
+                            <div className="profile-field-group">
+                                <label>Username</label>
+                                <input
+                                    className="profile-input"
+                                    name="username"
+                                    value={form.username}
+                                    onChange={handleChange}
+                                    disabled={!editing}
+                                    placeholder="Username"
+                                />
+
+                            </div>
                         </div>
                     </div>
 
                     {/*Description*/}
                     <div className="profile-card">
-                        
-                            <h3>Description</h3>
-                        
+
+                        <h3>Description</h3>
+
 
                         <div className="profile-fields">
-                           <div className="profile-field-group"> 
-                            <label>Birthday</label>
-                            <input
-                                className="profile-input"
-                                name="birthday"
-                                type="date"
-                                value={form.description[0].birthday}
-                                onChange={handleDescriptionChange}
-                                disabled={!editing}
-                            />
+                            <div className="profile-field-group">
+                                <label>Birthday</label>
+                                <input
+                                    className="profile-input"
+                                    name="birthday"
+                                    type="date"
+                                    value={form.description[0].birthday}
+                                    onChange={handleDescriptionChange}
+                                    disabled={!editing}
+                                />
                             </div>
-                            <div className="profile-field-group"> 
-                            <label>Gender</label>
-                            <select
-                                className="profile-select"
-                                name="gender"
-                                value={form.description[0].gender}
-                                onChange={handleDescriptionChange}
-                                disabled={!editing}
-                            >
-                                <option value="">Select Gender</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Prefer Not To Say">Prefer Not To Say</option>
-                            
-                            </select>
+                            <div className="profile-field-group">
+                                <label>Gender</label>
+                                <select
+                                    className="profile-select"
+                                    name="gender"
+                                    value={form.description[0].gender}
+                                    onChange={handleDescriptionChange}
+                                    disabled={!editing}
+                                >
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Prefer Not To Say">Prefer Not To Say</option>
+
+                                </select>
                             </div>
-                            
-                            <div className="profile-field-group"> 
-                            <label>Location</label>
-                            <input
-                                className="profile-input"
-                                name="location"
-                                value={form.description[0].location}
-                                onChange={handleDescriptionChange}
-                                disabled={!editing}
-                                placeholder="Location"
-                            />
+
+                            <div className="profile-field-group">
+                                <label>Location</label>
+                                <input
+                                    className="profile-input"
+                                    name="location"
+                                    value={form.description[0].location}
+                                    onChange={handleDescriptionChange}
+                                    disabled={!editing}
+                                    placeholder="Location"
+                                />
                             </div>
                         </div>
                     </div>
                     {/*Save/Edit Button*/}
-                    <div className ="profile-btn-row">
+                    <div className="profile-btn-row">
                         <button
                             className="profile-edit-btn"
                             onClick={() => setEditing(!editing)}>
-                                {editing ? "Cancel" : "Edit"}
+                            {editing ? "Cancel" : "Edit"}
+                        </button>
+                        {editing && (
+                            <button className="profile-save-btn" onClick={handleSave}>
+                                Save Changes
                             </button>
-                            {editing && (
-                                <button className="profile-save-btn" onClick={handleSave}>
-                                    Save Changes
-                                </button>
-                            )}
+                        )}
                     </div>
 
                     {saveStatus && <p className="profile-status-msg">{saveStatus}</p>}
+                </div>
             </div>
-          </div>
         </div>
     );
 
