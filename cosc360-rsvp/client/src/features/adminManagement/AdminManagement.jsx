@@ -171,7 +171,7 @@ const AdminManagement = () => {
                 <div className="list">
                     {filteredEvents.map((event) => (
                         <div className="list-item" key={event._id}>
-                            <span>{event.name} | {formatDate(event.date)}</span>
+                            <span>{event.name} | {event.location || "No location"} | {formatDate(event.date)}</span>
                             <div className="event-actions">
                                 <button className="settings-btn" onClick={() => setEditingEvent(event)}>
                                     <Pencil size={18} color="navy" />
