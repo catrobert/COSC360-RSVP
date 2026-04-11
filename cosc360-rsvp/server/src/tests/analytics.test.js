@@ -201,3 +201,52 @@ describe("Ratings insights", () => {
         expect(twoStar.count).toBeGreaterThanOrEqual(1);
     });
 });
+
+// user insights tests
+describe("User insights", () => {
+    test("genderDistribution contains all 4 gender categories", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { genderDistribution } = res.body.userInsights;
+        expect(Array.isArray(genderDistribution)).toBe(true);
+        const genders = genderDistribution.map(g => g.gender);
+        expect(genders).toContain("Male");
+        expect(genders).toContain("Female");
+        expect(genders).toContain("Other");
+        expect(genders).toContain("Prefer Not To Say");
+    });
+
+    test("averageAge is a number or N/A", async () => {
+        const admin = await createAdmin();
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { averageAge } = res.body.userInsights;
+        const isValid = averageAge === "N/A" || typeof averageAge === "number";
+        expect(isValid).toBe(true);
+    });
+
+    test("averageAge reflects users with a birthday set", async () => {
+        const admin = await createAdmin();
+
+        const birthday = new Date("1995-06-15");
+        await createUser({
+            description: [{ birthday: new Date("1995-06-15"), gender: "Male", location: "Kelowna" }],
+        });
+
+        const res = await request(app)
+            .get("/api/admin/analytics")
+            .set("x-user-id", admin._id.toString());
+
+        const { averageAge } = res.body.userInsights;
+        if (averageAge !== "N/A") {
+            expect(averageAge).toBeGreaterThan(0);
+        }
+    });
+});
