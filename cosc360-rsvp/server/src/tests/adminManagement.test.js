@@ -171,7 +171,7 @@ describe("Integration for PUT /api/admin/:id/role", () => {
         const user = await createUser();
 
         const res = await request(app)
-            .put(`/api/users/${user._id}/role`)
+            .put(`/api/admin/${user._id}/role`)
             .set("x-user-id", admin._id.toString())
             .send({ role: "superadmin" });
 
