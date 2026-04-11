@@ -3,19 +3,6 @@ import app from "../index.js";
 import { UserSchema } from "../modules/model/user.model.js";
 import bcrypt from "bcryptjs";
 
-// let uniqueCounter = 0;
-
-// async function createUser(overrides = {}) {
-//     uniqueCounter += 1;
-
-//     return await UserSchema.create({
-//         firstName: "Profile",
-//         lastName: "Tester",
-//         username: `profile_user_${uniqueCounter}`,
-//         password: "password123",
-//         createdDate: new Date(),
-//         role: "user",
-
 // Set Up Functions
 
 async function createUser(overrides = {}) {
