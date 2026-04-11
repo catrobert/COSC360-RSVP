@@ -81,7 +81,7 @@ async function getEventsInsights() {
     const bestReviews = events.length > 0 ? events.reduce((prev, current) =>
             (prev.averageRating ?? 0) > (current.averageRating ?? 0) ? prev : current) : null;
 
-    const bestByReviews = bestReviews.name;
+    const bestByReviews = bestReviews?.name ?? "N/A";
 
     const users = await userRepository.getAllUsers();
     let attendedMoreThanOne = 0;

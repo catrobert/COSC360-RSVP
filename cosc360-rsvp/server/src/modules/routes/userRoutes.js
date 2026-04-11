@@ -1,14 +1,14 @@
 import express from "express";
-import { getProfile, updateProfile, uploadPhoto, createUser, loginUser, updatePassword } from "../controllers/userController.js";
+import * as userController from "../controllers/userController.js"
 import { uploadImage, authMiddleware } from "../middleware.js";
 
 const router = express.Router();
 
-router.post("/register", createUser);
-router.post("/reset-password", updatePassword);
-router.post("/login", loginUser);
-router.get("/profile", getProfile);
-router.put("/profile", updateProfile);
-router.post("/profile/photo", uploadImage.single("profilePhoto"), uploadPhoto);
+router.post("/register", userController.createUser);
+router.post("/reset-password", userController.updatePassword);
+router.post("/login", userController.loginUser);
+router.get("/profile", authMiddleware, userController.getProfile);
+router.put("/profile", authMiddleware, userController.updateProfile);
+router.post("/profile/photo", authMiddleware, uploadImage.single("profilePhoto"), userController.uploadPhoto);
 
 export default router;
