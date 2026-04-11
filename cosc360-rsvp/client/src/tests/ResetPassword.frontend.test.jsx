@@ -34,7 +34,9 @@ describe("ResetPassword frontend tests", () => {
 
         fireEvent.click(screen.getByRole("button", { name: "Reset Password" }));
 
-        expect(await screen.findByText("Password must be at least 8 characters")).toBeInTheDocument();
+        expect(
+            await screen.findByText("Password must contain at least one number and one letter, and be 8-16 characters long")
+        ).toBeInTheDocument();
         expect(resetPass).not.toHaveBeenCalled();
         expect(mockNavigate).not.toHaveBeenCalled();
     });
@@ -57,7 +59,9 @@ describe("ResetPassword frontend tests", () => {
 
         fireEvent.click(screen.getByRole("button", { name: "Reset Password" }));
 
-        expect(await screen.findByText("Password must be 72 characters or fewer")).toBeInTheDocument();
+        expect(
+            await screen.findByText("Password must contain at least one number and one letter, and be 8-16 characters long")
+        ).toBeInTheDocument();
         expect(resetPass).not.toHaveBeenCalled();
         expect(mockNavigate).not.toHaveBeenCalled();
     });
