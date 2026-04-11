@@ -32,3 +32,7 @@ export const updatePassword = async (username, newPassword) => {
 export async function getUserById(id) {
     return await userRepository.getUserById(id);
 }
+
+export async function deleteUserById(id){
+    return await userRepository.findByIdAndDelete(id);
+}

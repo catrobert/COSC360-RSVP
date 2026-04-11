@@ -197,7 +197,7 @@ export const uploadPhoto = async (req, res) => {
         }
 
         const photoPath = "/uploads/" + req.file.filename;
-        const user = await updateUserById(userId, { profilePhoto: photoPath });
+        const user = await userServices.updateUserById(userId, { profilePhoto: photoPath });
 
         if (!user) {
             return res.status(404).json({ error: "User not found" });
